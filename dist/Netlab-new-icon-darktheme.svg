@@ -1,0 +1,6 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg_null" height="100" preserveAspectRatio="xMidYMid slice" viewBox="55 0 80 500" width="100">
+   <g id="root" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+		<path d="M94.77 225.169l0 -13.169l33.23 18.655l0 39.69l-33.23 18.655l0 -14.083l20.536 -10.791l0 -27.252l-20.536 -11.705zm-0.946 2.231l0 18.7l-15.824 -8.891l15.824 -9.809z" id="shape.primary" fill="#f5f5f5" />
+		<path d="M93.23 225.169l-20.536 11.705l0 27.252l20.536 10.79l0 14.084l-33.23 -18.655l0 -39.69l33.23 -18.655l0 13.169zm0.946 2.231l15.824 9.809l-15.824 8.891l0 -18.7z" id="shape.secondary" fill="#6ec1f5" />
+   </g>
+</svg>
