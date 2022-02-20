@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash - Blog O3R</title><meta name="Description" content="Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。"><meta property="og:title" content="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash" />
+<meta property="og:description" content="Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/sending-logs-from-pfsense-2-logstash/" /><meta property="og:image" content="https://example.com/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-03-13T08:27:24+08:00" />
+<meta property="article:modified_time" content="2022-02-20T05:32:39+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://example.com/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png"/>
+<meta name="twitter:title" content="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash"/>
+<meta name="twitter:description" content="Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。"/>
+<meta name="application-name" content="LoveIt">
+<meta name="apple-mobile-web-app-title" content="LoveIt"><meta name="theme-color" content="#4E5260"><meta name="msapplication-TileColor" content="#4E5260"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4E5260"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://example.com/sending-logs-from-pfsense-2-logstash/" /><link rel="prev" href="https://example.com/elasticsearch-receives-data-from-logstash/" /><link rel="next" href="https://example.com/monitoring-pfsense-via-kibana/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash",
+        "inLanguage": "zh-Hant-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/example.com\/sending-logs-from-pfsense-2-logstash\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/example.com\/sending-logs-from-pfsense-2-logstash\/sending-logs-from-pfsense-2-logstash.png",
+                            "width":  801 ,
+                            "height":  401 
+                        }],"genre": "posts","keywords": "ELK, pfSense","wordcount":  1569 ,
+        "url": "https:\/\/example.com\/sending-logs-from-pfsense-2-logstash\/","datePublished": "2020-03-13T08:27:24+08:00","dateModified": "2022-02-20T05:32:39+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Oscar Tseng","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/example.com\/images\/profile-pic.jpg",
+                    "width":  1283 ,
+                    "height":  1283 
+                }},"author": {
+                "@type": "Person",
+                "name": "Oscar Tseng"
+            },"description": "Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><div style="display: none;"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/header-bg-lowsrc.png"
+        data-srcset="/images/header-bg-lowsrc.png, /images/header-bg-lowsrc.png 1.5x, /images/header-bg-lowsrc.png 2x"
+        data-sizes="auto"
+        alt="/images/header-bg-lowsrc.png"
+        title="/images/header-bg-lowsrc.png" /></div><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Blog O3R">O3R</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                <div class="search mobile" id="search-mobile">
+                    <input type="text"
+                        placeholder="Search titles or contents..."
+                        id="search-input-mobile">
+                    <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile"
+                        title="Search">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile"
+                        title="Clear">
+                        <i class="fas fa-times-circle fa-fw"></i>
+                    </a>
+                    <span class="search-button search-loading" id="search-loading-mobile">
+                        <i class="fas fa-spinner fa-fw fa-spin"></i>
+                    </span>
+                </div>
+                <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                    Cancel
+                </a>
+            </div><a class="menu-item" href="/posts/" title="" >Posts</a><a class="menu-item" href="/tags/" title="" >Tags</a><a class="menu-item" href="/categories/" title="" >Categories</a><a class="menu-item" href="/about/" title="" >About</a><a class="menu-item" href="https://github.com/LYTzeng" title="GitHub" 
+                rel="noopener noreffer" target="_blank" ><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<div class="header-bg-wrapper mobile">
+    <div class="mediabox">
+    <img
+        class="mediabox-img lazyload"
+        data-srcset="/images/header-bg.png"
+        data-lowsrc="/images/header-bg-lowsrc.png"
+        data-sizes="auto"
+        alt="/images/header-bg.png"
+        title="/images/header-bg.png" />
+</div>
+</div>
+<div class="brand-logo mobile">
+    <div class="blog">BLOG&nbsp</div>
+    <div class="othreer-glitch-stack" style="--stacks: 3;">
+        <span class="othreer" style="--index: 0;">o3R</span>
+        <span class="othreer" style="--index: 1;">o3R</span>
+        <span class="othreer" style="--index: 2;">o3R</span>
+    </div>
+</div><header class="desktop" id="header-desktop">
+    <div class="header-wrapper" is-sticky="false">
+        <div class="header-title">
+            <a href="/" title="Blog O3R">O3R</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item"
+                    href="/posts/" > Posts </a><a class="menu-item"
+                    href="/tags/" > Tags </a><a class="menu-item"
+                    href="/categories/" > Categories </a><a class="menu-item"
+                    href="/about/" > About </a><a class="menu-item"
+                    href="https://github.com/LYTzeng"  title="GitHub" 
+                    rel="noopener noreffer" target="_blank" ><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                    <input type="text"
+                        placeholder="Search titles or contents..."
+                        id="search-input-desktop">
+                    <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop"
+                        title="Search">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop"
+                        title="Clear">
+                        <i class="fas fa-times-circle fa-fw"></i>
+                    </a>
+                    <span class="search-button search-loading" id="search-loading-desktop">
+                        <i class="fas fa-spinner fa-fw fa-spin"></i>
+                    </span>
+                </span><a href="javascript:void(0);" class="menu-item theme-switch" title="">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="header-bg-wrapper"><div class="mediabox">
+    <img
+        class="mediabox-img lazyload"
+        data-srcset="/images/header-bg.png"
+        data-lowsrc="/images/header-bg-lowsrc.png"
+        data-sizes="auto"
+        alt="/images/header-bg.png"
+        title="/images/header-bg.png" />
+</div>
+</div>
+    <div class="brand-logo">
+        <div class="blog">BLOG&nbsp</div>
+        <div class="othreer-glitch-stack" style="--stacks: 3;">
+            <span class="othreer" style="--index: 0;">o3R</span>
+            <span class="othreer" style="--index: 1;">o3R</span>
+            <span class="othreer" style="--index: 2;">o3R</span>
+        </div>
+    </div>
+</header><main class="main">
+                <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/profile-pic.jpg"
+        data-srcset="/images/profile-pic.jpg, /images/profile-pic.jpg 1.5x, /images/profile-pic.jpg 2x"
+        data-sizes="auto"
+        alt="/images/profile-pic.jpg"
+        title="/images/profile-pic.jpg" /></a></div><h1 class="sidebar-title">Oscar T.</h1><div class="links"><a href="https://github.com/LYTzeng" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://linkedin.com/in/li-yen-tseng" title="LinkedIn" target="_blank" rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href="https://steamcommunity.com/id/yen-host" title="Steam" target="_blank" rel="noopener noreffer me"><i class="fab fa-steam fa-fw"></i></a><a href="https://www.twitch.tv/0scar0x0" title="Twitch" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitch fa-fw"></i></a><a href="https://discordapp.com/users/" title="Discord" target="_blank" rel="noopener noreffer me"><i class="fab fa-discord fa-fw"></i></a><a href="/index.xml" title="RSS" target="_blank" rel="noopener noreffer me"><i class="fas fa-rss fa-fw"></i></a></div><div id="sidebar-intro">
+        <div class="sidebar-intro-tabs-container"><div class="sidebar-intro-tab" tab-index="0">我在做什麼</div><div class="sidebar-intro-tab" tab-index="1">最愛的妹紙</div><div class="sidebar-intro-tab" tab-index="2">最喜歡的遊戲</div><div class="sidebar-intro-tab" tab-index="3">最喜歡的作品</div><div class="sidebar-intro-tab" tab-index="4">裝備</div></div>
+        <div class="sidebar-intro-content-container"><div class="sidebar-intro-content hide-content" tab-index="0">
+                    <div>在 AWS 技術支援打工，懂一點網路，擅長什麼都不擅長</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="1">
+                    <div>神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="2">
+                    <div>Nier: Automata、Pokemon全系列、Dark Souls 3、愛上火車、茂伸奇談</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="3">
+                    <div>遊戲人生、點兔、賢惠幼妻仙狐小姐、奮鬥吧！系統工程師、動物朋友(僅第一季)</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="4">
+                    <div>MacBook Pro (13&#34;, 2021公司配) &amp; (13&#34;, 2019)、iPhone13 Pro、自組R9 5900X主機、Filco Hakua白、森海HD25</div>
+                </div></div>
+    </div></div>
+<div class="toc" id="toc-auto">
+                <h2 class="toc-title">Contents</h2>
+                <div class="toc-content" id="toc-content-auto"></div>
+            </div></div>
+
+    <article class="page single"><h1 class="single-title animated flipInX">ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/about/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Oscar Tseng</a></span>&nbsp;<span class="post-category">included in <a href="/categories/infra/"><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020.03.13">2020.03.13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1569 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;<span id="/sending-logs-from-pfsense-2-logstash/" class="leancloud_visitors" data-flag-title="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png"
+        data-srcset="/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png, /sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png 1.5x, /sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png 2x"
+        data-sizes="auto"
+        alt="/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png"
+        title="Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#elk-stack-整合-pfsense-系列文">ELK Stack 整合 pfSense 系列文</a></li>
+    <li><a href="#安裝-logstash">安裝 Logstash</a></li>
+    <li><a href="#logstash-的檔案結構">Logstash 的檔案結構</a>
+      <ul>
+        <li><a href="#pipelineyml"><code>pipeline.yml</code></a></li>
+        <li><a href="#logstashyml"><code>logstash.yml</code></a></li>
+        <li><a href="#config-file">Config File</a></li>
+        <li><a href="#bin-檔"><code>bin</code> 檔</a></li>
+        <li><a href="#custom-grok-patterns">Custom Grok Patterns</a></li>
+      </ul>
+    </li>
+    <li><a href="#在-pfsense-設定-syslog-的-remote-log-server">在 pfSense 設定 Syslog 的 Remote log server</a></li>
+    <li><a href="#建立-config-file-和-grok-patttern">建立 Config file 和 Grok Patttern</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#01-inputsconf"><code>01-inputs.conf</code></a></li>
+            <li><a href="#10-syslogconf-前半段"><code>10-syslog.conf</code> 前半段</a></li>
+            <li><a href="#30-outputsconf"><code>30-outputs.conf</code></a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/infra/sending-logs-from-pfsense-2-logstash.png"
+        data-srcset="/images/infra/sending-logs-from-pfsense-2-logstash.png, /images/infra/sending-logs-from-pfsense-2-logstash.png 1.5x, /images/infra/sending-logs-from-pfsense-2-logstash.png 2x"
+        data-sizes="auto"
+        alt="/images/infra/sending-logs-from-pfsense-2-logstash.png"
+        title="/images/infra/sending-logs-from-pfsense-2-logstash.png" /></p>
+<p>Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 <strong>Parser</strong> 將<a href="https://en.wikipedia.org/wiki/Unstructured_data" target="_blank" rel="noopener noreffer">非結構化資料</a>轉換成<a href="https://en.wikipedia.org/wiki/Semi-structured_data" target="_blank" rel="noopener noreffer">半結構化資料</a>。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 Logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。</p>
+<p>整個 pfSense 與 ELK Stack 的架構如下面這張圖，架設過程中只要注意一下 Port 的對應其他都沒有太大的問題。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/yMAxVaB.png"
+        data-srcset="https://i.imgur.com/yMAxVaB.png, https://i.imgur.com/yMAxVaB.png 1.5x, https://i.imgur.com/yMAxVaB.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/yMAxVaB.png"
+        title="https://i.imgur.com/yMAxVaB.png" /></p>
+<h2 id="elk-stack-整合-pfsense-系列文">ELK Stack 整合 pfSense 系列文</h2>
+<ul>
+<li>[本篇] ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash</li>
+<li><a href="/posts/infra/elasticsearch-receives-data-from-logstash" rel="">ELK Stack 整合 pfSense (二)：Elasticsearch</a></li>
+<li><a href="/posts/infra/monitoring-pfsense-via-kibana.html" rel="">ELK Stack 整合 pfSense (三)：Kibana Dashboard</a></li>
+</ul>
+<h2 id="安裝-logstash">安裝 Logstash</h2>
+<p>裝 logstash 前需要先安裝 Java，注意一下 Logstash 和 Java 的相容性。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 安裝 JRE</span>
+sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install default-jre -y
+java -version
+<span class="c1"># 安裝 logstash</span>
+curl -L -O https://artifacts.elastic.co/downloads/logstash/logstash-7.6.1.deb
+sudo dpkg -i logstash-7.6.1.deb
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="logstash-的檔案結構">Logstash 的檔案結構</h2>
+<p>請見<a href="https://www.elastic.co/guide/en/logstash/7.6/dir-layout.html#deb-layout" target="_blank" rel="noopener noreffer">文件</a>中有詳情，這邊主要是了解 Logstash 各種設定放在哪裡，以及他們有不同的作用。</p>
+<p><code>/etc/logstash/</code> 底下有各種 <code>yml</code> 檔，都是 logstash 的設定檔。下面說明設定檔的功能。</p>
+<h3 id="pipelineyml"><code>pipeline.yml</code></h3>
+<p><code>/etc/logstash/pipelines.yml</code> 決定 logstash pipeline config 的路徑，預設在 <code>/etc/logstash/conf.d/*.conf</code> 下，這邊使用預設即可。</p>
+<h3 id="logstashyml"><code>logstash.yml</code></h3>
+<p><code>logstash.yml</code> 用來設定 logstash 執行時的選項，<code>logstash.yml</code> 中大部分的設定也可以在執行指令用 <a href="https://www.elastic.co/guide/en/logstash/7.6/running-logstash-command-line.html#command-line-flags" target="_blank" rel="noopener noreffer">Command-line Flags</a> 帶入。</p>
+<h3 id="config-file">Config File</h3>
+<p>這邊是 Logstash 最重要的地方，所有 config 預設都要放在 <code>/etc/logstash/conf.d</code> 底下。我們只要在這裡建立一個 <code>.conf</code> 結尾的檔案就可以寫設定了。如果有多個 config file，則 Logstash 會自行整合。</p>
+<p>Config File 的結構分為 3 個部分，<code>input</code>、<code>filter</code>、<code>output</code>。Logstash 有需要的話要安裝 plugin，plugin 有四種：<a href="https://www.elastic.co/guide/en/logstash/7.6/input-plugins.html" target="_blank" rel="noopener noreffer"><code>input</code></a>、<a href="https://www.elastic.co/guide/en/logstash/7.6/filter-plugins.html" target="_blank" rel="noopener noreffer"><code>filter</code></a>、<a href="https://www.elastic.co/guide/en/logstash/7.6/output-plugins.html" target="_blank" rel="noopener noreffer"><code>output</code></a>、<a href="https://www.elastic.co/guide/en/logstash/7.6/codec-plugins.html" target="_blank" rel="noopener noreffer"><code>codec</code></a>。要查看已安裝的 plugin 可以透過指令 <code>bin/logstash-plugin list</code>，<code>bin</code>的路徑會因OS而不同，<a href="#Logstash%20%e7%9a%84%e6%aa%94%e6%a1%88%e7%b5%90%e6%a7%8b" rel="">Logstash 的檔案結構文件</a>文件有寫。</p>
+<h3 id="bin-檔"><code>bin</code> 檔</h3>
+<p>放在 <code>/usr/share/logstash/bin</code>。執行 Logstash、安裝其他 Plugin 等會需要用到這裡的 binary。</p>
+<h3 id="custom-grok-patterns">Custom Grok Patterns</h3>
+<p>有時我們需要自行定義 Grok Pattern，並且命名之，這可以透過<code>.grok</code> file 進行定義，然後再從 config file 中指定 pattern 的路徑。</p>
+<h2 id="在-pfsense-設定-syslog-的-remote-log-server">在 pfSense 設定 Syslog 的 Remote log server</h2>
+<p>在 pfSense 的選單中進入 <strong>Status</strong> &gt; <strong>System Logs</strong>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/bmoFsdy.png"
+        data-srcset="https://i.imgur.com/bmoFsdy.png, https://i.imgur.com/bmoFsdy.png 1.5x, https://i.imgur.com/bmoFsdy.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/bmoFsdy.png"
+        title="https://i.imgur.com/bmoFsdy.png" /></p>
+<p>接著切換到 <strong>Settings</strong> 標籤：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/zppua11.png"
+        data-srcset="https://i.imgur.com/zppua11.png, https://i.imgur.com/zppua11.png 1.5x, https://i.imgur.com/zppua11.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/zppua11.png"
+        title="https://i.imgur.com/zppua11.png" /></p>
+<p>輸入 Logstash 的 IP 和 Port：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/INCTORj.png"
+        data-srcset="https://i.imgur.com/INCTORj.png, https://i.imgur.com/INCTORj.png 1.5x, https://i.imgur.com/INCTORj.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/INCTORj.png"
+        title="https://i.imgur.com/INCTORj.png" /></p>
+<h2 id="建立-config-file-和-grok-patttern">建立 Config file 和 Grok Patttern</h2>
+<p>我找到 Github 上已經有勇者寫好 pfSense 的 Grok pattern 了，所以直接拿來使用，把整個 <a href="https://github.com/patrickjennings/logstash-pfSense" target="_blank" rel="noopener noreffer">Repo</a> 給<code>clone</code>下來吧。</p>
+<p>如果要新增更多自己的 Pattern，很多人會使用 <a href="https://grokdebug.herokuapp.com/" target="_blank" rel="noopener noreffer">Grok Debugger</a> 進行除錯。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/zLrOWa5.png"
+        data-srcset="https://i.imgur.com/zLrOWa5.png, https://i.imgur.com/zLrOWa5.png 1.5x, https://i.imgur.com/zLrOWa5.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/zLrOWa5.png"
+        title="https://i.imgur.com/zLrOWa5.png" /></p>
+<p>最上面就是輸入原始的 Log；中間的欄位輸入 Grok Pattern；如果有額外定義的 custom pattern (像 <code>logstash-pfSense/patterns</code> 裡的內容就是 custom pattern)，請將 <strong>Add custom patterns</strong> 打勾就會可以輸入了。最下方就是預覽 Parsed 後的結果。</p>
+<p><code>logstash-pfSense/conf.d</code> 裡的檔案複製到<code>/etc/logstash/conf.d</code>，<code>logstash-pfSense/patterns</code>複製到 <code>etc/logstash/patterns</code>。記得修改<code>01-inputs.conf</code>的 port 和<code>10-syslog.conf</code>的 IP，須對應到 pfSense 的 syslog 設定。還有<code>30-outputs.conf</code>的 Elasticsearch host IP。</p>
+<h4 id="01-inputsconf"><code>01-inputs.conf</code></h4>
+<p>例子使用 Port <code>6514</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">#tcp syslog stream via 5140
+input {
+  tcp {
+    type =&gt; &#34;syslog&#34;
+    port =&gt; 6514
+  }
+}
+#udp syslogs stream via 5140
+input {
+  udp {
+    type =&gt; &#34;syslog&#34;
+    port =&gt; 6514
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="10-syslogconf-前半段"><code>10-syslog.conf</code> 前半段</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">filter {
+  if [type] == &#34;syslog&#34; {
+    #change to pfSense ip address
+    if [host] =~ /172\.30\.0\.1/ { # 這邊要修改
+      mutate {
+        add_tag =&gt; [&#34;pfSense&#34;, &#34;Ready&#34;]
+      }
+    }
+    if &#34;Ready&#34; not in [tags] {
+      mutate {
+        add_tag =&gt; [ &#34;syslog&#34; ]
+      }
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>架 ELK 需要特別注意服務之間溝通的 Port</strong>，預設 <strong>Elasticsearch</strong> 會使用 <mark>Port <code>9200</code></mark> 來接收 Logstash 的資料，因此<code>30-outputs.conf</code>的設定請參考下面：</p>
+<h4 id="30-outputsconf"><code>30-outputs.conf</code></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">output {
+  if [type] == &#34;syslog&#34; {
+    elasticsearch {
+        hosts =&gt; &#34;172.30.0.5:9200&#34;
+        index =&gt; &#34;logstash-pfSense-%{+YYYY.MM.dd}&#34;
+    }
+    stdout { codec =&gt; rubydebug }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>接著啟動 Logstash。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo service logstash start
+</code></pre></td></tr></table>
+</div>
+</div><p>如何確定 Logstash 有接收到 Syslog?
+確認 OS 有 Listen 我設定的 Port <code>6514</code> 後，我是使用 TCPDump 查看，因為目前還沒架起 Elasticsearch，所以用很原始的方式看。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/AqOehqC.png"
+        data-srcset="https://i.imgur.com/AqOehqC.png, https://i.imgur.com/AqOehqC.png 1.5x, https://i.imgur.com/AqOehqC.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/AqOehqC.png"
+        title="https://i.imgur.com/AqOehqC.png" /></p>
+<p>要驗證 Log 被 parse 的結果，可以從 Wireshark 複製 log 內容，到 Grok Debugger 試試看套用 pattern。接著下一篇就是架 Elasticsearch。</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://www.elastic.co/guide/en/logstash/7.6/configuration-file-structure.html" target="_blank" rel="noopener noreffer">Structure of a Config File | Logstash Reference [7.6] | Elastic</a></li>
+<li><a href="https://docs.netgate.com/pfSense/en/latest/book/monitoring/remote-logging.html" target="_blank" rel="noopener noreffer">System Monitoring — Remote Logging with Syslog | pfSense Documentation</a></li>
+<li><a href="https://github.com/patrickjennings/logstash-pfSense" target="_blank" rel="noopener noreffer">patrickjennings/logstash-pfSense: Logstash configuration for pfSense syslog events.</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022.02.20</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/sending-logs-from-pfsense-2-logstash/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://example.com/sending-logs-from-pfsense-2-logstash/" data-title="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash" data-hashtags="ELK,pfSense"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://example.com/sending-logs-from-pfsense-2-logstash/" data-hashtag="ELK"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://example.com/sending-logs-from-pfsense-2-logstash/" data-title="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/elk/">ELK</a>,&nbsp;<a href="/tags/pfsense/">pfSense</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/elasticsearch-receives-data-from-logstash/" class="prev" rel="prev" title="ELK Stack 整合 pfSense (二)：Elasticsearch"><i class="fas fa-angle-left fa-fw"></i>ELK Stack 整合 pfSense (二)：Elasticsearch</a>
+            <a href="/monitoring-pfsense-via-kibana/" class="next" rel="next" title="ELK Stack 整合 pfSense (三)：Kibana Dashboard">ELK Stack 整合 pfSense (三)：Kibana Dashboard<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="/lib/dayjs/dayjs.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":20},"comment":{"valine":{"appId":"mBVjhrJAGxI6vq161LiQRhKH-MdYXbMMI-MdYXbMMI","appKey":"78ztEgoRX6GkV1LdNx0pghv8","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"serverURLs":"https://mbvjhrja.api.lncldglobal.com","visitor":true}},"search":{"algoliaAppID":"CJDJYKXD2Y","algoliaIndex":"o3r.moe","algoliaSearchKey":"35ae54723dc9f540430a2b6e875d7505","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.js"></script></body>
+</html>

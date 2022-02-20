@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7 - Blog O3R</title><meta name="Description" content="蘋果真高價，何不自己架？ 如果覺得 Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有多少。總之，能省錢又不犧牲效能，就是爽！網路上有一些關於 ESXi 安裝 macOS 的教學，但是大多是給 VMware Workstation，不然就是版本不夠新，這裡提供我親自嘗試過、可行的且最新的 ESXi 搭配 macOS 的安裝方式。"><meta property="og:title" content="想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7" />
+<meta property="og:description" content="蘋果真高價，何不自己架？ 如果覺得 Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有多少。總之，能省錢又不犧牲效能，就是爽！網路上有一些關於 ESXi 安裝 macOS 的教學，但是大多是給 VMware Workstation，不然就是版本不夠新，這裡提供我親自嘗試過、可行的且最新的 ESXi 搭配 macOS 的安裝方式。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://example.com/installing-macos-on-esxi/" /><meta property="og:image" content="https://example.com/installing-macos-on-esxi/BojArA4.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-01-27T17:33:25+08:00" />
+<meta property="article:modified_time" content="2022-02-20T05:48:02+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://example.com/installing-macos-on-esxi/BojArA4.png"/>
+<meta name="twitter:title" content="想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7"/>
+<meta name="twitter:description" content="蘋果真高價，何不自己架？ 如果覺得 Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有多少。總之，能省錢又不犧牲效能，就是爽！網路上有一些關於 ESXi 安裝 macOS 的教學，但是大多是給 VMware Workstation，不然就是版本不夠新，這裡提供我親自嘗試過、可行的且最新的 ESXi 搭配 macOS 的安裝方式。"/>
+<meta name="application-name" content="LoveIt">
+<meta name="apple-mobile-web-app-title" content="LoveIt"><meta name="theme-color" content="#4E5260"><meta name="msapplication-TileColor" content="#4E5260"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4E5260"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://example.com/installing-macos-on-esxi/" /><link rel="prev" href="https://example.com/introduction-to-mininet/" /><link rel="next" href="https://example.com/elasticsearch-receives-data-from-logstash/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7",
+        "inLanguage": "zh-Hant-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/example.com\/installing-macos-on-esxi\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/example.com\/installing-macos-on-esxi\/BojArA4.png",
+                            "width":  965 ,
+                            "height":  663 
+                        }],"genre": "posts","keywords": "VMware, vSphere, MacOS","wordcount":  2137 ,
+        "url": "https:\/\/example.com\/installing-macos-on-esxi\/","datePublished": "2020-01-27T17:33:25+08:00","dateModified": "2022-02-20T05:48:02+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Oscar Tseng","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/example.com\/images\/profile-pic.jpg",
+                    "width":  1283 ,
+                    "height":  1283 
+                }},"author": {
+                "@type": "Person",
+                "name": "Oscar Tseng"
+            },"description": "蘋果真高價，何不自己架？ 如果覺得 Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有多少。總之，能省錢又不犧牲效能，就是爽！網路上有一些關於 ESXi 安裝 macOS 的教學，但是大多是給 VMware Workstation，不然就是版本不夠新，這裡提供我親自嘗試過、可行的且最新的 ESXi 搭配 macOS 的安裝方式。"
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><div style="display: none;"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/header-bg-lowsrc.png"
+        data-srcset="/images/header-bg-lowsrc.png, /images/header-bg-lowsrc.png 1.5x, /images/header-bg-lowsrc.png 2x"
+        data-sizes="auto"
+        alt="/images/header-bg-lowsrc.png"
+        title="/images/header-bg-lowsrc.png" /></div><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Blog O3R">O3R</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                <div class="search mobile" id="search-mobile">
+                    <input type="text"
+                        placeholder="Search titles or contents..."
+                        id="search-input-mobile">
+                    <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile"
+                        title="Search">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile"
+                        title="Clear">
+                        <i class="fas fa-times-circle fa-fw"></i>
+                    </a>
+                    <span class="search-button search-loading" id="search-loading-mobile">
+                        <i class="fas fa-spinner fa-fw fa-spin"></i>
+                    </span>
+                </div>
+                <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                    Cancel
+                </a>
+            </div><a class="menu-item" href="/posts/" title="" >Posts</a><a class="menu-item" href="/tags/" title="" >Tags</a><a class="menu-item" href="/categories/" title="" >Categories</a><a class="menu-item" href="/about/" title="" >About</a><a class="menu-item" href="https://github.com/LYTzeng" title="GitHub" 
+                rel="noopener noreffer" target="_blank" ><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<div class="header-bg-wrapper mobile">
+    <div class="mediabox">
+    <img
+        class="mediabox-img lazyload"
+        data-srcset="/images/header-bg.png"
+        data-lowsrc="/images/header-bg-lowsrc.png"
+        data-sizes="auto"
+        alt="/images/header-bg.png"
+        title="/images/header-bg.png" />
+</div>
+</div>
+<div class="brand-logo mobile">
+    <div class="blog">BLOG&nbsp</div>
+    <div class="othreer-glitch-stack" style="--stacks: 3;">
+        <span class="othreer" style="--index: 0;">o3R</span>
+        <span class="othreer" style="--index: 1;">o3R</span>
+        <span class="othreer" style="--index: 2;">o3R</span>
+    </div>
+</div><header class="desktop" id="header-desktop">
+    <div class="header-wrapper" is-sticky="false">
+        <div class="header-title">
+            <a href="/" title="Blog O3R">O3R</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item"
+                    href="/posts/" > Posts </a><a class="menu-item"
+                    href="/tags/" > Tags </a><a class="menu-item"
+                    href="/categories/" > Categories </a><a class="menu-item"
+                    href="/about/" > About </a><a class="menu-item"
+                    href="https://github.com/LYTzeng"  title="GitHub" 
+                    rel="noopener noreffer" target="_blank" ><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                    <input type="text"
+                        placeholder="Search titles or contents..."
+                        id="search-input-desktop">
+                    <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop"
+                        title="Search">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop"
+                        title="Clear">
+                        <i class="fas fa-times-circle fa-fw"></i>
+                    </a>
+                    <span class="search-button search-loading" id="search-loading-desktop">
+                        <i class="fas fa-spinner fa-fw fa-spin"></i>
+                    </span>
+                </span><a href="javascript:void(0);" class="menu-item theme-switch" title="">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="header-bg-wrapper"><div class="mediabox">
+    <img
+        class="mediabox-img lazyload"
+        data-srcset="/images/header-bg.png"
+        data-lowsrc="/images/header-bg-lowsrc.png"
+        data-sizes="auto"
+        alt="/images/header-bg.png"
+        title="/images/header-bg.png" />
+</div>
+</div>
+    <div class="brand-logo">
+        <div class="blog">BLOG&nbsp</div>
+        <div class="othreer-glitch-stack" style="--stacks: 3;">
+            <span class="othreer" style="--index: 0;">o3R</span>
+            <span class="othreer" style="--index: 1;">o3R</span>
+            <span class="othreer" style="--index: 2;">o3R</span>
+        </div>
+    </div>
+</header><main class="main">
+                <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/profile-pic.jpg"
+        data-srcset="/images/profile-pic.jpg, /images/profile-pic.jpg 1.5x, /images/profile-pic.jpg 2x"
+        data-sizes="auto"
+        alt="/images/profile-pic.jpg"
+        title="/images/profile-pic.jpg" /></a></div><h1 class="sidebar-title">Oscar T.</h1><div class="links"><a href="https://github.com/LYTzeng" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://linkedin.com/in/li-yen-tseng" title="LinkedIn" target="_blank" rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href="https://steamcommunity.com/id/yen-host" title="Steam" target="_blank" rel="noopener noreffer me"><i class="fab fa-steam fa-fw"></i></a><a href="https://www.twitch.tv/0scar0x0" title="Twitch" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitch fa-fw"></i></a><a href="https://discordapp.com/users/" title="Discord" target="_blank" rel="noopener noreffer me"><i class="fab fa-discord fa-fw"></i></a><a href="/index.xml" title="RSS" target="_blank" rel="noopener noreffer me"><i class="fas fa-rss fa-fw"></i></a></div><div id="sidebar-intro">
+        <div class="sidebar-intro-tabs-container"><div class="sidebar-intro-tab" tab-index="0">我在做什麼</div><div class="sidebar-intro-tab" tab-index="1">最愛的妹紙</div><div class="sidebar-intro-tab" tab-index="2">最喜歡的遊戲</div><div class="sidebar-intro-tab" tab-index="3">最喜歡的作品</div><div class="sidebar-intro-tab" tab-index="4">裝備</div></div>
+        <div class="sidebar-intro-content-container"><div class="sidebar-intro-content hide-content" tab-index="0">
+                    <div>在 AWS 技術支援打工，懂一點網路，擅長什麼都不擅長</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="1">
+                    <div>神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="2">
+                    <div>Nier: Automata、Pokemon全系列、Dark Souls 3、愛上火車、茂伸奇談</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="3">
+                    <div>遊戲人生、點兔、賢惠幼妻仙狐小姐、奮鬥吧！系統工程師、動物朋友(僅第一季)</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="4">
+                    <div>MacBook Pro (13&#34;, 2021公司配) &amp; (13&#34;, 2019)、iPhone13 Pro、自組R9 5900X主機、Filco Hakua白、森海HD25</div>
+                </div></div>
+    </div></div>
+<div class="toc" id="toc-auto">
+                <h2 class="toc-title">Contents</h2>
+                <div class="toc-content" id="toc-content-auto"></div>
+            </div></div>
+
+    <article class="page single"><h1 class="single-title animated flipInX">想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/about/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Oscar Tseng</a></span>&nbsp;<span class="post-category">included in <a href="/categories/infra/"><i class="far fa-folder fa-fw"></i>Infra</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020.01.27">2020.01.27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2137 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;<span id="/installing-macos-on-esxi/" class="leancloud_visitors" data-flag-title="想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/installing-macos-on-esxi/BojArA4.png"
+        data-srcset="/installing-macos-on-esxi/BojArA4.png, /installing-macos-on-esxi/BojArA4.png 1.5x, /installing-macos-on-esxi/BojArA4.png 2x"
+        data-sizes="auto"
+        alt="/installing-macos-on-esxi/BojArA4.png"
+        title="蘋果真高價，何不自己架？ 如果覺得 Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有多少。總之，能省錢又不犧牲效能，就是爽！網路上有一些關於 ESXi 安裝 macOS 的教學，但是大多是給 VMware Workstation，不然就是版本不夠新，這裡提供我親自嘗試過、可行的且最新的 ESXi 搭配 macOS 的安裝方式。" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#更新-esxi-67-至-update-3">更新 ESXi 6.7 至 Update 3</a></li>
+    <li><a href="#安裝-unlocker">安裝 Unlocker</a></li>
+    <li><a href="#macos-的-vmdk">macOS 的 VMDK</a></li>
+    <li><a href="#建立新的虛擬機器">建立新的虛擬機器</a></li>
+    <li><a href="#修改-vmx-設定">修改 VMX 設定</a></li>
+    <li><a href="#在-macos-內安裝-vmware-tools">在 macOS 內安裝 VMware tools</a></li>
+    <li><a href="#顯卡與-usb-裝置透通-passthrough">顯卡與 USB 裝置透通 (Passthrough)</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><blockquote>
+<p>蘋果真高價，何不自己架？ — me</p>
+</blockquote>
+<p>如果覺得<del>蘋果的刨絲器</del> Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有多少。總之，能省錢又不犧牲效能，就是爽！可以參考 <a href="https://www.youtube.com/watch?v=mIB389tqzCI" target="_blank" rel="noopener noreffer">Linus Tech Tips 對 Mac Pro 的評論</a>。網路上有一些關於 ESXi 安裝 macOS 的教學，但是大多是給 VMware Workstation，不然就是版本不夠新，這裡提供我親自嘗試過、可行的且最新的 ESXi 搭配 macOS 的安裝方式。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/MkTKNFE.png"
+        data-srcset="https://i.imgur.com/MkTKNFE.png, https://i.imgur.com/MkTKNFE.png 1.5x, https://i.imgur.com/MkTKNFE.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/MkTKNFE.png"
+        title="https://i.imgur.com/MkTKNFE.png" />
+2019 Mac Pro 選好一點的規格，就跟買車一樣了。</p>
+<h2 id="更新-esxi-67-至-update-3">更新 ESXi 6.7 至 Update 3</h2>
+<p>首先請更新 ESXi Server 到 Update 3，才能支援 MacOS 10.15。我們必須依序從 Update 1 更新到 Update 3。以下過程需要進行三遍，分別安裝三次 Update 的更新。</p>
+<ol>
+<li>
+<p>到<a href="https://my.vmware.com/group/vmware/patch#search" target="_blank" rel="noopener noreffer">這裡</a> 找到對應版本，下載 zip 檔。Update 1 的檔名為 <code>update-from-esxi6.7-6.7_update01.zip</code>。</p>
+</li>
+<li>
+<p>讓 Server 進入維護模式。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/R2FS7Cj.png"
+        data-srcset="https://i.imgur.com/R2FS7Cj.png, https://i.imgur.com/R2FS7Cj.png 1.5x, https://i.imgur.com/R2FS7Cj.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/R2FS7Cj.png"
+        title="https://i.imgur.com/R2FS7Cj.png" /></p>
+</li>
+<li>
+<p>zip 上傳至 Datastore，SSH 進入 ESXi，執行指令，注意檔名和路徑要改：</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">esxcli software vib install -d /vmfs/volumes/datastore1/updates/update-from-esxi6.7-6.7_update01.zip
+</code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>重新開機</li>
+</ol>
+<h2 id="安裝-unlocker">安裝 Unlocker</h2>
+<p>ESXi 6.7 必須使用 Unlocker 3.0 版才能讓 MacOS 成功開機，舊版本都會進入無限自動重開循環。<strong>如果你的 Server 安裝過 Unlocker，更新 ESXi 後需重新再安裝 Unlocker。</strong></p>
+<p><strong>下載 ESXi Unlocker 3.0 (二擇一):</strong></p>
+<ul>
+<li><a href="https://www.insanelymac.com/forum/files/file/964-macos-unlocker-v30-for-vmware-esxi/" target="_blank" rel="noopener noreffer">Unlocker 作者的載點，需登入會員</a></li>
+<li><a href="https://drive.google.com/file/d/14rkRT8cRavA8QxvTseSQjSUeJ-gZ3WfV/view?usp=sharing" target="_blank" rel="noopener noreffer">我的 Google Drive 載點</a></li>
+</ul>
+<p>將 <code>esxi-unlocker-300.tgz</code> 上傳至 ESXi，在自己電腦執行:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">scp /你的下載路徑/esxi-unlocker-300.tgz root@xxx.xxx.xxx.xxx:/vmfs/volumes/datastore1/
+<span class="nb">cd</span> /vmfs/volumes/datastore1/
+tar xvf esxi-unlocker-300.tgz
+</code></pre></td></tr></table>
+</div>
+</div><p>然後執行 <code>esxi-install.sh</code>，結束後重開機:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">chomod <span class="m">777</span> esxi-install.sh
+./esxi-install.sh
+reboot -f
+</code></pre></td></tr></table>
+</div>
+</div><p>Unlocker 安裝完畢後，可以執行<code>esxi-smctest.sh</code> 檢查 Unlocker 是否成功安裝。成功安裝的話會有以下 Output：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">/bin/vmx
+smcPresent = true
+custom.vgz     false   38930360 B
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="macos-的-vmdk">macOS 的 VMDK</h2>
+<p>接著我們會使用比較不同的安裝方式。有別於一般使用映像檔安裝，我們會先建立一個 VM，再將 macOS 的 VMDK 新增到該 VM。這樣開機時該虛擬硬碟就會被讀取。和 ISO 安裝相比，這是我目前嘗試過成功機率最高的方法。安裝的 macOS 版本是 10.15，請特別留意<a href="https://www.vmware.com/resources/compatibility/pdf/VMware_GOS_Compatibility_Guide.pdf?fbclid=IwAR3TwlRY_63Q5KsiInF-1bnQyNi40OnpElkrZ9TMgfzXgwOST8FMB2MYKFY#page=6" target="_blank" rel="noopener noreffer">文件中</a>有註明 ESXi 所支援的 macOS 版本。</p>
+<p><strong>VMDK 載點 (二擇一):</strong></p>
+<ul>
+<li><a href="https://drive.google.com/drive/folders/1X8ImVEeM5GCvYgGEVifM21E-6Je7dHD3" target="_blank" rel="noopener noreffer">Geekrar Google Drive 載點</a></li>
+<li><a href="https://drive.google.com/file/d/1xHMtphpCj-EJr687_MQ0cSMlsKk9K-MY/view?usp=sharing" target="_blank" rel="noopener noreffer">我的 Google Drive 載點</a></li>
+</ul>
+<p>把 VMDK 上傳到 ESXi，可以使用任何 UI 或 SCP。接著先使用 VMDK 來登錄虛體機器。
+接著我們要對 VMDK 動一點手腳，不然會開不起來，因此要使用<code>vmkfstools</code>轉換 VMDK。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /vmfs/volumes/<span class="o">[</span>datastore 名稱<span class="o">]</span>
+vmkfs -i macOS_Catalina_Final.vmdk -d thin macOS_Catalina_Final_new.vmdk
+</code></pre></td></tr></table>
+</div>
+</div><p>接著開始建立新的虛擬機器。</p>
+<h2 id="建立新的虛擬機器">建立新的虛擬機器</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/apJi6c0.png"
+        data-srcset="https://i.imgur.com/apJi6c0.png, https://i.imgur.com/apJi6c0.png 1.5x, https://i.imgur.com/apJi6c0.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/apJi6c0.png"
+        title="https://i.imgur.com/apJi6c0.png" /></p>
+<p>OS 請選擇 Apple macOS 10.14 即可。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/vGoO0XT.png"
+        data-srcset="https://i.imgur.com/vGoO0XT.png, https://i.imgur.com/vGoO0XT.png 1.5x, https://i.imgur.com/vGoO0XT.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/vGoO0XT.png"
+        title="https://i.imgur.com/vGoO0XT.png" /></p>
+<p>其實對於資源大小沒有別的要求，只要不要太小即可。接著在下面的畫面中，砍掉預設的硬碟，我們要在這裡新增剛剛轉換好的 VMDK 硬碟。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/jSDsoCv.png"
+        data-srcset="https://i.imgur.com/jSDsoCv.png, https://i.imgur.com/jSDsoCv.png 1.5x, https://i.imgur.com/jSDsoCv.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/jSDsoCv.png"
+        title="https://i.imgur.com/jSDsoCv.png" /></p>
+<p>選擇「新增磁碟」&gt; 「新增現有磁碟」，如圖：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/mihE5cW.png"
+        data-srcset="https://i.imgur.com/mihE5cW.png, https://i.imgur.com/mihE5cW.png 1.5x, https://i.imgur.com/mihE5cW.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/mihE5cW.png"
+        title="https://i.imgur.com/mihE5cW.png" /></p>
+<p>接著選擇剛才轉換好的 VMDK <code>macOS_Catalina_Final_new.vmdk</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/Im7EMI8.png"
+        data-srcset="https://i.imgur.com/Im7EMI8.png, https://i.imgur.com/Im7EMI8.png 1.5x, https://i.imgur.com/Im7EMI8.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/Im7EMI8.png"
+        title="https://i.imgur.com/Im7EMI8.png" /></p>
+<p>接著「下一步」、「完成」，成功建立虛擬機器。</p>
+<h2 id="修改-vmx-設定">修改 VMX 設定</h2>
+<p>接著我們要修改 VMX 設定，SSH 進入 ESXi，<code>cd</code>到 VM 的位置。<code>[datastore 名稱]</code>請換成你的 datastore 名稱，<code>[虛擬機器名稱]</code>請換成你的 VM 名稱。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /vmfs/volumes/<span class="o">[</span>datastore 名稱<span class="o">]</span>/<span class="o">[</span>虛擬機器名稱<span class="o">]</span>
+<span class="nb">echo</span> <span class="s1">&#39;smc.version = &#34;0&#34;&#39;</span> &gt;&gt; <span class="o">[</span>虛擬機器名稱<span class="o">]</span>.vmx
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/xyIxpjb.png"
+        data-srcset="https://i.imgur.com/xyIxpjb.png, https://i.imgur.com/xyIxpjb.png 1.5x, https://i.imgur.com/xyIxpjb.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/xyIxpjb.png"
+        title="https://i.imgur.com/xyIxpjb.png" /></p>
+<p>接著就可以開機了，開機成功的話會進入各種設定，之後就只要照流程走完即可。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/ThA71sp.png"
+        data-srcset="https://i.imgur.com/ThA71sp.png, https://i.imgur.com/ThA71sp.png 1.5x, https://i.imgur.com/ThA71sp.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/ThA71sp.png"
+        title="https://i.imgur.com/ThA71sp.png" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/3wf0H3L.png"
+        data-srcset="https://i.imgur.com/3wf0H3L.png, https://i.imgur.com/3wf0H3L.png 1.5x, https://i.imgur.com/3wf0H3L.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/3wf0H3L.png"
+        title="https://i.imgur.com/3wf0H3L.png" /></p>
+<h2 id="在-macos-內安裝-vmware-tools">在 macOS 內安裝 VMware tools</h2>
+<p>最後就剩安裝 VMware tools 的部分了，VMware Tools 提供 Guest OS 和 ESXi 的相容度，讓我們可以調整螢幕解析度、。到這個<a href="http://softwareupdate.vmware.com/cds/vmw-desktop/fusion/11.1.0/13668589/packages/com.vmware.fusion.tools.darwin.zip.tar" target="_blank" rel="noopener noreffer">官方連結</a>下載 VMware tools，解壓縮後把 <code>darwin.iso</code> 檔上傳到 ESXi。</p>
+<p>接著掛載<code>darwin.iso</code>，macOS 會自動讀取光碟。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/RnSlhC8.png"
+        data-srcset="https://i.imgur.com/RnSlhC8.png, https://i.imgur.com/RnSlhC8.png 1.5x, https://i.imgur.com/RnSlhC8.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/RnSlhC8.png"
+        title="https://i.imgur.com/RnSlhC8.png" /></p>
+<p>直接點選 &ldquo;Install VMware Tools&rdquo; 並使用「下一步安裝法」。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/Ke5X0kX.png"
+        data-srcset="https://i.imgur.com/Ke5X0kX.png, https://i.imgur.com/Ke5X0kX.png 1.5x, https://i.imgur.com/Ke5X0kX.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/Ke5X0kX.png"
+        title="https://i.imgur.com/Ke5X0kX.png" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/LMIzHuK.png"
+        data-srcset="https://i.imgur.com/LMIzHuK.png, https://i.imgur.com/LMIzHuK.png 1.5x, https://i.imgur.com/LMIzHuK.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/LMIzHuK.png"
+        title="https://i.imgur.com/LMIzHuK.png" /></p>
+<p>中間需要從設定那邊 Allow 一下，點選 Allow 即可。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/ebkv229.png"
+        data-srcset="https://i.imgur.com/ebkv229.png, https://i.imgur.com/ebkv229.png 1.5x, https://i.imgur.com/ebkv229.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/ebkv229.png"
+        title="https://i.imgur.com/ebkv229.png" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/kuqISrT.png"
+        data-srcset="https://i.imgur.com/kuqISrT.png, https://i.imgur.com/kuqISrT.png 1.5x, https://i.imgur.com/kuqISrT.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/kuqISrT.png"
+        title="https://i.imgur.com/kuqISrT.png" /></p>
+<p>安裝完後重開機，即可使用。成功安裝就可以看見 ESXi 偵測到 VMware Tools：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/5OBM3xJ.png"
+        data-srcset="https://i.imgur.com/5OBM3xJ.png, https://i.imgur.com/5OBM3xJ.png 1.5x, https://i.imgur.com/5OBM3xJ.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/5OBM3xJ.png"
+        title="https://i.imgur.com/5OBM3xJ.png" /></p>
+<p>如果發現螢幕解析度沒有隨著調整視窗尺寸而改變，請試著提升虛擬顯示卡記憶體。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/nRWrrGb.png"
+        data-srcset="https://i.imgur.com/nRWrrGb.png, https://i.imgur.com/nRWrrGb.png 1.5x, https://i.imgur.com/nRWrrGb.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/nRWrrGb.png"
+        title="https://i.imgur.com/nRWrrGb.png" /></p>
+<h2 id="顯卡與-usb-裝置透通-passthrough">顯卡與 USB 裝置透通 (Passthrough)</h2>
+<p>因為用遠端或是 Remote Console 操作體驗感覺不順暢，接著我想嘗試讓顯卡直接 Passthrough 給 Guest OS，也就是 macOS。</p>
+<p>首先在管理&gt;硬體下面找到想 Passthrough 的裝置，開啟它的 Passthrough 功能。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/ldhikYA.png"
+        data-srcset="https://i.imgur.com/ldhikYA.png, https://i.imgur.com/ldhikYA.png 1.5x, https://i.imgur.com/ldhikYA.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/ldhikYA.png"
+        title="https://i.imgur.com/ldhikYA.png" /></p>
+<p>因為 Passthrough 後會無法從 ESXi 操控，所以我們也要 Passthrough USB 裝置用來連接滑鼠鍵盤，才能直接操控 macOS。因為無法 Passthrough 單一 USB 裝置給 Guest OS，我們必須 Passthrough 一整個 USB Controller。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/yVn7ipn.png"
+        data-srcset="https://i.imgur.com/yVn7ipn.png, https://i.imgur.com/yVn7ipn.png 1.5x, https://i.imgur.com/yVn7ipn.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/yVn7ipn.png"
+        title="https://i.imgur.com/yVn7ipn.png" /></p>
+<p>接著在 macOS VM 設定裡，將記憶體的 &ldquo;Reserve all guest memory&rdquo; 打勾，</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/jYyG7nC.png"
+        data-srcset="https://i.imgur.com/jYyG7nC.png, https://i.imgur.com/jYyG7nC.png 1.5x, https://i.imgur.com/jYyG7nC.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/jYyG7nC.png"
+        title="https://i.imgur.com/jYyG7nC.png" /></p>
+<p>接著在「新增其他裝置」(Add other device)，選擇新增 PCI 裝置，並選擇顯卡與 USB Conroller。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/ZUXCfOF.png"
+        data-srcset="https://i.imgur.com/ZUXCfOF.png, https://i.imgur.com/ZUXCfOF.png 1.5x, https://i.imgur.com/ZUXCfOF.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/ZUXCfOF.png"
+        title="https://i.imgur.com/ZUXCfOF.png" /></p>
+<p>儲存後就可以開機了，開機後便無法從 ESXi 操控了，如果開機後發現螢幕只顯示桌布，可以直接試著輸入密碼按 Enter，猜測這是因為 macOS 誤以為有多螢幕所造成的，登入後一切會恢復正常。或是也可以從 macOS 裡面的顯示設定去設定。</p>
+<p>恭喜你，終於擁有一台性能好的桌上型 Mac，媲美 MAC Pro 而硬體想怎樣搞都可以。對於 macOS 大家應該都如此，又愛又恨，甚至踩雷無數，<del>但只要不由愛轉恨都好</del>。最後附上一張 <code>Unlocker</code> 沒裝好導致開機 Kernel Panic 出現的 <code>Dont_Steal_MacOS.cpp</code> 截圖，我 Troubleshooting 時從未看過給得這麼爽快的線索XD。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://i.imgur.com/CopSHyf.png"
+        data-srcset="https://i.imgur.com/CopSHyf.png, https://i.imgur.com/CopSHyf.png 1.5x, https://i.imgur.com/CopSHyf.png 2x"
+        data-sizes="auto"
+        alt="https://i.imgur.com/CopSHyf.png"
+        title="https://i.imgur.com/CopSHyf.png" /></p>
+<p>欲知詳情，以及為何安裝 <code>Unlocker</code> 可以成功，請在 macOS 中開啟 Terminal，看看這個檔案：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cat <span class="s1">&#39;/System/Library/Extensions/Dont Steal MacOS X.kext/Contents/MacOS/Dont Steal Mac OS X&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>裡面有一段文字這麼寫道：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Copyright (c) 2006-2019 Apple Inc. All rights reserved.
+
+The purpose of this Apple software is to protect Apple copyrighted materials from 
+unauthorized copying and use. You may not copy, modify, reverse engineer, publicly 
+display, publicly perform, sublicense, transfer or redistribute this file, in whole or 
+in part.  If you have obtained a copy of this Apple software and do not have a valid 
+license from Apple to use it, please immediately destroy or delete it from your 
+computer.
+
+ Dont_Steal_Mac_OS_X AppleSMC &#34;DSMOS: SMC read error K0: %d&#34;@/BuildRoot/Library/Caches/
+ com.apple.xbs/Sources/DontStealMacOS/DontStealMacOS-30.0.1/Dont_Steal_MacOS.cpp:191 
+ &#34;DSMOS: SMC read error K1: %d&#34;@/BuildRoot/Library/Caches/com.apple.xbs/Sources/
+ DontStealMacOS/DontStealMacOS-30.0.1/Dont_Steal_MacOS.cpp:198 %02x DSMOS: SMC returned 
+ incorrect key: %s
+</code></pre></td></tr></table>
+</div>
+</div><p>什麼意思呢，嘿嘿，就自行解讀囉。</p>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://www.stevenannett.co.uk/2019/04/11/how-to-patch-your-vmware-esxi-6-7-server/" target="_blank" rel="noopener noreffer">How to patch your VMware ESXi 6.7 server - StevenAnnett.co.uk</a></li>
+<li><a href="http://blog.ilc.edu.tw/blog/blog/25793/post/105209/690915" target="_blank" rel="noopener noreffer">頭城國小資訊組 | VMware ESXi - 安裝 macOS Sierra 10.12.4</a></li>
+<li><a href="http://blog.sina.com.cn/s/blog_6452c6b40102x313.html" target="_blank" rel="noopener noreffer">【VMware】失败 - “scsi0:0”的磁盘类型 2 不受支持或无效。请确保磁盘已导入_永无止境的Pasu_新浪博客</a></li>
+<li><a href="https://www.geekrar.com/install-macos-mojave-on-vmware/" target="_blank" rel="noopener noreffer">Install macOS Mojave on VMware on Windows PC - Geekrar</a></li>
+<li><a href="https://www.insanelymac.com/forum/files/file/964-macos-unlocker-v30-for-vmware-esxi/" target="_blank" rel="noopener noreffer">macOS Unlocker V3.0 for VMware ESXi - Miscellaneous - InsanelyMac Forum</a></li>
+</ul>
+<Disqus/></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022.02.20</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/installing-macos-on-esxi/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://example.com/installing-macos-on-esxi/" data-title="想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7" data-hashtags="VMware,vSphere,MacOS"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://example.com/installing-macos-on-esxi/" data-hashtag="VMware"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://example.com/installing-macos-on-esxi/" data-title="想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/vmware/">VMware</a>,&nbsp;<a href="/tags/vsphere/">vSphere</a>,&nbsp;<a href="/tags/macos/">MacOS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/introduction-to-mininet/" class="prev" rel="prev" title="OpenFlow 1.5 從入門到交報告 (一) - Mininet 基本概念"><i class="fas fa-angle-left fa-fw"></i>OpenFlow 1.5 從入門到交報告 (一) - Mininet 基本概念</a>
+            <a href="/elasticsearch-receives-data-from-logstash/" class="next" rel="next" title="ELK Stack 整合 pfSense (二)：Elasticsearch">ELK Stack 整合 pfSense (二)：Elasticsearch<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="/lib/dayjs/dayjs.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":20},"comment":{"valine":{"appId":"mBVjhrJAGxI6vq161LiQRhKH-MdYXbMMI-MdYXbMMI","appKey":"78ztEgoRX6GkV1LdNx0pghv8","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"serverURLs":"https://mbvjhrja.api.lncldglobal.com","visitor":true}},"search":{"algoliaAppID":"CJDJYKXD2Y","algoliaIndex":"o3r.moe","algoliaSearchKey":"35ae54723dc9f540430a2b6e875d7505","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.js"></script></body>
+</html>
