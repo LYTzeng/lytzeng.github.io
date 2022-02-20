@@ -2,9 +2,7 @@
 
 
 
-目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具，直接呼叫 API 來控制和查看 EC2，免去登入 console 的麻煩，一定會方便許多。整體架構如下。
-
-![](/images/aws/lambda-apigateway-mattermost-go-ec2-1.jpg)
+目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具，直接呼叫 API 來控制和查看 EC2，免去登入 console 的麻煩，一定會方便許多。整體架構如上圖
 
 我使用 Go 寫了一個程式處理 Mattermost 傳入的資料，並且透過 [aws-sdk-go](https://github.com/aws/aws-sdk-go) 對 EC2 進行操作。程式會在 Lambda 上執行，原始碼請參考我的 Github：[https://github.com/LYTzeng/ec2ctl](https://github.com/LYTzeng/ec2ctl)，日後考慮用 CloudFormation 讓需要的人快速佈署。這篇主要會介紹 API Gateway、Lambda 和部份 SDK 的使用。
 
