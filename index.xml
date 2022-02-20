@@ -1,79 +1,79 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Blog O3R</title>
-        <link>https://example.com/</link>
+        <link>https://lytzeng.github.io/</link>
         <description>Blog O3R</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 21 Apr 2020 02:19:34 &#43;0800</lastBuildDate>
-            <atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+            <atom:link href="https://lytzeng.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
     <title>透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances</title>
-    <link>https://example.com/lambda-apigateway-mattermost-go-ec2/</link>
+    <link>https://lytzeng.github.io/lambda-apigateway-mattermost-go-ec2/</link>
     <pubDate>Tue, 21 Apr 2020 02:19:34 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/lambda-apigateway-mattermost-go-ec2/</guid>
+    <guid>https://lytzeng.github.io/lambda-apigateway-mattermost-go-ec2/</guid>
     <description><![CDATA[目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具]]></description>
 </item><item>
     <title>ELK Stack 整合 pfSense (三)：Kibana Dashboard</title>
-    <link>https://example.com/monitoring-pfsense-via-kibana/</link>
+    <link>https://lytzeng.github.io/monitoring-pfsense-via-kibana/</link>
     <pubDate>Sat, 14 Mar 2020 12:07:47 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/monitoring-pfsense-via-kibana/</guid>
+    <guid>https://lytzeng.github.io/monitoring-pfsense-via-kibana/</guid>
     <description><![CDATA[Kibana 能夠將資料視覺化成各種圖表並進行分析，同時提供 ELK Stack 的管理介面，架設完成的 ELK Stack 之後只需進入 Kibana，就可以透過這個 portal 瀏覽一切 Elastic 的服務。之]]></description>
 </item><item>
     <title>ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash</title>
-    <link>https://example.com/sending-logs-from-pfsense-2-logstash/</link>
+    <link>https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/</link>
     <pubDate>Fri, 13 Mar 2020 08:27:24 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/sending-logs-from-pfsense-2-logstash/</guid>
+    <guid>https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/</guid>
     <description><![CDATA[Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser]]></description>
 </item><item>
     <title>ELK Stack 整合 pfSense (二)：Elasticsearch</title>
-    <link>https://example.com/elasticsearch-receives-data-from-logstash/</link>
+    <link>https://lytzeng.github.io/elasticsearch-receives-data-from-logstash/</link>
     <pubDate>Thu, 12 Mar 2020 09:55:28 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/elasticsearch-receives-data-from-logstash/</guid>
+    <guid>https://lytzeng.github.io/elasticsearch-receives-data-from-logstash/</guid>
     <description><![CDATA[本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。Elasticsearch 是個全文搜尋引擎，透過 Inverted Index 的資料結構來提供即時的]]></description>
 </item><item>
     <title>想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7</title>
-    <link>https://example.com/installing-macos-on-esxi/</link>
+    <link>https://lytzeng.github.io/installing-macos-on-esxi/</link>
     <pubDate>Mon, 27 Jan 2020 17:33:25 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/installing-macos-on-esxi/</guid>
+    <guid>https://lytzeng.github.io/installing-macos-on-esxi/</guid>
     <description><![CDATA[蘋果真高價，何不自己架？ — me 如果覺得蘋果的刨絲器 Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有]]></description>
 </item><item>
     <title>OpenFlow 1.5 從入門到交報告 (一) - Mininet 基本概念</title>
-    <link>https://example.com/introduction-to-mininet/</link>
+    <link>https://lytzeng.github.io/introduction-to-mininet/</link>
     <pubDate>Thu, 23 Jan 2020 18:36:17 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/introduction-to-mininet/</guid>
+    <guid>https://lytzeng.github.io/introduction-to-mininet/</guid>
     <description><![CDATA[Mininet 是一個虛擬網路的模擬器，可以在單一主機、VM 或 Container 中執行。一開始我想用 Container 的環境玩玩看 Mininet，主要目的是學習 OpenFlow。為了產出]]></description>
 </item><item>
     <title>OpenFlow 1.5 從入門到交報告 (二) - Ryu</title>
-    <link>https://example.com/introduction-to-ryu/</link>
+    <link>https://lytzeng.github.io/introduction-to-ryu/</link>
     <pubDate>Sat, 04 Jan 2020 09:32:07 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/introduction-to-ryu/</guid>
+    <guid>https://lytzeng.github.io/introduction-to-ryu/</guid>
     <description><![CDATA[支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支]]></description>
 </item><item>
     <title>實驗室自架 Lab 環境 — 網路架構設計</title>
-    <link>https://example.com/esxi-server-in-lab-structure/</link>
+    <link>https://lytzeng.github.io/esxi-server-in-lab-structure/</link>
     <pubDate>Wed, 18 Dec 2019 08:34:14 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/esxi-server-in-lab-structure/</guid>
+    <guid>https://lytzeng.github.io/esxi-server-in-lab-structure/</guid>
     <description><![CDATA[前陣子學校電腦教室汰換之電腦，有幾台送給實驗室利用，我藉這個機會使用那些資源架設一台 ESXi。架設完成後，接下來考量到一些需求與環境因素，開]]></description>
 </item><item>
     <title>在實驗室自架 VMware ESXi — 使用電腦教室汰換之電腦</title>
-    <link>https://example.com/self-hosted-esxi-server-in-lab/</link>
+    <link>https://lytzeng.github.io/self-hosted-esxi-server-in-lab/</link>
     <pubDate>Fri, 13 Dec 2019 10:16:17 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/self-hosted-esxi-server-in-lab/</guid>
+    <guid>https://lytzeng.github.io/self-hosted-esxi-server-in-lab/</guid>
     <description><![CDATA[自從離開前一間實習的公司，我就缺乏一個可以做 Lab 的地方，深刻感受到「伺服器戒斷症」。想當初公司是天天有 Server 可以使用，有 Cisco UCS、Hyperfle]]></description>
 </item><item>
     <title>VuePress 部落格架設與折騰 (三)：Global Computed、標籤與分類功能、Components 的應用</title>
-    <link>https://example.com/vuepress-blog-3/</link>
+    <link>https://lytzeng.github.io/vuepress-blog-3/</link>
     <pubDate>Wed, 11 Dec 2019 14:07:14 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/vuepress-blog-3/</guid>
+    <guid>https://lytzeng.github.io/vuepress-blog-3/</guid>
     <description><![CDATA[「使用 VuePress 架設部落格以及被折騰」的系列文，是我架設本部落格的過程筆記，希望日後對有需要使用 VuePress 架設 Blog 的朋友有一點點幫助。內文有誤的部分，敬請指正]]></description>
 </item></channel>
 </rss>

@@ -1,14 +1,14 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>OpenVPN - Tag - Blog O3R</title>
-        <link>https://example.com/tags/openvpn/</link>
+        <link>https://lytzeng.github.io/tags/openvpn/</link>
         <description>OpenVPN - Tag - Blog O3R</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 18 Dec 2019 08:34:14 &#43;0800</lastBuildDate><atom:link href="https://example.com/tags/openvpn/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 18 Dec 2019 08:34:14 &#43;0800</lastBuildDate><atom:link href="https://lytzeng.github.io/tags/openvpn/" rel="self" type="application/rss+xml" /><item>
     <title>實驗室自架 Lab 環境 — 網路架構設計</title>
-    <link>https://example.com/esxi-server-in-lab-structure/</link>
+    <link>https://lytzeng.github.io/esxi-server-in-lab-structure/</link>
     <pubDate>Wed, 18 Dec 2019 08:34:14 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://example.com/esxi-server-in-lab-structure/</guid>
+    <guid>https://lytzeng.github.io/esxi-server-in-lab-structure/</guid>
     <description><![CDATA[前陣子學校電腦教室汰換之電腦，有幾台送給實驗室利用，我藉這個機會使用那些資源架設一台 ESXi。架設完成後，接下來考量到一些需求與環境因素，開]]></description>
 </item></channel>
 </rss>
