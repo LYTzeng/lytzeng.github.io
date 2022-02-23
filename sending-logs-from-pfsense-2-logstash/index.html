@@ -8,18 +8,18 @@
         <title>ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash - Blog O3R</title><meta name="Description" content="Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。"><meta property="og:title" content="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash" />
 <meta property="og:description" content="Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/" /><meta property="og:image" content="https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png"/><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://o3r.moe/sending-logs-from-pfsense-2-logstash/" /><meta property="og:image" content="https://o3r.moe/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-03-13T08:27:24+08:00" />
 <meta property="article:modified_time" content="2022-02-20T10:52:27+00:00" />
 
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png"/>
+<meta name="twitter:image" content="https://o3r.moe/sending-logs-from-pfsense-2-logstash/sending-logs-from-pfsense-2-logstash.png"/>
 <meta name="twitter:title" content="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash"/>
 <meta name="twitter:description" content="Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser 方便的是使用 Grok Pattern，可以避免自行撰寫複雜的 Regex，不過他也支援 Regex 讓我們可以自訂 Pattern，因此 logstash 的 parsing 是很彈性的。本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。"/>
 <meta name="application-name" content="LoveIt">
 <meta name="apple-mobile-web-app-title" content="LoveIt"><meta name="theme-color" content="#4E5260"><meta name="msapplication-TileColor" content="#4E5260"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4E5260"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/" /><link rel="prev" href="https://lytzeng.github.io/elasticsearch-receives-data-from-logstash/" /><link rel="next" href="https://lytzeng.github.io/monitoring-pfsense-via-kibana/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4E5260"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://o3r.moe/sending-logs-from-pfsense-2-logstash/" /><link rel="prev" href="https://o3r.moe/elasticsearch-receives-data-from-logstash/" /><link rel="next" href="https://o3r.moe/monitoring-pfsense-via-kibana/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -27,18 +27,18 @@
         "inLanguage": "zh-Hant-TW",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/lytzeng.github.io\/sending-logs-from-pfsense-2-logstash\/"
+            "@id": "https:\/\/o3r.moe\/sending-logs-from-pfsense-2-logstash\/"
         },"image": [{
                             "@type": "ImageObject",
-                            "url": "https:\/\/lytzeng.github.io\/sending-logs-from-pfsense-2-logstash\/sending-logs-from-pfsense-2-logstash.png",
+                            "url": "https:\/\/o3r.moe\/sending-logs-from-pfsense-2-logstash\/sending-logs-from-pfsense-2-logstash.png",
                             "width":  801 ,
                             "height":  401 
                         }],"genre": "posts","keywords": "ELK, pfSense","wordcount":  1569 ,
-        "url": "https:\/\/lytzeng.github.io\/sending-logs-from-pfsense-2-logstash\/","datePublished": "2020-03-13T08:27:24+08:00","dateModified": "2022-02-20T10:52:27+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+        "url": "https:\/\/o3r.moe\/sending-logs-from-pfsense-2-logstash\/","datePublished": "2020-03-13T08:27:24+08:00","dateModified": "2022-02-20T10:52:27+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Oscar Tseng","logo": {
                     "@type": "ImageObject",
-                    "url": "https:\/\/lytzeng.github.io\/images\/profile-pic.webp",
+                    "url": "https:\/\/o3r.moe\/images\/profile-pic.webp",
                     "width":  1283 ,
                     "height":  1283 
                 }},"author": {
@@ -478,7 +478,7 @@ input {
                             <a class="link-to-markdown" href="/sending-logs-from-pfsense-2-logstash/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/" data-title="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash" data-hashtags="ELK,pfSense"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/" data-hashtag="ELK"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://lytzeng.github.io/sending-logs-from-pfsense-2-logstash/" data-title="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://o3r.moe/sending-logs-from-pfsense-2-logstash/" data-title="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash" data-hashtags="ELK,pfSense"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://o3r.moe/sending-logs-from-pfsense-2-logstash/" data-hashtag="ELK"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://o3r.moe/sending-logs-from-pfsense-2-logstash/" data-title="ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a></span>
             </div>
         </div>
     </div>

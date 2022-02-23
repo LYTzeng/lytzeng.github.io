@@ -61,4 +61,4 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-Sitemap: https://lytzeng.github.io/sitemap.xml
+Sitemap: https://o3r.moe/sitemap.xml

@@ -1,14 +1,14 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Misc - Category - Blog O3R</title>
-        <link>https://lytzeng.github.io/categories/misc/</link>
+        <link>https://o3r.moe/categories/misc/</link>
         <description>Misc - Category - Blog O3R</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sun, 08 Dec 2019 13:21:31 &#43;0800</lastBuildDate><atom:link href="https://lytzeng.github.io/categories/misc/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sun, 08 Dec 2019 13:21:31 &#43;0800</lastBuildDate><atom:link href="https://o3r.moe/categories/misc/" rel="self" type="application/rss+xml" /><item>
     <title>開端</title>
-    <link>https://lytzeng.github.io/why-i-launch-this-blog/</link>
+    <link>https://o3r.moe/why-i-launch-this-blog/</link>
     <pubDate>Sun, 08 Dec 2019 13:21:31 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://lytzeng.github.io/why-i-launch-this-blog/</guid>
+    <guid>https://o3r.moe/why-i-launch-this-blog/</guid>
     <description><![CDATA[為什麼決定要架 Blog 寫技術文章？ 其實很早以前就有這個想法，而遲遲沒有執行。當下和周遭的人表達這個想法時，通常都是「寫部落格，太累了吧！」 當然我知]]></description>
 </item></channel>
 </rss>

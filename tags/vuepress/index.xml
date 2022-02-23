@@ -1,28 +1,28 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>VuePress - Tag - Blog O3R</title>
-        <link>https://lytzeng.github.io/tags/vuepress/</link>
+        <link>https://o3r.moe/tags/vuepress/</link>
         <description>VuePress - Tag - Blog O3R</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 11 Dec 2019 14:07:14 &#43;0800</lastBuildDate><atom:link href="https://lytzeng.github.io/tags/vuepress/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 11 Dec 2019 14:07:14 &#43;0800</lastBuildDate><atom:link href="https://o3r.moe/tags/vuepress/" rel="self" type="application/rss+xml" /><item>
     <title>VuePress 部落格架設與折騰 (三)：Global Computed、標籤與分類功能、Components 的應用</title>
-    <link>https://lytzeng.github.io/vuepress-blog-3/</link>
+    <link>https://o3r.moe/vuepress-blog-3/</link>
     <pubDate>Wed, 11 Dec 2019 14:07:14 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://lytzeng.github.io/vuepress-blog-3/</guid>
+    <guid>https://o3r.moe/vuepress-blog-3/</guid>
     <description><![CDATA[「使用 VuePress 架設部落格以及被折騰」的系列文，是我架設本部落格的過程筆記，希望日後對有需要使用 VuePress 架設 Blog 的朋友有一點點幫助。內文有誤的部分，敬請指正]]></description>
 </item><item>
     <title>VuePress 部落格架設與折騰 (二)：Components</title>
-    <link>https://lytzeng.github.io/vuepress-blog-2/</link>
+    <link>https://o3r.moe/vuepress-blog-2/</link>
     <pubDate>Tue, 10 Dec 2019 14:55:51 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://lytzeng.github.io/vuepress-blog-2/</guid>
+    <guid>https://o3r.moe/vuepress-blog-2/</guid>
     <description><![CDATA[「使用 VuePress 架設部落格以及被折騰」的系列文，是我架設本部落格的過程筆記，希望日後對有需要使用 VuePress 架設 Blog 的朋友有一點點幫助。內文有誤的部分，敬請指正]]></description>
 </item><item>
     <title>VuePress 部落格架設與折騰 (一)：Themes、頁面元素、部署至 Github</title>
-    <link>https://lytzeng.github.io/vuepress-blog-1/</link>
+    <link>https://o3r.moe/vuepress-blog-1/</link>
     <pubDate>Mon, 09 Dec 2019 06:37:30 &#43;0800</pubDate>
     <author>Author</author>
-    <guid>https://lytzeng.github.io/vuepress-blog-1/</guid>
+    <guid>https://o3r.moe/vuepress-blog-1/</guid>
     <description><![CDATA[這個部落格決定使用 VuePress 架設，過程中遇到種種問題以及官方文件寫不清楚的地方，因此這一系列 VuePress 筆記同時也希望幫助到剛接觸的人。會想使用 VuePres]]></description>
 </item></channel>
 </rss>
