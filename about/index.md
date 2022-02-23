@@ -34,8 +34,8 @@ Summer Intern
 {{< /timeline >}}
 
 ## 沒什麼用的證照
-|                                                                                                                                                                                |                                                                                                                                                                                    |                                                                                                                                                                              |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|                                                                                                    |                                                                                                 |                                                                                                   |
+| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | {{< image src="AWS-SAA.png" caption="AWS Solutions Architect Associate" width=200 linked=false >}} | {{< image src="CCNA.jpg" caption="Cisco Certified Network Associate" width=200 linked=false >}} | {{< image src="AWS-ACP.png" caption="AWS Certified Cloud Practitioner" width=200 linked=false >}} |
 
 
@@ -55,4 +55,33 @@ Summer Intern
 > 如果眾人離Kana而去 我會是唯一守護她的人\
 > 如果世界與Kana為敵 我會與世界為敵\
 > 如果世界上沒有人守護Kana了 代表我已經不在這個世界上了
+---
+## :warning: 授權條款 License :warning:
 
+以下授權不包含本部落格上方橫幅圖片，橫幅圖片著作權及版權屬於原作者。
+
+The below license does not include the banner image on the top of the blog, which is the copyright of the original author.
+
+### [CC BY-NC 4.0 (Attribution-NonCommercial 4.0 International)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+{{< admonition warning "姓名標示 (Attribution)" >}}
+你必須給予**適當表彰**、提供指向本授權條款的連結，以及**指出（本作品的原始版本）是否已被變更**。你可以任何合理方式為前述表彰，但不得以任何方式暗示授權人為你或你的使用方式背書。
+
+You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use. 
+{{< /admonition >}}
+
+{{< admonition failure "非商業性  (NonCommercial)" >}}
+不得增加額外限制 — 你不能增設法律條款或科技措施，來限制別人依授權條款本已許可的作為。
+
+You may not use the material for commercial purposes. 
+{{< /admonition >}}
+
+{{< admonition success "你可自由 You are free to" >}}
+分享 — 以任何媒介或格式重製及散布本素材
+
+Share — copy and redistribute the material in any medium or format 
+
+修改 — 重混、轉換本素材、及依本素材建立新素材 
+
+Adapt — remix, transform, and build upon the material
+{{< /admonition >}}
