@@ -167,6 +167,8 @@
             <span class="othreer" style="--index: 2;">o3R</span>
         </div>
     </div>
+    <div class="header-bg-credits">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/73785165" target="_blank" rel="noopener noreferrer">6L36</a>&nbsp;<a href="https://twitter.com/6L36DlPKD21KqZQ" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
@@ -276,13 +278,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 安裝 JRE</span>
-sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install default-jre -y
-java -version
-<span class="c1"># 安裝 logstash</span>
-curl -L -O https://artifacts.elastic.co/downloads/logstash/logstash-7.6.1.deb
-sudo dpkg -i logstash-7.6.1.deb
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 安裝 JRE</span>
+</span></span><span class="line"><span class="cl">sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install default-jre -y
+</span></span><span class="line"><span class="cl">java -version
+</span></span><span class="line"><span class="cl"><span class="c1"># 安裝 logstash</span>
+</span></span><span class="line"><span class="cl">curl -L -O https://artifacts.elastic.co/downloads/logstash/logstash-7.6.1.deb
+</span></span><span class="line"><span class="cl">sudo dpkg -i logstash-7.6.1.deb
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="logstash-的檔案結構">Logstash 的檔案結構</h2>
 <p>請見<a href="https://www.elastic.co/guide/en/logstash/7.6/dir-layout.html#deb-layout" target="_blank" rel="noopener noreffer">文件</a>中有詳情，這邊主要是了解 Logstash 各種設定放在哪裡，以及他們有不同的作用。</p>
@@ -359,21 +361,21 @@ sudo dpkg -i logstash-7.6.1.deb
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">#tcp syslog stream via 5140
-input {
-  tcp {
-    type =&gt; &#34;syslog&#34;
-    port =&gt; 6514
-  }
-}
-#udp syslogs stream via 5140
-input {
-  udp {
-    type =&gt; &#34;syslog&#34;
-    port =&gt; 6514
-  }
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#tcp syslog stream via 5140
+</span></span><span class="line"><span class="cl">input {
+</span></span><span class="line"><span class="cl">  tcp {
+</span></span><span class="line"><span class="cl">    type =&gt; &#34;syslog&#34;
+</span></span><span class="line"><span class="cl">    port =&gt; 6514
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">#udp syslogs stream via 5140
+</span></span><span class="line"><span class="cl">input {
+</span></span><span class="line"><span class="cl">  udp {
+</span></span><span class="line"><span class="cl">    type =&gt; &#34;syslog&#34;
+</span></span><span class="line"><span class="cl">    port =&gt; 6514
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="10-syslogconf-前半段"><code>10-syslog.conf</code> 前半段</h4>
 <div class="highlight"><div class="chroma">
@@ -395,22 +397,22 @@ input {
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">filter {
-  if [type] == &#34;syslog&#34; {
-    #change to pfSense ip address
-    if [host] =~ /172\.30\.0\.1/ { # 這邊要修改
-      mutate {
-        add_tag =&gt; [&#34;pfSense&#34;, &#34;Ready&#34;]
-      }
-    }
-    if &#34;Ready&#34; not in [tags] {
-      mutate {
-        add_tag =&gt; [ &#34;syslog&#34; ]
-      }
-    }
-  }
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">filter {
+</span></span><span class="line"><span class="cl">  if [type] == &#34;syslog&#34; {
+</span></span><span class="line"><span class="cl">    #change to pfSense ip address
+</span></span><span class="line"><span class="cl">    if [host] =~ /172\.30\.0\.1/ { # 這邊要修改
+</span></span><span class="line"><span class="cl">      mutate {
+</span></span><span class="line"><span class="cl">        add_tag =&gt; [&#34;pfSense&#34;, &#34;Ready&#34;]
+</span></span><span class="line"><span class="cl">      }
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">    if &#34;Ready&#34; not in [tags] {
+</span></span><span class="line"><span class="cl">      mutate {
+</span></span><span class="line"><span class="cl">        add_tag =&gt; [ &#34;syslog&#34; ]
+</span></span><span class="line"><span class="cl">      }
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>架 ELK 需要特別注意服務之間溝通的 Port</strong>，預設 <strong>Elasticsearch</strong> 會使用 <mark>Port <code>9200</code></mark> 來接收 Logstash 的資料，因此<code>30-outputs.conf</code>的設定請參考下面：</p>
 <h4 id="30-outputsconf"><code>30-outputs.conf</code></h4>
@@ -427,16 +429,16 @@ input {
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">output {
-  if [type] == &#34;syslog&#34; {
-    elasticsearch {
-        hosts =&gt; &#34;172.30.0.5:9200&#34;
-        index =&gt; &#34;logstash-pfSense-%{+YYYY.MM.dd}&#34;
-    }
-    stdout { codec =&gt; rubydebug }
-  }
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">output {
+</span></span><span class="line"><span class="cl">  if [type] == &#34;syslog&#34; {
+</span></span><span class="line"><span class="cl">    elasticsearch {
+</span></span><span class="line"><span class="cl">        hosts =&gt; &#34;172.30.0.5:9200&#34;
+</span></span><span class="line"><span class="cl">        index =&gt; &#34;logstash-pfSense-%{+YYYY.MM.dd}&#34;
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">    stdout { codec =&gt; rubydebug }
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著啟動 Logstash。</p>
 <div class="highlight"><div class="chroma">
@@ -444,8 +446,8 @@ input {
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo service logstash start
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo service logstash start
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如何確定 Logstash 有接收到 Syslog?
 確認 OS 有 Listen 我設定的 Port <code>6514</code> 後，我是使用 TCPDump 查看，因為目前還沒架起 Elasticsearch，所以用很原始的方式看。</p>
@@ -497,7 +499,7 @@ input {
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

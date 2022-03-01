@@ -167,6 +167,8 @@
             <span class="othreer" style="--index: 2;">o3R</span>
         </div>
     </div>
+    <div class="header-bg-credits">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/73785165" target="_blank" rel="noopener noreferrer">6L36</a>&nbsp;<a href="https://twitter.com/6L36DlPKD21KqZQ" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
@@ -263,8 +265,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">esxcli software vib install -d /vmfs/volumes/datastore1/updates/update-from-esxi6.7-6.7_update01.zip
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">esxcli software vib install -d /vmfs/volumes/datastore1/updates/update-from-esxi6.7-6.7_update01.zip
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="4">
 <li>重新開機</li>
@@ -284,10 +286,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">scp /你的下載路徑/esxi-unlocker-300.tgz root@xxx.xxx.xxx.xxx:/vmfs/volumes/datastore1/
-<span class="nb">cd</span> /vmfs/volumes/datastore1/
-tar xvf esxi-unlocker-300.tgz
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">scp /你的下載路徑/esxi-unlocker-300.tgz root@xxx.xxx.xxx.xxx:/vmfs/volumes/datastore1/
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /vmfs/volumes/datastore1/
+</span></span><span class="line"><span class="cl">tar xvf esxi-unlocker-300.tgz
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然後執行 <code>esxi-install.sh</code>，結束後重開機:</p>
 <div class="highlight"><div class="chroma">
@@ -297,10 +299,10 @@ tar xvf esxi-unlocker-300.tgz
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">chomod <span class="m">777</span> esxi-install.sh
-./esxi-install.sh
-reboot -f
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chomod <span class="m">777</span> esxi-install.sh
+</span></span><span class="line"><span class="cl">./esxi-install.sh
+</span></span><span class="line"><span class="cl">reboot -f
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Unlocker 安裝完畢後，可以執行<code>esxi-smctest.sh</code> 檢查 Unlocker 是否成功安裝。成功安裝的話會有以下 Output：</p>
 <div class="highlight"><div class="chroma">
@@ -310,10 +312,10 @@ reboot -f
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">/bin/vmx
-smcPresent = true
-custom.vgz     false   38930360 B
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/bin/vmx
+</span></span><span class="line"><span class="cl">smcPresent = true
+</span></span><span class="line"><span class="cl">custom.vgz     false   38930360 B
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="macos-的-vmdk">macOS 的 VMDK</h2>
 <p>接著我們會使用比較不同的安裝方式。有別於一般使用映像檔安裝，我們會先建立一個 VM，再將 macOS 的 VMDK 新增到該 VM。這樣開機時該虛擬硬碟就會被讀取。和 ISO 安裝相比，這是我目前嘗試過成功機率最高的方法。安裝的 macOS 版本是 10.15，請特別留意<a href="https://www.vmware.com/resources/compatibility/pdf/VMware_GOS_Compatibility_Guide.pdf?fbclid=IwAR3TwlRY_63Q5KsiInF-1bnQyNi40OnpElkrZ9TMgfzXgwOST8FMB2MYKFY#page=6" target="_blank" rel="noopener noreffer">文件中</a>有註明 ESXi 所支援的 macOS 版本。</p>
@@ -330,9 +332,9 @@ custom.vgz     false   38930360 B
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /vmfs/volumes/<span class="o">[</span>datastore 名稱<span class="o">]</span>
-vmkfs -i macOS_Catalina_Final.vmdk -d thin macOS_Catalina_Final_new.vmdk
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /vmfs/volumes/<span class="o">[</span>datastore 名稱<span class="o">]</span>
+</span></span><span class="line"><span class="cl">vmkfs -i macOS_Catalina_Final.vmdk -d thin macOS_Catalina_Final_new.vmdk
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著開始建立新的虛擬機器。</p>
 <h2 id="建立新的虛擬機器">建立新的虛擬機器</h2>
@@ -389,9 +391,9 @@ vmkfs -i macOS_Catalina_Final.vmdk -d thin macOS_Catalina_Final_new.vmdk
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /vmfs/volumes/<span class="o">[</span>datastore 名稱<span class="o">]</span>/<span class="o">[</span>虛擬機器名稱<span class="o">]</span>
-<span class="nb">echo</span> <span class="s1">&#39;smc.version = &#34;0&#34;&#39;</span> &gt;&gt; <span class="o">[</span>虛擬機器名稱<span class="o">]</span>.vmx
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /vmfs/volumes/<span class="o">[</span>datastore 名稱<span class="o">]</span>/<span class="o">[</span>虛擬機器名稱<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;smc.version = &#34;0&#34;&#39;</span> &gt;&gt; <span class="o">[</span>虛擬機器名稱<span class="o">]</span>.vmx
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -535,8 +537,8 @@ vmkfs -i macOS_Catalina_Final.vmdk -d thin macOS_Catalina_Final_new.vmdk
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cat <span class="s1">&#39;/System/Library/Extensions/Dont Steal MacOS X.kext/Contents/MacOS/Dont Steal Mac OS X&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat <span class="s1">&#39;/System/Library/Extensions/Dont Steal MacOS X.kext/Contents/MacOS/Dont Steal Mac OS X&#39;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>裡面有一段文字這麼寫道：</p>
 <div class="highlight"><div class="chroma">
@@ -557,21 +559,21 @@ vmkfs -i macOS_Catalina_Final.vmdk -d thin macOS_Catalina_Final_new.vmdk
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Copyright (c) 2006-2019 Apple Inc. All rights reserved.
-
-The purpose of this Apple software is to protect Apple copyrighted materials from 
-unauthorized copying and use. You may not copy, modify, reverse engineer, publicly 
-display, publicly perform, sublicense, transfer or redistribute this file, in whole or 
-in part.  If you have obtained a copy of this Apple software and do not have a valid 
-license from Apple to use it, please immediately destroy or delete it from your 
-computer.
-
- Dont_Steal_Mac_OS_X AppleSMC &#34;DSMOS: SMC read error K0: %d&#34;@/BuildRoot/Library/Caches/
- com.apple.xbs/Sources/DontStealMacOS/DontStealMacOS-30.0.1/Dont_Steal_MacOS.cpp:191 
- &#34;DSMOS: SMC read error K1: %d&#34;@/BuildRoot/Library/Caches/com.apple.xbs/Sources/
- DontStealMacOS/DontStealMacOS-30.0.1/Dont_Steal_MacOS.cpp:198 %02x DSMOS: SMC returned 
- incorrect key: %s
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Copyright (c) 2006-2019 Apple Inc. All rights reserved.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">The purpose of this Apple software is to protect Apple copyrighted materials from 
+</span></span><span class="line"><span class="cl">unauthorized copying and use. You may not copy, modify, reverse engineer, publicly 
+</span></span><span class="line"><span class="cl">display, publicly perform, sublicense, transfer or redistribute this file, in whole or 
+</span></span><span class="line"><span class="cl">in part.  If you have obtained a copy of this Apple software and do not have a valid 
+</span></span><span class="line"><span class="cl">license from Apple to use it, please immediately destroy or delete it from your 
+</span></span><span class="line"><span class="cl">computer.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> Dont_Steal_Mac_OS_X AppleSMC &#34;DSMOS: SMC read error K0: %d&#34;@/BuildRoot/Library/Caches/
+</span></span><span class="line"><span class="cl"> com.apple.xbs/Sources/DontStealMacOS/DontStealMacOS-30.0.1/Dont_Steal_MacOS.cpp:191 
+</span></span><span class="line"><span class="cl"> &#34;DSMOS: SMC read error K1: %d&#34;@/BuildRoot/Library/Caches/com.apple.xbs/Sources/
+</span></span><span class="line"><span class="cl"> DontStealMacOS/DontStealMacOS-30.0.1/Dont_Steal_MacOS.cpp:198 %02x DSMOS: SMC returned 
+</span></span><span class="line"><span class="cl"> incorrect key: %s
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>什麼意思呢，嘿嘿，就自行解讀囉。</p>
 <h2 id="references">References</h2>
@@ -615,7 +617,7 @@ computer.
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

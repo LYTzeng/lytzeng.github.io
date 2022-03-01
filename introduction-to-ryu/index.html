@@ -163,6 +163,8 @@
             <span class="othreer" style="--index: 2;">o3R</span>
         </div>
     </div>
+    <div class="header-bg-credits">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/73785165" target="_blank" rel="noopener noreferrer">6L36</a>&nbsp;<a href="https://twitter.com/6L36DlPKD21KqZQ" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
@@ -223,8 +225,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">pip install ryu
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install ryu
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Ryu 部分功能有依賴其他套件，可以一併安裝。</p>
 <div class="highlight"><div class="chroma">
@@ -232,8 +234,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">pip install -r &lt;<span class="o">(</span>curl https://raw.githubusercontent.com/osrg/ryu/master/tools/optional-requires<span class="o">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install -r &lt;<span class="o">(</span>curl https://raw.githubusercontent.com/osrg/ryu/master/tools/optional-requires<span class="o">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>還有一些是必要的 Dependencies：</p>
 <div class="highlight"><div class="chroma">
@@ -241,8 +243,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">apt-get install -y gcc python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev zlib1g-dev
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get install -y gcc python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev zlib1g-dev
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="或是使用-ryu-container">或是，使用 Ryu Container</h2>
 <p>我很喜歡 Container 超好用，環境單純，不需要煩惱架設環境所踩到的雷，不過要想清楚的是 Container 間的網路怎麼連，目前我想讓 Mininet 容器能夠和 Ryu Controller 容器可以互連，因此使用預設的 bridge mode 即可。為了讓 Ryu 容器可以吃到我之後寫的 Python，所以要 Mount 一個 Volume 對應到主機的某資料夾。</p>
@@ -257,14 +259,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mkdir -p ~/ryu_test ~/tcpdump
-<span class="c1"># 開 Ryu</span>
-docker pull osrg/ryu
-docker run -it --name ryu <span class="se">\
-</span><span class="se"></span>             -v ~/ryu_test:/ryu_test <span class="se">\
-</span><span class="se"></span>             --hostname ryu <span class="se">\
-</span><span class="se"></span>             osrg/ryu
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p ~/ryu_test ~/tcpdump
+</span></span><span class="line"><span class="cl"><span class="c1"># 開 Ryu</span>
+</span></span><span class="line"><span class="cl">docker pull osrg/ryu
+</span></span><span class="line"><span class="cl">docker run -it --name ryu <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             -v ~/ryu_test:/ryu_test <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             --hostname ryu <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             osrg/ryu
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著到另一個視窗開 Mininet</p>
 <div class="highlight"><div class="chroma">
@@ -278,14 +280,14 @@ docker run -it --name ryu <span class="se">\
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run -it --rm --privileged -e DISPLAY <span class="se">\
-</span><span class="se"></span>             --name mininet <span class="se">\
-</span><span class="se"></span>             -v /tmp/.X11-unix:/tmp/.X11-unix <span class="se">\
-</span><span class="se"></span>             -v /lib/modules:/lib/modules <span class="se">\
-</span><span class="se"></span>             -v ~/tcpdump:/tcpdump <span class="se">\
-</span><span class="se"></span>             --hostname mininet <span class="se">\
-</span><span class="se"></span>             iwaseyusuke/mininet
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -it --rm --privileged -e DISPLAY <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             --name mininet <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             -v /tmp/.X11-unix:/tmp/.X11-unix <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             -v /lib/modules:/lib/modules <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             -v ~/tcpdump:/tcpdump <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             --hostname mininet <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>             iwaseyusuke/mininet
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>查看 Ryu 的 IP，是<code>172.17.0.2</code>：</p>
 <div class="highlight"><div class="chroma">
@@ -301,16 +303,16 @@ docker run -it --name ryu <span class="se">\
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@ryu:~# ip a
-1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-20: eth0@if21: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default      
-    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
-       valid_lft forever preferred_lft forever
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@ryu:~# ip a
+</span></span><span class="line"><span class="cl">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+</span></span><span class="line"><span class="cl">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span><span class="line"><span class="cl">    inet 127.0.0.1/8 scope host lo
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">20: eth0@if21: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default      
+</span></span><span class="line"><span class="cl">    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span><span class="line"><span class="cl">    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="執行-simple-switch">執行 Simple Switch</h2>
 <p>運行 Ryu 的 Simple Switch: <code>ryu-manager ryu.app.simple_switch_15</code>， 測試 Controller 是否可以被 Mininet 連接。</p>
@@ -323,12 +325,12 @@ docker run -it --name ryu <span class="se">\
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@ryu:~# ryu-manager ryu.app.simple_switch_15
-loading app ryu.app.simple_switch_15
-loading app ryu.controller.ofp_handler
-instantiating app ryu.app.simple_switch_15 of SimpleSwitch15
-instantiating app ryu.controller.ofp_handler of OFPHandler
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@ryu:~# ryu-manager ryu.app.simple_switch_15
+</span></span><span class="line"><span class="cl">loading app ryu.app.simple_switch_15
+</span></span><span class="line"><span class="cl">loading app ryu.controller.ofp_handler
+</span></span><span class="line"><span class="cl">instantiating app ryu.app.simple_switch_15 of SimpleSwitch15
+</span></span><span class="line"><span class="cl">instantiating app ryu.controller.ofp_handler of OFPHandler
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著啟動 Mininet，控制器指定到 Ryu 的 IP：</p>
 <div class="highlight"><div class="chroma">
@@ -340,12 +342,12 @@ instantiating app ryu.controller.ofp_handler of OFPHandler
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@mininet:~# mn --topo single,3 --mac \
-        --switch ovsk,protocols=OpenFlow15 \
-        --controller remote,ip=172.17.0.2
-...
-mininet&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@mininet:~# mn --topo single,3 --mac \
+</span></span><span class="line"><span class="cl">        --switch ovsk,protocols=OpenFlow15 \
+</span></span><span class="line"><span class="cl">        --controller remote,ip=172.17.0.2
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">mininet&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>你會看見 Ryu 輸出一堆封包訊息：</p>
 <div class="highlight"><div class="chroma">
@@ -357,12 +359,12 @@ mininet&gt;
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">packet in 1 00:00:00:00:00:01 33:33:ff:00:00:01 1
-packet in 1 00:00:00:00:00:03 33:33:00:00:00:16 3
-packet in 1 00:00:00:00:00:02 33:33:00:00:00:16 2
-packet in 1 00:00:00:00:00:01 33:33:00:00:00:16 1
-...
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">packet in 1 00:00:00:00:00:01 33:33:ff:00:00:01 1
+</span></span><span class="line"><span class="cl">packet in 1 00:00:00:00:00:03 33:33:00:00:00:16 3
+</span></span><span class="line"><span class="cl">packet in 1 00:00:00:00:00:02 33:33:00:00:00:16 2
+</span></span><span class="line"><span class="cl">packet in 1 00:00:00:00:00:01 33:33:00:00:00:16 1
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>最後 Pingall 測試 Hosts 之間可以互通。</p>
 <div class="highlight"><div class="chroma">
@@ -375,13 +377,13 @@ packet in 1 00:00:00:00:00:01 33:33:00:00:00:16 1
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">mininet&gt; pingall
-*** Ping: testing ping reachability
-h1 -&gt; h2 h3 
-h2 -&gt; h1 h3 
-h3 -&gt; h1 h2
-*** Results: 0% dropped (6/6 received)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mininet&gt; pingall
+</span></span><span class="line"><span class="cl">*** Ping: testing ping reachability
+</span></span><span class="line"><span class="cl">h1 -&gt; h2 h3 
+</span></span><span class="line"><span class="cl">h2 -&gt; h1 h3 
+</span></span><span class="line"><span class="cl">h3 -&gt; h1 h2
+</span></span><span class="line"><span class="cl">*** Results: 0% dropped (6/6 received)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="ryu-開發框架結構">Ryu 開發框架結構</h2>
 <p>下面這個程式還沒有任何功能，不過已經是一個最基本可以運行的 Ryu 程式。<code>ryu.base.app_manager.RyuApp(*_args, **_kwargs)</code> 這個 Class 是 Ryu 的 Base class，我們自己寫的 Class 必須繼承這個 Class。文件中規定，Constructor 中必須呼叫 Parent 的 Constructor，換句話說就是 <code>__init__</code> 中必須呼叫 <code>RyuApp.__init__</code>，也就是<code>super.__init__</code>。</p>
@@ -393,11 +395,11 @@ h3 -&gt; h1 h2
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">ryu.base</span> <span class="kn">import</span> <span class="n">app_manager</span>
-<span class="k">class</span> <span class="nc">L2SW</span><span class="p">(</span><span class="n">app_manager</span><span class="o">.</span><span class="n">RyuApp</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">L2SW</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ryu.base</span> <span class="kn">import</span> <span class="n">app_manager</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">L2SW</span><span class="p">(</span><span class="n">app_manager</span><span class="o">.</span><span class="n">RyuApp</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">super</span><span class="p">(</span><span class="n">L2SW</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接下來觀察 <code>simple_switch</code> 原始碼，藉此了解如何開發 Ryu Controller。
 Code <a href="https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_15.py" target="_blank" rel="noopener noreffer">在官方 Repo 中</a></p>
@@ -410,10 +412,10 @@ Code <a href="https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_15.p
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">ryu.ofproto</span> <span class="kn">import</span> <span class="n">ofproto_v1_5</span>
-<span class="o">...</span>
-<span class="n">OFP_VERSIONS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ofproto_v1_5</span><span class="o">.</span><span class="n">OFP_VERSION</span><span class="p">]</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">ryu.ofproto</span> <span class="kn">import</span> <span class="n">ofproto_v1_5</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">OFP_VERSIONS</span> <span class="o">=</span> <span class="p">[</span><span class="n">ofproto_v1_5</span><span class="o">.</span><span class="n">OFP_VERSION</span><span class="p">]</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="decorator-set_ev_clsev_cls-dispatchersnone">Decorator <code>@set_ev_cls(ev_cls, dispatchers=None)</code></h3>
 <p>Ryu 讓我們透過 <code>@set_ev_cls</code> 這個 Decorated Method 來定義 Event Handeler 的角色，當該定義的 Event 發生時，就會執行 Decorator 下方的函式。這個 Decorated Method 接收兩個參數： <code>ev_cls</code> 和 <code>dispatcher</code>。<code>ev_cls</code> 這個 Event Class 參數要放入 OpenFlow 的 Messages and Structures，依照 OpenFlow 標準分為 Controller-to-Switch、Asynchronous 與 Symmetric，以 OpenFlow 1.5 為例，<a href="https://ryu.readthedocs.io/en/latest/ofproto_v1_5_ref.html" target="_blank" rel="noopener noreffer">文件中</a>就有列出所有的種類以及他們的作用。 <code>dispatcher</code> 參數用來決定要處理哪個 Negotiation Phase (Switch 與 Controller 交涉的階段)，總共有四個階段，取決於你放的 <code>ev_cls</code> 為何。</p>
@@ -450,9 +452,9 @@ Code <a href="https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_15.p
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nd">@set_ev_cls</span><span class="p">(</span><span class="n">ofp_event</span><span class="o">.</span><span class="n">EventOFPSwitchFeatures</span><span class="p">,</span> <span class="n">CONFIG_DISPATCHER</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">switch_features_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nd">@set_ev_cls</span><span class="p">(</span><span class="n">ofp_event</span><span class="o">.</span><span class="n">EventOFPSwitchFeatures</span><span class="p">,</span> <span class="n">CONFIG_DISPATCHER</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">switch_features_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>ofp_event.EventOFPPacketIn</code> 是 Packet-In Message，意即當 Switch 收到進入的封包時，所發送給 Controller 的訊息。當 Switch 收到封包時觸發，對應到的 Negotiation phase 為 <code>MAIN_DISPATCHER</code>。</p>
 <div class="highlight"><div class="chroma">
@@ -461,9 +463,9 @@ Code <a href="https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_15.p
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nd">@set_ev_cls</span><span class="p">(</span><span class="n">ofp_event</span><span class="o">.</span><span class="n">EventOFPPacketIn</span><span class="p">,</span> <span class="n">MAIN_DISPATCHER</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_packet_in_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nd">@set_ev_cls</span><span class="p">(</span><span class="n">ofp_event</span><span class="o">.</span><span class="n">EventOFPPacketIn</span><span class="p">,</span> <span class="n">MAIN_DISPATCHER</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">_packet_in_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="add-flow">Add Flow</h3>
 <p>再來看看 Function 裡面的變數是如何使用的。</p>
@@ -480,16 +482,16 @@ Code <a href="https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_15.p
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nd">@set_ev_cls</span><span class="p">(</span><span class="n">ofp_event</span><span class="o">.</span><span class="n">EventOFPSwitchFeatures</span><span class="p">,</span> <span class="n">CONFIG_DISPATCHER</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">switch_features_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
-    <span class="n">datapath</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">datapath</span>
-    <span class="n">ofproto</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">ofproto</span>
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">ofproto_parser</span>
-    <span class="n">match</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">OFPMatch</span><span class="p">()</span>
-    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">parser</span><span class="o">.</span><span class="n">OFPActionOutput</span><span class="p">(</span><span class="n">ofproto</span><span class="o">.</span><span class="n">OFPP_CONTROLLER</span><span class="p">,</span>
-                                      <span class="n">ofproto</span><span class="o">.</span><span class="n">OFPCML_NO_BUFFER</span><span class="p">)]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">actions</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nd">@set_ev_cls</span><span class="p">(</span><span class="n">ofp_event</span><span class="o">.</span><span class="n">EventOFPSwitchFeatures</span><span class="p">,</span> <span class="n">CONFIG_DISPATCHER</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">switch_features_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">datapath</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">datapath</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ofproto</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">ofproto</span>
+</span></span><span class="line"><span class="cl">    <span class="n">parser</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">ofproto_parser</span>
+</span></span><span class="line"><span class="cl">    <span class="n">match</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">OFPMatch</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">parser</span><span class="o">.</span><span class="n">OFPActionOutput</span><span class="p">(</span><span class="n">ofproto</span><span class="o">.</span><span class="n">OFPP_CONTROLLER</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                      <span class="n">ofproto</span><span class="o">.</span><span class="n">OFPCML_NO_BUFFER</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="bp">self</span><span class="o">.</span><span class="n">add_flow</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">actions</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>ev.msg.datapath</code> 代表 Switch 物件</li>
@@ -511,17 +513,17 @@ Code <a href="https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_15.p
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">add_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datapath</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
-    <span class="n">ofproto</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">ofproto</span>
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">ofproto_parser</span>
-
-    <span class="n">inst</span> <span class="o">=</span> <span class="p">[</span><span class="n">parser</span><span class="o">.</span><span class="n">OFPInstructionActions</span><span class="p">(</span><span class="n">ofproto</span><span class="o">.</span><span class="n">OFPIT_APPLY_ACTIONS</span><span class="p">,</span>
-                                         <span class="n">actions</span><span class="p">)]</span>
-
-    <span class="n">mod</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">OFPFlowMod</span><span class="p">(</span><span class="n">datapath</span><span class="o">=</span><span class="n">datapath</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
-                            <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="n">inst</span><span class="p">)</span>
-    <span class="n">datapath</span><span class="o">.</span><span class="n">send_msg</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">add_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datapath</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ofproto</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">ofproto</span>
+</span></span><span class="line"><span class="cl">    <span class="n">parser</span> <span class="o">=</span> <span class="n">datapath</span><span class="o">.</span><span class="n">ofproto_parser</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">inst</span> <span class="o">=</span> <span class="p">[</span><span class="n">parser</span><span class="o">.</span><span class="n">OFPInstructionActions</span><span class="p">(</span><span class="n">ofproto</span><span class="o">.</span><span class="n">OFPIT_APPLY_ACTIONS</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                         <span class="n">actions</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">mod</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">OFPFlowMod</span><span class="p">(</span><span class="n">datapath</span><span class="o">=</span><span class="n">datapath</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">match</span><span class="o">=</span><span class="n">match</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="n">inst</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">datapath</span><span class="o">.</span><span class="n">send_msg</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>OFPInstructionActions</code> 就是 OpenFlow 的 Instruction，種類由第一個參數設定，三選一如下，第二個參數放入 <code>OFPInstructionActions</code>。
@@ -581,7 +583,7 @@ Code <a href="https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_15.p
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

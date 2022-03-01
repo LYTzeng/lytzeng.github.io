@@ -167,6 +167,8 @@
             <span class="othreer" style="--index: 2;">o3R</span>
         </div>
     </div>
+    <div class="header-bg-credits">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/73785165" target="_blank" rel="noopener noreferrer">6L36</a>&nbsp;<a href="https://twitter.com/6L36DlPKD21KqZQ" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
@@ -272,21 +274,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
-    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
-    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="nt">&#34;Sid&#34;</span><span class="p">:</span> <span class="s2">&#34;VisualEditor0&#34;</span><span class="p">,</span>
-            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
-            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&#34;lambda:InvokeFunction&#34;</span><span class="p">,</span>
-                <span class="s2">&#34;lambda:PutFunctionEventInvokeConfig&#34;</span>
-            <span class="p">],</span>
-            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;*&#34;</span>
-        <span class="p">}</span>
-    <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Sid&#34;</span><span class="p">:</span> <span class="s2">&#34;VisualEditor0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;lambda:InvokeFunction&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;lambda:PutFunctionEventInvokeConfig&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;*&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著建立一個 Role 並 <strong>Attach policies</strong>。除了 attach 剛才建立的 policy，還需要 attach 一個 <code>AmazonAPIGatewayPushToCloudWatchLogs</code> 的 policy，可以直接搜尋，順便將 <strong>Role ARN</strong>複製下來，之後會使用到。接下來就可以建立一個 API。</p>
 <p><img
@@ -350,8 +352,8 @@ Stage 代表這個 API 的開發階段，例如 <code>dev, prod, beta, v2</code>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">https://{restapi-id}.execute-api.{region}.amazonaws.com/{stageName}/{resource}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://{restapi-id}.execute-api.{region}.amazonaws.com/{stageName}/{resource}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>假設我建立一個名為 <code>ec2ctl</code> 的 <strong>resource</strong>，<strong>stage</strong> 為 <code>dev</code>，API 位於 <code>us-west-2</code> 的 region，則我的 API URL 會是 <code>https://{restapi-id}.execute-api.us-west-2.amazonaws.com/dev/ec2ctl</code> 。</p>
 <h4 id="建立-resource">建立 Resource</h4>
@@ -409,28 +411,28 @@ Stage 代表這個 API 的開發階段，例如 <code>dev, prod, beta, v2</code>
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
-    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
-    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
-            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">&#34;AWS&#34;</span><span class="p">:</span> <span class="s2">&#34;*&#34;</span>
-            <span class="p">},</span>
-            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;execute-api:Invoke&#34;</span><span class="p">,</span>
-            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;execute-api:/*/*/ec2ctl&#34;</span><span class="p">,</span>
-            <span class="nt">&#34;Condition&#34;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="nt">&#34;IpAddress&#34;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="nt">&#34;aws:SourceIp&#34;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&#34;192.0.2.1/32&#34;</span><span class="p">,</span>
-                        <span class="s2">&#34;192.0.2.2/32&#34;</span>
-                    <span class="p">]</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;AWS&#34;</span><span class="p">:</span> <span class="s2">&#34;*&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;execute-api:Invoke&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;execute-api:/*/*/ec2ctl&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Condition&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;IpAddress&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;aws:SourceIp&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                        <span class="s2">&#34;192.0.2.1/32&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="s2">&#34;192.0.2.2/32&#34;</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="deploy-api-到指定-stage">Deploy API 到指定 Stage</h4>
 <p>點選左側選單 <strong>Resources</strong>，<strong>Action</strong> &gt; <strong>Deploy API</strong>，<strong>[New Stage]</strong> 後輸入 stage name，deploy 後即可使用這個 API。
@@ -539,14 +541,14 @@ Slash Command 設定可以參考這裡的範例：</li>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Usage:
-    ec2ctl version
-    ec2ctl (stop | start) -i &lt;id&gt;
-    ec2ctl ls [-r &lt;region&gt;]
-Options:
-    -i &lt;id&gt;    Specify an instance ID.
-    -r &lt;region&gt;    Specify a region.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Usage:
+</span></span><span class="line"><span class="cl">    ec2ctl version
+</span></span><span class="line"><span class="cl">    ec2ctl (stop | start) -i &lt;id&gt;
+</span></span><span class="line"><span class="cl">    ec2ctl ls [-r &lt;region&gt;]
+</span></span><span class="line"><span class="cl">Options:
+</span></span><span class="line"><span class="cl">    -i &lt;id&gt;    Specify an instance ID.
+</span></span><span class="line"><span class="cl">    -r &lt;region&gt;    Specify a region.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>測試指令是否正常，<code>/ec2ctl ls -r us-west-2</code>輸入後可以看到輸出如下：
 <img
@@ -626,7 +628,7 @@ Options:
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

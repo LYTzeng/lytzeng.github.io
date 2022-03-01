@@ -167,6 +167,8 @@
             <span class="othreer" style="--index: 2;">o3R</span>
         </div>
     </div>
+    <div class="header-bg-credits">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/73785165" target="_blank" rel="noopener noreferrer">6L36</a>&nbsp;<a href="https://twitter.com/6L36DlPKD21KqZQ" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
@@ -308,9 +310,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ls /dev/<span class="o">[</span>sh<span class="o">]</span>d*
-/dev/sda  /dev/sdb ...
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ls /dev/<span class="o">[</span>sh<span class="o">]</span>d*
+</span></span><span class="line"><span class="cl">/dev/sda  /dev/sdb ...
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著猜猜看，我覺得目標是 <code>/dev/sda/</code></p>
 <div class="highlight"><div class="chroma">
@@ -318,8 +320,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">fdisk -l /dev/sda
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">fdisk -l /dev/sda
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -338,10 +340,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/dev/sda <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">1</span>
-<span class="c1">#然後再確認一次</span>
-fdisk -l /dev/sda
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/dev/sda <span class="nv">bs</span><span class="o">=</span><span class="m">512</span> <span class="nv">count</span><span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#然後再確認一次</span>
+</span></span><span class="line"><span class="cl">fdisk -l /dev/sda
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>你會發現 <code>GPT Table is corrupted</code> 的錯誤訊息消失了。</p>
 <p><img
@@ -368,8 +370,8 @@ fdisk -l /dev/sda
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">parted /dev/sda mklabel gpt mkpart P1 fat32 <span class="m">1</span> 240GB
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">parted /dev/sda mklabel gpt mkpart P1 fat32 <span class="m">1</span> 240GB
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>:::warning 注意：
 使用這些指令請格外小心！
@@ -381,8 +383,8 @@ fdisk -l /dev/sda
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mkfs.vfat -F <span class="m">32</span> /dev/sda1
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkfs.vfat -F <span class="m">32</span> /dev/sda1
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>重新安裝，成功。看到熟悉的黃灰畫面。</p>
 <p><img
@@ -427,7 +429,7 @@ fdisk -l /dev/sda
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

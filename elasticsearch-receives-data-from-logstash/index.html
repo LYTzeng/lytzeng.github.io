@@ -167,6 +167,8 @@
             <span class="othreer" style="--index: 2;">o3R</span>
         </div>
     </div>
+    <div class="header-bg-credits">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/73785165" target="_blank" rel="noopener noreferrer">6L36</a>&nbsp;<a href="https://twitter.com/6L36DlPKD21KqZQ" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
@@ -254,12 +256,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install default-jre -y
-wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch <span class="p">|</span> sudo apt-key add -
-sudo apt-get install -y apt-transport-https
-<span class="nb">echo</span> <span class="s2">&#34;deb https://artifacts.elastic.co/packages/7.x/apt stable main&#34;</span> <span class="p">|</span> sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
-sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install -y elasticsearch
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install default-jre -y
+</span></span><span class="line"><span class="cl">wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch <span class="p">|</span> sudo apt-key add -
+</span></span><span class="line"><span class="cl">sudo apt-get install -y apt-transport-https
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;deb https://artifacts.elastic.co/packages/7.x/apt stable main&#34;</span> <span class="p">|</span> sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+</span></span><span class="line"><span class="cl">sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install -y elasticsearch
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Elasticsearch 的設定檔放在<code>/etc/elasticsearch/elasticsearch.yml</code>，<code>elasticsearch.yml</code>有幾個地方需要特別注意。</p>
 <h4 id="elasticsearchyml"><code>elasticsearch.yml</code></h4>
@@ -280,20 +282,20 @@ sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install -y el
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 因為我另外掛載大容量的 NFS 來當作儲存空間，所以需要修改預設的路徑。</span><span class="w">
-</span><span class="w"></span><span class="c"># 儲存 data 的地放</span><span class="w">
-</span><span class="w"></span><span class="nt">path.data</span><span class="p">:</span><span class="w"> </span><span class="l">/boot/lib/elasticsearch</span><span class="w">
-</span><span class="w"></span><span class="c"># 儲存 log 的地方</span><span class="w">
-</span><span class="w"></span><span class="nt">path.log</span><span class="p">:</span><span class="w"> </span><span class="l">/boot/log/elasticserch</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="c"># 如果 Kibana 和 Elasticsearch 不在同一台，一定要修改 IP。</span><span class="w">
-</span><span class="w"></span><span class="c"># 預設是 Listen 127.0.0.1 的，不修改的話無法讓其他主機連接</span><span class="w">
-</span><span class="w"></span><span class="nt">network.host</span><span class="p">:</span><span class="w"> </span><span class="m">172.30.0.5</span><span class="w">
-</span><span class="w"></span><span class="c"># 由於 network.host 非 loopback address</span><span class="w">
-</span><span class="w"></span><span class="c"># Elasticsearch 會認為這是 Production 環境</span><span class="w">
-</span><span class="w"></span><span class="c"># 所以必須修改 discovery.seed_hosts</span><span class="w">
-</span><span class="w"></span><span class="nt">discovery.seed_hosts</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;172.30.0.5&#34;</span><span class="p">]</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 因為我另外掛載大容量的 NFS 來當作儲存空間，所以需要修改預設的路徑。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 儲存 data 的地放</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">path.data</span><span class="p">:</span><span class="w"> </span><span class="l">/boot/lib/elasticsearch</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 儲存 log 的地方</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">path.log</span><span class="p">:</span><span class="w"> </span><span class="l">/boot/log/elasticserch</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果 Kibana 和 Elasticsearch 不在同一台，一定要修改 IP。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 預設是 Listen 127.0.0.1 的，不修改的話無法讓其他主機連接</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">network.host</span><span class="p">:</span><span class="w"> </span><span class="m">172.30.0.5</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 由於 network.host 非 loopback address</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Elasticsearch 會認為這是 Production 環境</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 所以必須修改 discovery.seed_hosts</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">discovery.seed_hosts</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;172.30.0.5&#34;</span><span class="p">]</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著就可以啟動 Elasticsearch，Elasticsearch 會透過 <mark>Port 9200</mark> 接收 Logstash 的資料和接收查詢指令，然後透過 <mark>Port 9300</mark> 和 Kibana 進行 Keepalive。</p>
 <div class="highlight"><div class="chroma">
@@ -301,8 +303,8 @@ sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install -y el
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo systemctl start elasticsearch.service
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo systemctl start elasticsearch.service
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然後檢查 Port 狀態：</p>
 <div class="highlight"><div class="chroma">
@@ -310,8 +312,8 @@ sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install -y el
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">netstat -nlt
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">netstat -nlt
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>注意 9200 與 9300：</p>
 <div class="highlight"><div class="chroma">
@@ -323,12 +325,12 @@ sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install -y el
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN
-tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
-tcp6       0      0 172.30.0.5:9200         :::*                    LISTEN
-tcp6       0      0 172.30.0.5:9300         :::*                    LISTEN
-tcp6       0      0 :::22                   :::*                    LISTEN
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN
+</span></span><span class="line"><span class="cl">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
+</span></span><span class="line"><span class="cl">tcp6       0      0 172.30.0.5:9200         :::*                    LISTEN
+</span></span><span class="line"><span class="cl">tcp6       0      0 172.30.0.5:9300         :::*                    LISTEN
+</span></span><span class="line"><span class="cl">tcp6       0      0 :::22                   :::*                    LISTEN
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果 Logstash 已經在運作，我們會看得到 Elasticsearch 和 Logstash 建立的 connection：</p>
 <div class="highlight"><div class="chroma">
@@ -337,9 +339,9 @@ tcp6       0      0 :::22                   :::*                    LISTEN
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@elasticsearch:/etc/elasticsearch# netstat -net | grep 9200
-tcp6       0      0 172.30.0.5:9200         172.30.0.4:51242        ESTABLISHED 111        253749
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@elasticsearch:/etc/elasticsearch# netstat -net | grep 9200
+</span></span><span class="line"><span class="cl">tcp6       0      0 172.30.0.5:9200         172.30.0.4:51242        ESTABLISHED 111        253749
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著等待 Logstash 傳送一些資料之後，可以透過 API 查詢看看是否收到資料。之前在 Logstash 的 output config 有定義 <strong>index</strong> 名稱為 <code>logstash-pfSense-%{+YYYY.MM.dd}</code>，所以查詢所有資料可以在 URL 用<code>logstash-pfSense-\*</code>，<code>_search</code>就是查詢所有資料，<code>?pretty=true</code>是為了讓輸出結果方便人類閱讀。</p>
 <div class="highlight"><div class="chroma">
@@ -347,8 +349,8 @@ tcp6       0      0 172.30.0.5:9200         172.30.0.4:51242        ESTABLISHED 
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">curl http://172.30.0.5:9200/logstash-pfSense-<span class="se">\*</span>/_search<span class="se">\?</span><span class="nv">pretty</span><span class="o">=</span><span class="nb">true</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl http://172.30.0.5:9200/logstash-pfSense-<span class="se">\*</span>/_search<span class="se">\?</span><span class="nv">pretty</span><span class="o">=</span><span class="nb">true</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果有看到一堆 JSON 格式的資料，就代表成功了，這邊沒有要特別研究查詢語法，因為接下來的工作就是讓 Kibana 查詢並製作視覺化 Dashboard。</p>
 <p><img
@@ -397,7 +399,7 @@ tcp6       0      0 172.30.0.5:9200         172.30.0.4:51242        ESTABLISHED 
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

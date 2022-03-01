@@ -167,6 +167,8 @@
             <span class="othreer" style="--index: 2;">o3R</span>
         </div>
     </div>
+    <div class="header-bg-credits">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/73785165" target="_blank" rel="noopener noreferrer">6L36</a>&nbsp;<a href="https://twitter.com/6L36DlPKD21KqZQ" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
@@ -276,12 +278,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># int ra fa 0/1 - 12
-(config-if)# sw mode access
-(config-if)# sw access vl 10
-# int ra fa 0/13 - 24
-(config-if)# sw mode access
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># int ra fa 0/1 - 12
+</span></span><span class="line"><span class="cl">(config-if)# sw mode access
+</span></span><span class="line"><span class="cl">(config-if)# sw access vl 10
+</span></span><span class="line"><span class="cl"># int ra fa 0/13 - 24
+</span></span><span class="line"><span class="cl">(config-if)# sw mode access
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>但是第24 port 要接到學校的 Swich，我怕對端有設定<a href="https://www.cisco.com/c/en/us/support/docs/lan-switching/spanning-tree-protocol/10586-65.html" target="_blank" rel="noopener noreffer">BPDU Guard</a>，因此特定對該port開啟 <strong>BPDU filter</strong>，阻止我的交換器發出 BPDU。</p>
 <div class="highlight"><div class="chroma">
@@ -290,9 +292,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># int fa0/24
-(config-if)# spanning-tree bpdufilter en
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># int fa0/24
+</span></span><span class="line"><span class="cl">(config-if)# spanning-tree bpdufilter en
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>同時將 VTP 的模式切換成 Transparent，總之，避免一切私接 Switch 對學校網路的影響。</p>
 <div class="highlight"><div class="chroma">
@@ -300,8 +302,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># vtp mode transparent
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># vtp mode transparent
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="安裝-pfsense">安裝 pfSense</h2>
 <p>安裝 pfSense 的過程參考自<a href="https://docs.netgate.com/pfsense/en/latest/virtualization/virtualizing-pfsense-with-vmware-vsphere-esxi.html" target="_blank" rel="noopener noreffer">官方文件</a>，這邊順便翻譯以內化學習。</p>
@@ -474,7 +476,7 @@
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

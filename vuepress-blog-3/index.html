@@ -167,6 +167,8 @@
             <span class="othreer" style="--index: 2;">o3R</span>
         </div>
     </div>
+    <div class="header-bg-credits">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/73785165" target="_blank" rel="noopener noreferrer">6L36</a>&nbsp;<a href="https://twitter.com/6L36DlPKD21KqZQ" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
@@ -264,14 +266,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
-</span><span class="w"></span><span class="nt">lang</span><span class="p">:</span><span class="w"> </span><span class="l">zh-TW</span><span class="w">
-</span><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">VuePress 原本是提供官方文件網站一個產生靜態頁面的框架，因此許多部落格應有的功能都是缺乏的。例如標籤、分類和留言等都需要自己做，因為我想掌控排版和背後的邏輯，所以就寫起來囉。這篇會討論 Components 的應用、標籤（Tags)和分類（Categories)的實做部分。範例程式碼就是直接從這個部落格的原始碼節錄的。</span><span class="w">
-</span><span class="w"></span><span class="nt">sidebar</span><span class="p">:</span><span class="w"> </span><span class="l">auto</span><span class="w">
-</span><span class="w"></span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;VuePress&#34;</span><span class="p">]</span><span class="w">
-</span><span class="w"></span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">Frontend</span><span class="w">
-</span><span class="w"></span><span class="nn">---</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">lang</span><span class="p">:</span><span class="w"> </span><span class="l">zh-TW</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">VuePress 原本是提供官方文件網站一個產生靜態頁面的框架，因此許多部落格應有的功能都是缺乏的。例如標籤、分類和留言等都需要自己做，因為我想掌控排版和背後的邏輯，所以就寫起來囉。這篇會討論 Components 的應用、標籤（Tags)和分類（Categories)的實做部分。範例程式碼就是直接從這個部落格的原始碼節錄的。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">sidebar</span><span class="p">:</span><span class="w"> </span><span class="l">auto</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;VuePress&#34;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l">Frontend</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Frontmatter 一部分是 VuePress 預設的，而其餘可以自行新增資料。VuePress 預設的幾項設定如下：</p>
 <h4 id="title">title</h4>
@@ -309,21 +311,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{
-  &#34;title&#34;: &#34;VuePress&#34;,
-  &#34;description&#34;: &#34;Vue-powered static site generator&#34;,
-  &#34;base&#34;: &#34;/&#34;,
-  &#34;pages&#34;: [
-    {
-      &#34;lastUpdated&#34;: 1524027677000,
-      &#34;path&#34;: &#34;/&#34;,
-      &#34;title&#34;: &#34;VuePress&#34;,
-      &#34;frontmatter&#34;: {}
-    },
-    ...
-  ]
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;title&#34;: &#34;VuePress&#34;,
+</span></span><span class="line"><span class="cl">  &#34;description&#34;: &#34;Vue-powered static site generator&#34;,
+</span></span><span class="line"><span class="cl">  &#34;base&#34;: &#34;/&#34;,
+</span></span><span class="line"><span class="cl">  &#34;pages&#34;: [
+</span></span><span class="line"><span class="cl">    {
+</span></span><span class="line"><span class="cl">      &#34;lastUpdated&#34;: 1524027677000,
+</span></span><span class="line"><span class="cl">      &#34;path&#34;: &#34;/&#34;,
+</span></span><span class="line"><span class="cl">      &#34;title&#34;: &#34;VuePress&#34;,
+</span></span><span class="line"><span class="cl">      &#34;frontmatter&#34;: {}
+</span></span><span class="line"><span class="cl">    },
+</span></span><span class="line"><span class="cl">    ...
+</span></span><span class="line"><span class="cl">  ]
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="page">$page</h4>
 <p>這個變數是「本頁」的變數，也就是你所在的頁面的相關參數都在裡面，包含自己定義的 Frontmatter。</p>
@@ -351,27 +353,27 @@
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
-  <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;Global Computed&#34;</span><span class="p">,</span>
-  <span class="nt">&#34;frontmatter&#34;</span><span class="p">:</span> <span class="p">{},</span>
-  <span class="nt">&#34;regularPath&#34;</span><span class="p">:</span> <span class="s2">&#34;/guide/global-computed.html&#34;</span><span class="p">,</span>
-  <span class="nt">&#34;key&#34;</span><span class="p">:</span> <span class="s2">&#34;v-d4cbeb69eff3d&#34;</span><span class="p">,</span>
-  <span class="nt">&#34;path&#34;</span><span class="p">:</span> <span class="s2">&#34;/guide/global-computed.html&#34;</span><span class="p">,</span>
-  <span class="nt">&#34;headers&#34;</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">{</span>
-      <span class="nt">&#34;level&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-      <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;$site&#34;</span><span class="p">,</span>
-      <span class="nt">&#34;slug&#34;</span><span class="p">:</span> <span class="s2">&#34;site&#34;</span>
-    <span class="p">},</span>
-    <span class="p">{</span>
-      <span class="nt">&#34;level&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-      <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;$page&#34;</span><span class="p">,</span>
-      <span class="nt">&#34;slug&#34;</span><span class="p">:</span> <span class="s2">&#34;$page&#34;</span>
-    <span class="p">},</span>
-    <span class="err">...</span>
-  <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;Global Computed&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;frontmatter&#34;</span><span class="p">:</span> <span class="p">{},</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;regularPath&#34;</span><span class="p">:</span> <span class="s2">&#34;/guide/global-computed.html&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;key&#34;</span><span class="p">:</span> <span class="s2">&#34;v-d4cbeb69eff3d&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;path&#34;</span><span class="p">:</span> <span class="s2">&#34;/guide/global-computed.html&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;headers&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;level&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;$site&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;slug&#34;</span><span class="p">:</span> <span class="s2">&#34;site&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;level&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;$page&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;slug&#34;</span><span class="p">:</span> <span class="s2">&#34;$page&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="err">...</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="frontmatter-1">$frontmatter</h4>
 <p>等同<code>$page.frontmatter</code>。</p>
@@ -391,17 +393,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;script&gt;
-export default {
-  computed: {
-    category () {
-      console.log(this.$page);
-      return this.$page.frontmatter.category
-    },
-  }
-}
-&lt;/script&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;script&gt;
+</span></span><span class="line"><span class="cl">export default {
+</span></span><span class="line"><span class="cl">  computed: {
+</span></span><span class="line"><span class="cl">    category () {
+</span></span><span class="line"><span class="cl">      console.log(this.$page);
+</span></span><span class="line"><span class="cl">      return this.$page.frontmatter.category
+</span></span><span class="line"><span class="cl">    },
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">&lt;/script&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="標籤">標籤</h2>
 <p>接下來開始製作標籤功能。參考其他部落格(像是用 Hexo 製作的那種)，一篇文章包含多個標籤，而我可以點選標籤查看具有該標籤的所有文章，同時可以顯示該標籤所包含的文章總數。</p>
@@ -415,12 +417,12 @@ export default {
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
-</span><span class="w"></span><span class="nn">...</span><span class="w">
-</span><span class="w"></span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;Tag1&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Tag2&#34;</span><span class="p">]</span><span class="w">
-</span><span class="w"></span><span class="nn">...</span><span class="w">
-</span><span class="w"></span><span class="nn">---</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;Tag1&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Tag2&#34;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著我希望在文章、側邊欄和首頁最新文章都可以看到每篇文章包含的標籤，因此需要製作 Components。 <br>
 首先是文章頂端的標籤，結果如下(藍色方塊的部分)：</p>
@@ -460,29 +462,29 @@ export default {
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;template lang=&#34;html&#34;&gt;
-  &lt;div class=&#34;taglinks&#34;&gt;
-    &lt;router-link
-      v-for=&#34;tag in $page.frontmatter.tags&#34;
-      :key=&#34;tag&#34;
-      :to=&#34;{ path: `/tags/${tag}`}&#34;&gt;
-      &lt;Badge :text=&#34;tag&#34;/&gt;
-    &lt;/router-link&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;script&gt;
-export default {
-  name: &#34;TagLinks&#34;,
-}
-&lt;/script&gt;
-
-&lt;style lang=&#34;stylus&#34;&gt;
-.taglinks &gt; a
-  padding-right 5px
-  font-family &#39;Noto Sans TC Medium&#39;
-&lt;/style&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;template lang=&#34;html&#34;&gt;
+</span></span><span class="line"><span class="cl">  &lt;div class=&#34;taglinks&#34;&gt;
+</span></span><span class="line"><span class="cl">    &lt;router-link
+</span></span><span class="line"><span class="cl">      v-for=&#34;tag in $page.frontmatter.tags&#34;
+</span></span><span class="line"><span class="cl">      :key=&#34;tag&#34;
+</span></span><span class="line"><span class="cl">      :to=&#34;{ path: `/tags/${tag}`}&#34;&gt;
+</span></span><span class="line"><span class="cl">      &lt;Badge :text=&#34;tag&#34;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/router-link&gt;
+</span></span><span class="line"><span class="cl">  &lt;/div&gt;
+</span></span><span class="line"><span class="cl">&lt;/template&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;script&gt;
+</span></span><span class="line"><span class="cl">export default {
+</span></span><span class="line"><span class="cl">  name: &#34;TagLinks&#34;,
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">&lt;/script&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;style lang=&#34;stylus&#34;&gt;
+</span></span><span class="line"><span class="cl">.taglinks &gt; a
+</span></span><span class="line"><span class="cl">  padding-right 5px
+</span></span><span class="line"><span class="cl">  font-family &#39;Noto Sans TC Medium&#39;
+</span></span><span class="line"><span class="cl">&lt;/style&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>template</code>裡面，<code>router-link</code>標籤是類似 HTML 的<code>&lt;a&gt;&lt;/a&gt;</code>提供超連結的功能，目的地則是定義在<code>to=</code>，如果要使用變數只要在前面加上冒號即可：<code>:to=</code>。注意例子中<code>:to=&quot;{ path </code>&hellip;<code> }&quot;</code>，<code>path</code> 提供相對路徑的效果，一定要用大括號包起來，後面是相對路徑，這裡使用到<code>tag</code>變數，要用<code>${tag}</code>的形式嵌入。假設我的網站 Root 為 <code>https://lytzeng.github.io</code>，這個連結就會變成<code>https://lytzeng.github.io/tags/tagXXX</code>。</p>
 <p>在來是 <code>v-for</code>，它讓這個標籤可以跑 for loop，每跑一次就產生一個<code>router-link</code>，邏輯就是有 n 個標籤在陣列 <code>$page.frontmatter.tags</code> 中，就產生 n 個藍色標籤方塊。<code>key</code> 則是讓 Vue 內部演算法可以增加物件的重複使用率，這個不一定要設置。</p>
@@ -534,40 +536,40 @@ export default {
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">template</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;tags&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;tag in Object.keys(tags)&#34;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">Badge</span> <span class="na">:id</span><span class="o">=</span><span class="s">&#34;tag&#34;</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">router-link</span> <span class="na">:to</span><span class="o">=</span><span class="s">&#34;{ path: `/tags/${tag}`}&#34;</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>{{tag}}
-          <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;tagcount&#34;</span><span class="p">&gt;</span>{{tags[tag].length}}<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">router-link</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">Badge</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
-  <span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">tags</span><span class="p">()</span> <span class="p">{</span>
-      <span class="kd">let</span> <span class="nx">tags</span> <span class="o">=</span> <span class="p">{};</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">page</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">$site</span><span class="p">.</span><span class="nx">pages</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
-          <span class="kr">const</span> <span class="nx">tag</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">tag</span> <span class="k">in</span> <span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">page</span><span class="p">);</span>
-          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">page</span><span class="p">];</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">tags</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;tags&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">span</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;tag in Object.keys(tags)&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">Badge</span> <span class="na">:id</span><span class="o">=</span><span class="s">&#34;tag&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">router-link</span> <span class="na">:to</span><span class="o">=</span><span class="s">&#34;{ path: `/tags/${tag}`}&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>{{tag}}
+</span></span><span class="line"><span class="cl">          <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;tagcount&#34;</span><span class="p">&gt;</span>{{tags[tag].length}}<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">router-link</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">Badge</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">tags</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nx">tags</span> <span class="o">=</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">page</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">$site</span><span class="p">.</span><span class="nx">pages</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="kr">const</span> <span class="nx">tag</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="nx">tag</span> <span class="k">in</span> <span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">page</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">page</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nx">tags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>這裡開始用到一個作法：「從 template 的 HTML 中呼叫 Scripts 區塊中的函式」。 Scripts 區塊的寫法也是被定義的，接下來開始說明。</p>
 <h3 id="scripts">Scripts</h3>
@@ -597,23 +599,23 @@ export default {
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="c1">// ...
-</span><span class="c1"></span><span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
-  <span class="nx">fullName</span><span class="o">:</span> <span class="p">{</span>
-    <span class="c1">// getter
-</span><span class="c1"></span>    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">lastName</span>
-    <span class="p">},</span>
-    <span class="c1">// setter
-</span><span class="c1"></span>    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">newValue</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="nx">newValue</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">=</span> <span class="nx">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">lastName</span> <span class="o">=</span> <span class="nx">names</span><span class="p">[</span><span class="nx">names</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// ...
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">fullName</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// getter
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">lastName</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// setter
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">newValue</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="nx">newValue</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">firstName</span> <span class="o">=</span> <span class="nx">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      <span class="k">this</span><span class="p">.</span><span class="nx">lastName</span> <span class="o">=</span> <span class="nx">names</span><span class="p">[</span><span class="nx">names</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// ...
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="data">data</h4>
 <p><code>data</code> 的部分可以直接用來放定義的變數，但是注意 <code>data</code> 內的寫法，一定要使用 function，再把 Object 丟出去。</p>
@@ -626,12 +628,12 @@ export default {
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="nx">data</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="p">{</span>
-      <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;about page&#39;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">data</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;about page&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="methods">methods</h4>
 <p>其實上面提到，<code>computed</code> 下的 function 其實也可以改放在 <code>methods</code> 裡，它們的行為是一樣的。差別在於：<code>computed</code> 會 cache，除非裡面的參數有改變（比如透過 setter ），不然每次call <code>computed</code> 內的 function 所回傳的值都會是第一次的運算結果。而<code>methods</code>則是每次呼叫、每次重新計算。使用方法如下：</p>
@@ -645,13 +647,13 @@ export default {
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="c1">// in component
-</span><span class="c1"></span><span class="nx">methods</span><span class="o">:</span> <span class="p">{</span>
-  <span class="nx">reverseMessage</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="c1">// in component
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">methods</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">reverseMessage</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>:::v-pre
 在 <code>template</code> 使用時插入 <code>{{ reversedMessage() }}</code> 即可。</p>
@@ -660,8 +662,8 @@ export default {
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Reversed message: &#34;{{ reverseMessage() }}&#34;<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Reversed message: &#34;{{ reverseMessage() }}&#34;<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>:::</p>
 <h4 id="mounted">mounted</h4>
@@ -689,23 +691,23 @@ export default {
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">//...
-&lt;template&gt;
-&lt;Tags/&gt;
-&lt;/template&gt;
-
-&lt;script&gt;
-//...
-import Tags from &#34;@theme/components/Tags.vue&#34;
-//...
-export default {
-  name: &#34;Sidebar&#34;,
- // ...
-  components: { &#34;....&#34;, Tags },
- //...
-};
-&lt;/script&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">//...
+</span></span><span class="line"><span class="cl">&lt;template&gt;
+</span></span><span class="line"><span class="cl">&lt;Tags/&gt;
+</span></span><span class="line"><span class="cl">&lt;/template&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;script&gt;
+</span></span><span class="line"><span class="cl">//...
+</span></span><span class="line"><span class="cl">import Tags from &#34;@theme/components/Tags.vue&#34;
+</span></span><span class="line"><span class="cl">//...
+</span></span><span class="line"><span class="cl">export default {
+</span></span><span class="line"><span class="cl">  name: &#34;Sidebar&#34;,
+</span></span><span class="line"><span class="cl"> // ...
+</span></span><span class="line"><span class="cl">  components: { &#34;....&#34;, Tags },
+</span></span><span class="line"><span class="cl"> //...
+</span></span><span class="line"><span class="cl">};
+</span></span><span class="line"><span class="cl">&lt;/script&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>為了讓每個標籤都有文章數量顯示，<strong><code>Tags.vue</code></strong> 這段程式碼可以計算每個標籤的文章數量。</p>
 <div class="highlight"><div class="chroma">
@@ -728,23 +730,23 @@ export default {
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">tags</span><span class="p">()</span> <span class="p">{</span>
-      <span class="kd">let</span> <span class="nx">tags</span> <span class="o">=</span> <span class="p">{};</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">page</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">$site</span><span class="p">.</span><span class="nx">pages</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
-          <span class="kr">const</span> <span class="nx">tag</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">tag</span> <span class="k">in</span> <span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">page</span><span class="p">);</span>
-          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">page</span><span class="p">];</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">tags</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">tags</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nx">tags</span> <span class="o">=</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">page</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">$site</span><span class="p">.</span><span class="nx">pages</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="kr">const</span> <span class="nx">tag</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="nx">tag</span> <span class="k">in</span> <span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">page</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">page</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nx">tags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接著<code>router-link</code>讓我們點擊標籤時可以到達標籤頁面，顯示相同標籤文章。</p>
 <div class="highlight"><div class="chroma">
@@ -754,10 +756,10 @@ export default {
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">router-link</span> <span class="na">:to</span><span class="o">=</span><span class="s">&#34;{ path: `/tags/${tag}`}&#34;</span><span class="p">&gt;</span>
-<span class="c">&lt;!-- ... --&gt;</span>
-<span class="p">&lt;/</span><span class="nt">router-link</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">router-link</span> <span class="na">:to</span><span class="o">=</span><span class="s">&#34;{ path: `/tags/${tag}`}&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c">&lt;!-- ... --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">router-link</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>所以要製作標籤頁面，先新增元件 <strong><code>GetPagesByTag.vue</code></strong>，這個元件將嵌入到 Markdown 中，我會為每個標籤建立一個 Markdown，在裡面加入 <code>&lt;GetPagesByTag/&gt;</code>，透過標題決定顯示哪一種標籤。</p>
 <p>:::v-pre
@@ -800,41 +802,41 @@ export default {
 </span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">template</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;tag-posts&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">li</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;page in thisTag&#34;</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">router-link</span> <span class="na">:to</span><span class="o">=</span><span class="s">&#34;{ path: page.path}&#34;</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{page.title}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{page.frontmatter.description}}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">router-link</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
-  <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;GetPagesByTag&#34;</span><span class="p">,</span>
-  <span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">thisTag</span><span class="p">()</span> <span class="p">{</span>
-      <span class="kd">let</span> <span class="nx">tags</span> <span class="o">=</span> <span class="p">{};</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">page</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">$site</span><span class="p">.</span><span class="nx">pages</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
-          <span class="kr">const</span> <span class="nx">tag</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">tag</span> <span class="k">in</span> <span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">page</span><span class="p">);</span>
-          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">page</span><span class="p">];</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="nx">tags</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">$page</span><span class="p">.</span><span class="nx">title</span><span class="p">];</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;tag-posts&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;</span><span class="nt">li</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&#34;page in thisTag&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">router-link</span> <span class="na">:to</span><span class="o">=</span><span class="s">&#34;{ path: page.path}&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{page.title}}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{page.frontmatter.description}}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">router-link</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">template</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;GetPagesByTag&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">thisTag</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="kd">let</span> <span class="nx">tags</span> <span class="o">=</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">page</span> <span class="k">of</span> <span class="k">this</span><span class="p">.</span><span class="nx">$site</span><span class="p">.</span><span class="nx">pages</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">in</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="kr">const</span> <span class="nx">tag</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">tags</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="nx">tag</span> <span class="k">in</span> <span class="nx">tags</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">page</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">tags</span><span class="p">[</span><span class="nx">tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">page</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nx">tags</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">$page</span><span class="p">.</span><span class="nx">title</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>:::</p>
 <h2 id="類別">類別</h2>
@@ -860,13 +862,13 @@ export default {
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;router-link :key=&#34;category&#34; :to=&#34;{ path: `/categories/#${category}` }&#34;&gt;
-    &lt;div style=&#34;display: inline;&#34;&gt;
-        &lt;svg fill=&#34;#14cdef&#34; focusable=&#34;false&#34; preserveAspectRatio=&#34;xMidYMid meet&#34; style=&#34;display: inline-block; vertical-align: middle; will-change: transform;&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20&#34; height=&#34;20&#34; viewBox=&#34;0 0 32 32&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;M11.17 6l3.42 3.41.58.59H28v16H4V6h7.17m0-2H4a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2H16l-3.41-3.41A2 2 0 0 0 11.17 4z&#34;&gt;&lt;/path&gt;&lt;title&gt;Folder&lt;/title&gt;&lt;/svg&gt;
-    &lt;/div&gt;
-    {{ category }}
-&lt;/router-link&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;router-link :key=&#34;category&#34; :to=&#34;{ path: `/categories/#${category}` }&#34;&gt;
+</span></span><span class="line"><span class="cl">    &lt;div style=&#34;display: inline;&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;svg fill=&#34;#14cdef&#34; focusable=&#34;false&#34; preserveAspectRatio=&#34;xMidYMid meet&#34; style=&#34;display: inline-block; vertical-align: middle; will-change: transform;&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20&#34; height=&#34;20&#34; viewBox=&#34;0 0 32 32&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;M11.17 6l3.42 3.41.58.59H28v16H4V6h7.17m0-2H4a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h24a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2H16l-3.41-3.41A2 2 0 0 0 11.17 4z&#34;&gt;&lt;/path&gt;&lt;title&gt;Folder&lt;/title&gt;&lt;/svg&gt;
+</span></span><span class="line"><span class="cl">    &lt;/div&gt;
+</span></span><span class="line"><span class="cl">    {{ category }}
+</span></span><span class="line"><span class="cl">&lt;/router-link&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>:::</p>
 <p>附帶一提，中間那段是 SVG 圖示(資料夾小圖示)，網頁中的 icon 最好盡量用 SVG ，載入速度較圖片快，也支援無線的縮放不失真。</p>
@@ -883,15 +885,15 @@ export default {
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
-  <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;TagLinks&#34;</span><span class="p">,</span>
-  <span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">category</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">$page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">category</span>
-    <span class="p">},</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;TagLinks&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">computed</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">category</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">$page</span><span class="p">.</span><span class="nx">frontmatter</span><span class="p">.</span><span class="nx">category</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>再來是製作類別總覽的頁面，我想使用比較特別的做法，整個頁面會顯示所有類別以及底下所有文章，在其他頁面點選特定類別時，跳到類別總覽的特定類別位置 (可以點<a href="/categories/" rel="">這裡</a>先看結果)。怎麼做到呢？在目的地網址加入<code>#element-id</code> 就可，element-id 是你想要捲動到該物件的 id。類別總覽元件：<strong><code>Categories.vue</code></strong>，注意有深色標示的程式碼部分。因為要跑過所有文章與類別，這裡使用一層 for loop。</p>
 <div class="highlight"><div class="chroma">
@@ -943,52 +945,52 @@ export default {
 </span><span class="lnt">45
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;template&gt;
-  &lt;div class=&#34;categories&#34; v-if=&#34;categories&#34;&gt;
-    &lt;div class=&#34;tilesWrap&#34;&gt;
-      &lt;div v-for=&#34;cat in Object.keys(categories)&#34; :id=&#34;cat&#34; class=&#34;category-card-container&#34;&gt;
-        &lt;div class=&#34;category-card&#34;&gt;
-          &lt;div class=&#34;category-name&#34;&gt;{{ cat }}&lt;/div&gt;
-          &lt;router-link v-for=&#34;page of categories[cat]&#34; :to=&#34;{ path: `${page.path}`}&#34;&gt;
-            &lt;div class=&#34;cat-page-title&#34;&gt;{{ page.title }}&lt;/div&gt;
-            &lt;p&gt;{{ page.frontmatter.description }}&lt;/p&gt;
-          &lt;/router-link&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
-
-&lt;script&gt;
-export default {
-  name: &#34;Categories&#34;,
-  computed: {
-    categories() {
-      let categories = {};
-      let posts = this.$site.pages.filter(p =&gt; {
-        return p.path.indexOf(&#34;/posts/&#34;) &gt;= 0;
-      });
-      this.$page[&#34;headers&#34;] = [];
-      for (let post of posts) {
-        const cat = post.frontmatter.category;
-        let postArr = [post];
-        if (cat in categories) categories[cat].push(post);
-        else {
-          categories[cat] = postArr;
-          this.$page[&#34;headers&#34;].push({
-            level: 2,
-            slug: cat,
-            title: cat
-          })
-        } 
-      }
-      console.log(this.$page)
-      return categories;
-    }
-  }
-};
-&lt;/script&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;template&gt;
+</span></span><span class="line"><span class="cl">  &lt;div class=&#34;categories&#34; v-if=&#34;categories&#34;&gt;
+</span></span><span class="line"><span class="cl">    &lt;div class=&#34;tilesWrap&#34;&gt;
+</span></span><span class="line"><span class="cl">      &lt;div v-for=&#34;cat in Object.keys(categories)&#34; :id=&#34;cat&#34; class=&#34;category-card-container&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;div class=&#34;category-card&#34;&gt;
+</span></span><span class="line"><span class="cl">          &lt;div class=&#34;category-name&#34;&gt;{{ cat }}&lt;/div&gt;
+</span></span><span class="line"><span class="cl">          &lt;router-link v-for=&#34;page of categories[cat]&#34; :to=&#34;{ path: `${page.path}`}&#34;&gt;
+</span></span><span class="line"><span class="cl">            &lt;div class=&#34;cat-page-title&#34;&gt;{{ page.title }}&lt;/div&gt;
+</span></span><span class="line"><span class="cl">            &lt;p&gt;{{ page.frontmatter.description }}&lt;/p&gt;
+</span></span><span class="line"><span class="cl">          &lt;/router-link&gt;
+</span></span><span class="line"><span class="cl">        &lt;/div&gt;
+</span></span><span class="line"><span class="cl">      &lt;/div&gt;
+</span></span><span class="line"><span class="cl">    &lt;/div&gt;
+</span></span><span class="line"><span class="cl">  &lt;/div&gt;
+</span></span><span class="line"><span class="cl">&lt;/template&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;script&gt;
+</span></span><span class="line"><span class="cl">export default {
+</span></span><span class="line"><span class="cl">  name: &#34;Categories&#34;,
+</span></span><span class="line"><span class="cl">  computed: {
+</span></span><span class="line"><span class="cl">    categories() {
+</span></span><span class="line"><span class="cl">      let categories = {};
+</span></span><span class="line"><span class="cl">      let posts = this.$site.pages.filter(p =&gt; {
+</span></span><span class="line"><span class="cl">        return p.path.indexOf(&#34;/posts/&#34;) &gt;= 0;
+</span></span><span class="line"><span class="cl">      });
+</span></span><span class="line"><span class="cl">      this.$page[&#34;headers&#34;] = [];
+</span></span><span class="line"><span class="cl">      for (let post of posts) {
+</span></span><span class="line"><span class="cl">        const cat = post.frontmatter.category;
+</span></span><span class="line"><span class="cl">        let postArr = [post];
+</span></span><span class="line"><span class="cl">        if (cat in categories) categories[cat].push(post);
+</span></span><span class="line"><span class="cl">        else {
+</span></span><span class="line"><span class="cl">          categories[cat] = postArr;
+</span></span><span class="line"><span class="cl">          this.$page[&#34;headers&#34;].push({
+</span></span><span class="line"><span class="cl">            level: 2,
+</span></span><span class="line"><span class="cl">            slug: cat,
+</span></span><span class="line"><span class="cl">            title: cat
+</span></span><span class="line"><span class="cl">          })
+</span></span><span class="line"><span class="cl">        } 
+</span></span><span class="line"><span class="cl">      }
+</span></span><span class="line"><span class="cl">      console.log(this.$page)
+</span></span><span class="line"><span class="cl">      return categories;
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">};
+</span></span><span class="line"><span class="cl">&lt;/script&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>終於到這篇結尾，目前我都省略 CSS 樣式的部分，也就是<code>&lt;style&gt;</code>裡面的內容不提，之後會單獨一篇討論如何客製化 VuePress 的顏色設計等等，以及 Stylus 的部分。
 這篇東西比較多，如果之後發現有遺漏的部分，我會回來補上。</p>
@@ -1025,7 +1027,7 @@ export default {
                 Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
             </noscript></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.92.2">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
                 </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
