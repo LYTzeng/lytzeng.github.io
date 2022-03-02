@@ -1,0 +1,99 @@
+{{- $profile := .Site.Params.home.profile -}}
+{{- $infotabs := .Site.Params.profile.infotabs -}}
+<div id="sidebar-profile">
+    {{- $avatar := $profile.avatarURL -}}
+    {{- with $profile.gravatarEmail -}}
+        {{- $avatar = md5 . | printf "https://www.gravatar.com/avatar/%v?s=240&d=mp" -}}
+    {{- end -}}
+    {{- if $avatar -}}
+        <div class="sidebar-avatar">
+            {{- $menus := $.Site.Menus.main | default slice -}}
+            {{- with index $menus 0 -}}
+                {{- $url := .URL | relLangURL -}}
+                {{- with .Page -}}
+                    {{- $url = .RelPermalink -}}
+                {{- end -}}
+                <a href="{{ $url }}"{{ with .Title | default .Name }} title="{{ . }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
+                    {{- dict "Src" $avatar | partial "plugin/image.html" -}}
+                </a>
+            {{- else -}}
+                {{- dict "Src" $avatar | partial "plugin/image.html" -}}
+            {{- end -}}
+        </div>
+    {{- end -}}
+
+    {{- with $profile.title -}}
+        <h1 class="sidebar-title">
+            {{- . | safeHTML -}}
+        </h1>
+    {{- end -}}
+
+    {{- if $profile.social -}}
+        <div class="links">
+            {{- $socialMap := resources.Get "data/social.yml" | transform.Unmarshal -}}
+            {{- $socialArr := slice -}}
+            {{- range $key, $value := .Site.Params.social -}}
+                {{- $social := $key | lower | index $socialMap | default dict -}}
+                {{- if $value -}}
+                    {{- if reflect.IsMap $value -}}
+                        {{- with $value.weight -}}
+                            {{- $social = dict "Weight" . | merge $social -}}
+                        {{- end -}}
+                        {{- with $value.prefix -}}
+                            {{- $social = dict "Prefix" . | merge $social -}}
+                        {{- end -}}
+                        {{- with $value.template -}}
+                            {{- $social = dict "Template" . | merge $social -}}
+                        {{- end -}}
+                        {{- with $value.id -}}
+                            {{- $social = dict "Id" . | merge $social -}}
+                        {{- end -}}
+                        {{- with $value.url -}}
+                            {{- $social = dict "Url" . | merge $social -}}
+                        {{- end -}}
+                        {{- with $value.title -}}
+                            {{- $social = dict "Title" . | merge $social -}}
+                        {{- end -}}
+                        {{- with $value.newtab -}}
+                            {{- $social = dict "Newtab" . | merge $social -}}
+                        {{- end -}}
+                        {{- with $value.icon -}}
+                            {{- $social = dict "Icon" . | merge $social -}}
+                        {{- end -}}
+                    {{- else if ne $value true -}}
+                        {{- $social = dict "Id" $value | merge $social -}}
+                    {{- end -}}
+                    {{- if $social.Icon.Simpleicons -}}
+                        {{- $prefix := ($.Scratch.Get "cdn" | default dict).simpleIconsPrefix -}}
+                        {{- $social = dict "Prefix" $prefix | dict "Icon" | merge $social -}}
+                    {{- end -}}
+                    {{- $socialArr = $socialArr | append $social -}}
+                {{- end -}}
+            {{- end -}}
+            {{- range sort $socialArr "Weight" -}}
+                {{- partial "plugin/social.html" . -}}
+            {{- end -}}
+        </div>
+    {{- end -}}
+
+    <div id="sidebar-intro">
+        <div class="sidebar-intro-tabs-container">
+            {{- range $index, $map := $infotabs -}}
+                <div class="sidebar-intro-tab" tab-index="{{- $index -}}">{{- .name -}}</div>
+            {{- end -}}
+        </div>
+        <div class="sidebar-intro-content-container">
+            {{- range $index, $map := $infotabs -}}
+                <div class="sidebar-intro-content hide-content" tab-index="{{- $index -}}">
+                    <div>{{- .content -}}</div>
+                </div>
+            {{- end -}}
+        </div>
+    </div>
+
+    {{- with $profile.disclaimer -}}
+        <h3 class="sidebar-disclaimer">
+            {{- . | safeHTML -}}
+        </h3>
+    {{- end -}}
+</div>

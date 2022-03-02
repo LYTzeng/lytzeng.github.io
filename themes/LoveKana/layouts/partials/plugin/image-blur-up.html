@@ -1,0 +1,23 @@
+{{- /* lazysizes with Blur Up */ -}}
+{{/* https://github.com/aFarkas/lazysizes/blob/gh-pages/plugins/blur-up/README.md */}}
+{{- $src := .Src -}}
+{{- with dict "Path" .Src "Resources" .Resources | partial "function/resource.html" -}}
+{{- $src = .RelPermalink -}}
+{{- end -}}
+
+{{- $lowsrc := .SrcLow | default $src -}}
+{{- with dict "Path" .SrcLarge "Resources" .Resources | partial "function/resource.html" -}}
+{{- $lowsrc = .RelPermalink -}}
+{{- end -}}
+
+{{- $alt := .Alt | default $src -}}
+
+<div class="mediabox">
+    <img
+        class="mediabox-img lazyload"
+        data-srcset="{{ .Src | safeURL }}"
+        data-lowsrc="{{ .SrcLow | safeURL }}"
+        data-sizes="auto"
+        alt="{{ $alt }}"
+        title="{{ .Title | default $alt }}"{{ with .Height }} height="{{ . }}"{{ end }}{{ with .Width }} width="{{ . }}"{{ end }} />
+</div>

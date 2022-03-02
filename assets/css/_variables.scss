@@ -1,0 +1,376 @@
+// ==============================
+// Variables
+// ==============================
+
+// ========== Global ========== //
+// Font and Line Height
+$global-font-family: 'TaipeiSansTCBeta Regular', system-ui, -apple-system, BlinkMacSystemFont, PingFang SC, Microsoft YaHei UI, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial, sans-serif !default;
+$global-font-size: 16px;
+$global-font-weight: 400;
+$global-line-height: 1.5rem;
+
+// Color of the background
+$global-background-color: #fff !default;
+$global-background-color-dark: #0e0e10 !default;
+
+// Color of the text
+$global-font-color: #161209 !default;
+$global-font-color-dark: rgb(174, 174, 180) !default;
+
+// Color of the secondary text
+$global-font-secondary-color: #a9a9b3 !default;
+$global-font-secondary-color-dark: rgb(150, 150, 150) !default;
+
+// Color of the link
+$global-link-color: #161209 !default;
+$global-link-color-dark: rgb(222, 222, 230) !default;
+
+// Color of the hover link
+$global-link-hover-color: #2d96bd !default;
+$global-link-hover-color-dark: #ffaf7a !default;
+
+// Color of the border
+$global-border-color: #f0f0f0 !default;
+$global-border-color-dark: rgb(156, 156, 156) !default;
+// ========== Global ========== //
+
+// ========== Scrollbar ========== //
+// Color of the scrollbar
+$scrollbar-color: #87878d !default;
+
+// Color of the hover scrollbar
+$scrollbar-hover-color: #a9a9b3 !default;
+// ========== Scrollbar ========== //
+
+// ========== Selection ========== //
+// Color of the selected text
+$selection-color: rgba(53, 166, 247, 0.25) !default;
+$selection-color-dark: rgba(50, 112, 194, 0.4) !default;
+// ========== Selection ========== //
+
+// ========== Header ========== //
+// Height of the header
+$header-height: 30rem !default;
+$header-height-mobile: 25vh !default;
+$header-menu-height: 3.5rem !default; // This new variable is to blend Kana bg and the original together
+$header-menu-sticky-height: 2rem !default;
+
+// Color of the header background
+$header-background-color: #f8f8f8 !default;
+$header-background-color-dark: #252627 !default;
+
+// Font style of the header title
+$header-title-font-family: 'SOLGAS' !default;
+$header-title-font-size: 1.8rem !default;
+
+// Color of the hover header item
+$header-hover-color: #161209 !default;
+$header-hover-color-dark: #ffaf7a !default;
+
+// Color of the search background
+$search-background-color: #e9e9e9 !default;
+$search-background-color-dark: #363636 !default;
+// ========== Header ========== //
+
+// ========== Single Content ========== //
+// Font size of the TOC
+$toc-title-font-size: 1.2rem !default;
+$toc-content-font-size: 1rem !default;
+
+// Color of the TOC
+$toc-link-color: #cc5773 !default;
+$toc-link-color-dark: #f7845d !default;
+$toc-link-hover-color: #ee3e7e !default;
+$toc-link-hover-color-dark: #eeb2b2 !default;
+
+
+// Color of the single link
+$single-link-color: #2d96bd !default;
+$single-link-color-dark: #55bde2 !default;
+
+// Color of the hover single link
+$single-link-hover-color: #ef3982 !default;
+$single-link-hover-color-dark: #bdebfc !default;
+
+// Color of the table background
+$table-background-color: #fff !default;
+$table-background-color-dark: #272c34 !default;
+
+// Color of the table thead
+$table-thead-color: #ededed !default;
+$table-thead-color-dark: #20252b !default;
+
+// Color of the blockquote
+$blockquote-color: #6bd6fd !default;
+$blockquote-color-dark: #59c5ec !default;
+// ========== Single Content ========== //
+
+// ========== Pagination ========== //
+// Color of the link in pagination
+$pagination-link-color: #2d96bd !default;
+$pagination-link-color-dark: #a9a9b3 !default;
+
+// Color of the hover link in pagination
+$pagination-link-hover-color: #000 !default;
+$pagination-link-hover-color-dark: #fff !default;
+// ========== Pagination ========== //
+
+// ========== Code ========== //
+// Color of the code
+$code-color: #E74C3C !default;
+$code-color-dark: #E5BF78 !default;
+
+// Color of the code background
+$code-background-color: #f5f5f5 !default;
+$code-background-color-dark: #272C34 !default;
+
+$code-info-color: #9c9c9c !default;
+$code-info-color-dark: #b1b0b0 !default;
+
+// Font size of the code
+$code-font-size: .875rem !default;
+
+// Font family of the code
+$code-font-family: 'Fira Code', Source Code Pro, Menlo, Consolas, Monaco, monospace, $global-font-family !default;
+
+// Code type map
+$code-type-map: (
+  // Custom code type
+  language-bash: 'Bash',
+  language-c: 'C',
+  language-cs: 'C#',
+  language-cpp: 'C++',
+  language-clojure: 'Clojure',
+  language-coffeescript: 'CoffeeScript',
+  language-css: 'CSS',
+  language-dart: 'Dart',
+  language-diff: 'Diff',
+  language-erlang: 'Erlang',
+  language-go: 'Go',
+  language-go-html-template: 'Go HTML Template',
+  language-groovy: 'Groovy',
+  language-haskell: 'Haskell',
+  language-html: 'HTML',
+  language-http: 'HTTP',
+  language-xml: 'XML',
+  language-java: 'Java',
+  language-js: 'JavaScript',
+  language-javascript: 'JavaScript',
+  language-json: 'JSON',
+  language-kotlin: 'Kotlin',
+  language-latex: 'LaTeX',
+  language-less: 'Less',
+  language-lisp: 'Lisp',
+  language-lua: 'Lua',
+  language-makefile: 'Makefile',
+  language-markdown: 'Markdown',
+  language-matlab: 'Matlab',
+  language-objectivec: 'Objective-C',
+  language-php: 'PHP',
+  language-perl: 'Perl',
+  language-python: 'Python',
+  language-r: 'R',
+  language-ruby: 'Ruby',
+  language-rust: 'Rust',
+  language-scala: 'Scala',
+  language-scss: 'Scss',
+  language-shell: 'Shell',
+  language-sql: 'SQL',
+  language-swift: 'Swift',
+  language-tex: 'TeX',
+  language-toml: 'TOML',
+  language-ts: 'TypeScript',
+  language-typescript: 'TypeScript',
+  language-vue: 'Vue',
+  language-yml: 'YAML',
+  language-yaml: 'YAML',
+) !default;
+
+// Color map of the code highlight
+$code-highlight-color-map: (
+  /* Parentheses */ 'p': #a9a9b3,
+  /* Keyword */ 'k': #b501a9,
+  /* KeywordConstant */ 'kc': #b501a9,
+  /* KeywordDeclaration */ 'kd': #b501a9,
+  /* KeywordNamespace */ 'kn': #b501a9,
+  /* KeywordPseudo */ 'kp': #b501a9,
+  /* KeywordReserved */ 'kr': #b501a9,
+  /* KeywordType */ 'kt': #b501a9,
+  /* Name */ 'n': #333333,
+  /* NameAttribute */ 'na': #2b77fa,
+  /* NameBuiltin */ 'nb': #f74840,
+  /* NameBuiltinPseudo */ 'bp': #f74840,
+  /* NameClass */ 'nc': #cb8100,
+  /* NameConstant */ 'no': #2b77fa,
+  /* NameDecorator */ 'nd': #0086c1,
+  /* NameEntity */ 'ni': #2b77fa,
+  /* NameException */ 'ne': #2b77fa,
+  /* NameFunction */ 'nf': #2b77fa,
+  /* NameFunctionMagic */ 'fm': #1ccad6,
+  /* NameLabel */ 'nl': #2b77fa,
+  /* NameNamespace */ 'nn': #2b77fa,
+  /* NameOther */ 'nx': #333333,
+  /* NameProperty */ 'py': #2b77fa,
+  /* NameTag */ 'nt': #2b77fa,
+  /* NameVariable */ 'nv': #2b77fa,
+  /* NameVariableClass */ 'vc': #2b77fa,
+  /* NameVariableGlobal */ 'vg': #2b77fa,
+  /* NameVariableInstance */ 'vi': #2b77fa,
+  /* NameVariableMagic */ 'vm': #2b77fa,
+  /* Literal */ 'l': #2aa198,
+  /* LiteralDate */ 'ld': #2aa198,
+  /* LiteralString */ 's': #24a443,
+  /* LiteralStringAffix */ 'sa': #24a443,
+  /* LiteralStringBacktick */ 'sb': #24a443,
+  /* LiteralStringChar */ 'sc': #24a443,
+  /* LiteralStringDelimiter */ 'dl': #24a443,
+  /* LiteralStringDoc */ 'sd': #24a443,
+  /* LiteralStringDouble */ 's2': #24a443,
+  /* LiteralStringEscape */ 'se': #24a443,
+  /* LiteralStringHeredoc */ 'sh': #24a443,
+  /* LiteralStringInterpol */ 'si': #24a443,
+  /* LiteralStringOther */ 'sx': #24a443,
+  /* LiteralStringRegex */ 'sr': #24a443,
+  /* LiteralStringSingle */ 's1': #24a443,
+  /* LiteralStringSymbol */ 'ss': #24a443,
+  /* LiteralNumber */ 'm': #e2893c,
+  /* LiteralNumberBin */ 'mb': #e2893c,
+  /* LiteralNumberFloat */ 'mf': #e2893c,
+  /* LiteralNumberHex */ 'mh': #e2893c,
+  /* LiteralNumberInteger */ 'mi': #e2893c,
+  /* LiteralNumberIntegerLong */ 'il': #e2893c,
+  /* LiteralNumberOct */ 'mo': #e2893c,
+  /* Operator */ 'o': #f19b04,
+  /* OperatorWord */ 'ow': #b501a9,
+  /* Comment */ 'c': #a0a1a8,
+  /* CommentHashbang */ 'ch': #a0a1a8,
+  /* CommentMultiline */ 'cm': #a0a1a8,
+  /* CommentSingle */ 'c1': #a0a1a8,
+  /* CommentSpecial */ 'cs': #a0a1a8,
+  /* CommentPreproc */ 'cp': #a0a1a8,
+  /* CommentPreprocFile */ 'cpf': #a0a1a8,
+  /* Generic */ 'g': #e72d40,
+  /* GenericDeleted */ 'gd': #e72d40,
+  /* GenericEmph */ 'ge': #e72d40,
+  /* GenericError */ 'gr': #e72d40,
+  /* GenericHeading */ 'gh': #e72d40,
+  /* GenericInserted */ 'gi': #e72d40,
+  /* GenericOutput */ 'go': #e72d40,
+  /* GenericPrompt */ 'gp': #e72d40,
+  /* GenericStrong */ 'gs': #e72d40,
+  /* GenericSubheading */ 'gu': #e72d40,
+  /* GenericTraceback */ 'gt': #e72d40,
+  /* TextWhitespace */ 'w': #bbbbbb,
+) !default;
+$code-highlight-color-map-dark: (
+  /* Parentheses */ 'p': #a9a9b3,
+  /* Keyword */ 'k': #B084EB,
+  /* KeywordConstant */ 'kc': #B084EB,
+  /* KeywordDeclaration */ 'kd': #B084EB,
+  /* KeywordNamespace */ 'kn': #B084EB,
+  /* KeywordPseudo */ 'kp': #B084EB,
+  /* KeywordReserved */ 'kr': #B084EB,
+  /* KeywordType */ 'kt': #B084EB,
+  /* Name */ 'n': #a9b2c0,
+  /* NameAttribute */ 'na': #45A9F9,
+  /* NameBuiltin */ 'nb': #6FE7D2,
+  /* NameBuiltinPseudo */ 'bp': #FFCC95,
+  /* NameClass */ 'nc': #FFCC95,
+  /* NameConstant */ 'no': #45A9F9,
+  /* NameDecorator */ 'nd': #FFCC95,
+  /* NameEntity */ 'ni': #45A9F9,
+  /* NameException */ 'ne': #45A9F9,
+  /* NameFunction */ 'nf': #45A9F9,
+  /* NameFunctionMagic */ 'fm': #6FE7D2,
+  /* NameLabel */ 'nl': #45A9F9,
+  /* NameNamespace */ 'nn': #45A9F9,
+  /* NameOther */ 'nx': #a9a9b3,
+  /* NameProperty */ 'py': #45A9F9,
+  /* NameTag */ 'nt': #45A9F9,
+  /* NameVariable */ 'nv': #45A9F9,
+  /* NameVariableClass */ 'vc': #45A9F9,
+  /* NameVariableGlobal */ 'vg': #45A9F9,
+  /* NameVariableInstance */ 'vi': #45A9F9,
+  /* NameVariableMagic */ 'vm': #45A9F9,
+  /* Literal */ 'l': #19f9d899,
+  /* LiteralDate */ 'ld': #19f9d899,
+  /* LiteralString */ 's': #19f9d8,
+  /* LiteralStringAffix */ 'sa': #19f9d8,
+  /* LiteralStringBacktick */ 'sb': #19f9d8,
+  /* LiteralStringChar */ 'sc': #19f9d8,
+  /* LiteralStringDelimiter */ 'dl': #19f9d8,
+  /* LiteralStringDoc */ 'sd': #19f9d8,
+  /* LiteralStringDouble */ 's2': #19f9d8,
+  /* LiteralStringEscape */ 'se': #19f9d8,
+  /* LiteralStringHeredoc */ 'sh': #19f9d8,
+  /* LiteralStringInterpol */ 'si': #19f9d8,
+  /* LiteralStringOther */ 'sx': #19f9d8,
+  /* LiteralStringRegex */ 'sr': #19f9d8,
+  /* LiteralStringSingle */ 's1': #19f9d8,
+  /* LiteralStringSymbol */ 'ss': #19f9d8,
+  /* LiteralNumber */ 'm': #FFB86C,
+  /* LiteralNumberBin */ 'mb': #FFB86C,
+  /* LiteralNumberFloat */ 'mf': #FFB86C,
+  /* LiteralNumberHex */ 'mh': #FFB86C,
+  /* LiteralNumberInteger */ 'mi': #FFB86C,
+  /* LiteralNumberIntegerLong */ 'il': #FFB86C,
+  /* LiteralNumberOct */ 'mo': #FFB86C,
+  /* Operator */ 'o': #FFCC95,
+  /* OperatorWord */ 'ow': #B084EB,
+  /* Comment */ 'c': #7e848f,
+  /* CommentHashbang */ 'ch': #7e848f,
+  /* CommentMultiline */ 'cm': #7e848f,
+  /* CommentSingle */ 'c1': #7e848f,
+  /* CommentSpecial */ 'cs': #7e848f,
+  /* CommentPreproc */ 'cp': #7e848f,
+  /* CommentPreprocFile */ 'cpf': #7e848f,
+  /* Generic */ 'g': #FF75B5,
+  /* GenericDeleted */ 'gd': #FF75B5,
+  /* GenericEmph */ 'ge': #FF75B5,
+  /* GenericError */ 'gr': #FF2C6D,
+  /* GenericHeading */ 'gh': #FF75B5,
+  /* GenericInserted */ 'gi': #FF75B5,
+  /* GenericOutput */ 'go': #FF75B5,
+  /* GenericPrompt */ 'gp': #FF75B5,
+  /* GenericStrong */ 'gs': #FF2C6D,
+  /* GenericSubheading */ 'gu': #FF75B5,
+  /* GenericTraceback */ 'gt': #FF75B5,
+  /* TextWhitespace */ 'w': #bbbbbb,
+) !default;
+// ========== Code ========== //
+
+// ========== Admonition ========== //
+// Color map of the admonition
+$admonition-color-map: (
+  'note': #45A9F9,
+  'abstract': #6FC1FF,
+  'info': #6FC1FF,
+  'tip': #19f9d8,
+  'success': #19f9d8,
+  'question': #6FE7D2,
+  'warning': #FFB86C,
+  'failure': #FF9AC1,
+  'danger': #FF75B5,
+  'bug': #FF2C6D,
+  'example': #BCAAFE,
+  'quote': #9e9e9e,
+) !default;
+
+// Color map of the admonition background
+$admonition-background-color-map: (
+  'note': rgba(68, 138, 255, 0.1),
+  'abstract': rgba(0, 176, 255, 0.1),
+  'info': rgba(0, 184, 212, 0.1),
+  'tip': rgba(0, 191, 165, 0.1),
+  'success': rgba(0, 200, 83, 0.1),
+  'question': rgba(100, 221, 23, 0.1),
+  'warning': rgba(255, 145, 0, 0.1),
+  'failure': rgba(255, 82, 82, 0.1),
+  'danger': rgba(255, 23, 68, 0.1),
+  'bug': rgba(245, 0, 87, 0.1),
+  'example': rgba(101, 31, 255, 0.1),
+  'quote': rgba(159, 159, 159, 0.1),
+) !default;
+// ========== Admonition ========== //
+
+$MAX_LENGTH: 12000px;

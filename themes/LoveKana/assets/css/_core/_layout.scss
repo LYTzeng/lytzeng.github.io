@@ -1,0 +1,19 @@
+/** Layout **/
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+
+  main {
+    flex: 1 0 auto;
+
+    [header-desktop] & {
+      margin-top: calc(#{$header-height} - #{$header-menu-height});
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+  }
+}
