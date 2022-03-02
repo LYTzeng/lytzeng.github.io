@@ -1,0 +1,344 @@
+<!doctype html><html lang=zh-hant-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>OpenFlow 1.5 從入門到交報告 (二) - Ryu - Blog O3R</title><meta name=Description content="支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支援到 OpenFlow 1.5。"><meta property="og:title" content="OpenFlow 1.5 從入門到交報告 (二) - Ryu">
+<meta property="og:description" content="支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支援到 OpenFlow 1.5。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://o3r.moe/introduction-to-ryu/"><meta property="og:image" content="https://o3r.moe/logo.png"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2020-01-04T09:32:07+08:00">
+<meta property="article:modified_time" content="2022-03-02T15:02:38+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://o3r.moe/logo.png">
+<meta name=twitter:title content="OpenFlow 1.5 從入門到交報告 (二) - Ryu">
+<meta name=twitter:description content="支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支援到 OpenFlow 1.5。">
+<meta name=application-name content="LoveIt">
+<meta name=apple-mobile-web-app-title content="LoveIt"><meta name=theme-color content="#4E5260"><meta name=msapplication-TileColor content="#4E5260"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#4e5260><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://o3r.moe/introduction-to-ryu/><link rel=prev href=https://o3r.moe/esxi-server-in-lab-structure/><link rel=next href=https://o3r.moe/introduction-to-mininet/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"OpenFlow 1.5 從入門到交報告 (二) - Ryu","inLanguage":"zh-Hant-TW","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/o3r.moe\/introduction-to-ryu\/"},"image":["https:\/\/o3r.moe\/images\/Apple-Devices-Preview.png"],"genre":"posts","keywords":"Ryu, OpenFlow, Python","wordcount":1821,"url":"https:\/\/o3r.moe\/introduction-to-ryu\/","datePublished":"2020-01-04T09:32:07+08:00","dateModified":"2022-03-02T15:02:38+00:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Oscar Tseng","logo":{"@type":"ImageObject","url":"https:\/\/o3r.moe\/images\/profile-pic.webp","width":1283,"height":1283}},"author":{"@type":"Person","name":"Oscar Tseng"},"description":"支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支援到 OpenFlow 1.5。"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("theme","dark")</script>
+<div id=mask></div><div class=wrapper><div style=display:none><img class=lazyload src=/svg/loading.min.svg data-src=/images/header-bg-lowsrc.webp data-srcset="/images/header-bg-lowsrc.webp, /images/header-bg-lowsrc.webp 1.5x, /images/header-bg-lowsrc.webp 2x" data-sizes=auto alt=/images/header-bg-lowsrc.webp title=/images/header-bg-lowsrc.webp></div><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Blog O3R">O3R</a>
+</div><div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div></div><div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about/ title>About</a><a class=menu-item href=https://github.com/LYTzeng title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div></div></header><div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div></div><div class="header-bg-wrapper mobile">
+<div class=mediabox>
+<img class="mediabox-img lazyload" data-srcset=/images/header-bg.webp data-lowsrc=/images/header-bg-lowsrc.webp data-sizes=auto alt=/images/header-bg.webp title=/images/header-bg.webp>
+</div></div><div class="brand-logo mobile">
+<div class=blog>BLOG&nbsp</div><div class=othreer-glitch-stack style=--stacks:3>
+<span class=othreer style=--index:0>o3R</span>
+<span class=othreer style=--index:1>o3R</span>
+<span class=othreer style=--index:2>o3R</span>
+</div></div><header class=desktop id=header-desktop>
+<div class=header-wrapper is-sticky=false>
+<div class=header-title>
+<a href=/ title="Blog O3R">O3R</a>
+</div><div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about/> About </a><a class=menu-item href=https://github.com/LYTzeng title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i> </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div></div></div><div class=header-bg-wrapper><div class=mediabox>
+<img class="mediabox-img lazyload" data-srcset=/images/header-bg.webp data-lowsrc=/images/header-bg-lowsrc.webp data-sizes=auto alt=/images/header-bg.webp title=/images/header-bg.webp>
+</div></div><div class=brand-logo>
+<div class=blog>BLOG&nbsp</div><div class=othreer-glitch-stack style=--stacks:3>
+<span class=othreer style=--index:0>o3R</span>
+<span class=othreer style=--index:1>o3R</span>
+<span class=othreer style=--index:2>o3R</span>
+</div></div><div class=header-bg-credits>
+Artwork by&nbsp;<a href=https://www.pixiv.net/users/73785165 target=_blank rel="noopener noreferrer">6L36</a>&nbsp;<a href=https://twitter.com/6L36DlPKD21KqZQ title=Twitter target=_blank rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div></header><main class=main>
+<div class=container><div id=sidebar><div id=sidebar-profile><div class=sidebar-avatar><a href=/posts/ title=Posts><img class=lazyload src=/svg/loading.min.svg data-src=/images/profile-pic.webp data-srcset="/images/profile-pic.webp, /images/profile-pic.webp 1.5x, /images/profile-pic.webp 2x" data-sizes=auto alt=/images/profile-pic.webp title=/images/profile-pic.webp></a></div><h1 class=sidebar-title>Oscar T.</h1><div class=links><a href=https://github.com/LYTzeng title=GitHub target=_blank rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href=https://linkedin.com/in/li-yen-tseng title=LinkedIn target=_blank rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href=https://steamcommunity.com/id/yen-host title=Steam target=_blank rel="noopener noreffer me"><i class="fab fa-steam fa-fw"></i></a><a href=https://www.twitch.tv/0scar0x0 title=Twitch target=_blank rel="noopener noreffer me"><i class="fab fa-twitch fa-fw"></i></a><a href=mailto:oscar@o3r.moe title=Email rel=me><i class="far fa-envelope fa-fw"></i></a><a href=https://discordapp.com/users/697020575989628989 title=Discord target=_blank rel="noopener noreffer me"><i class="fab fa-discord fa-fw"></i></a><a href=/index.xml title=RSS target=_blank rel="noopener noreffer me"><i class="fas fa-rss fa-fw"></i></a></div><div id=sidebar-intro>
+<div class=sidebar-intro-tabs-container><div class=sidebar-intro-tab tab-index=0>我在做什麼</div><div class=sidebar-intro-tab tab-index=1>最愛的妹紙</div><div class=sidebar-intro-tab tab-index=2>最喜歡的遊戲</div><div class=sidebar-intro-tab tab-index=3>最喜歡的作品</div><div class=sidebar-intro-tab tab-index=4>裝備</div></div><div class=sidebar-intro-content-container><div class="sidebar-intro-content hide-content" tab-index=0>
+<div>在 AWS 技術支援打工，懂一點網路，擅長什麼都不擅長</div></div><div class="sidebar-intro-content hide-content" tab-index=1>
+<div>神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)</div></div><div class="sidebar-intro-content hide-content" tab-index=2>
+<div>Nier: Automata、Pokemon全系列、Dark Souls 3、愛上火車、茂伸奇談</div></div><div class="sidebar-intro-content hide-content" tab-index=3>
+<div>遊戲人生、點兔、賢惠幼妻仙狐小姐、奮鬥吧！系統工程師、動物朋友(僅第一季)</div></div><div class="sidebar-intro-content hide-content" tab-index=4>
+<div>MacBook Pro (13", 2021公司配) & (13", 2019)、iPhone13 Pro、自組R9 5900X主機、Filco Hakua白、森海HD25</div></div></div></div></div><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div></div><article class="page single"><h1 class="single-title animated flipInX">OpenFlow 1.5 從入門到交報告 (二) - Ryu</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/about/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Oscar Tseng</a></span>&nbsp;<span class=post-category>included in <a href=/categories/sdn/><i class="far fa-folder fa-fw"></i>SDN</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020.01.04>2020.01.04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1821 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;4 minutes&nbsp;<span id=/introduction-to-ryu/ class=leancloud_visitors data-flag-title="OpenFlow 1.5 從入門到交報告 (二) - Ryu">
+<i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+</span>&nbsp;</div></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#安裝-ryu>安裝 Ryu</a></li><li><a href=#或是使用-ryu-container>或是，使用 Ryu Container</a></li><li><a href=#執行-simple-switch>執行 Simple Switch</a></li><li><a href=#ryu-開發框架結構>Ryu 開發框架結構</a>
+<ul>
+<li><a href=#指定-openflow-版本>指定 OpenFlow 版本</a></li><li><a href=#decorator-set_ev_clsev_cls-dispatchersnone>Decorator <code>@set_ev_cls(ev_cls, dispatchers=None)</code></a></li><li><a href=#add-flow>Add Flow</a></li></ul></li><li><a href=#references>References</a></li></ul></nav></div></div><div class=content id=content><p>支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支援到 OpenFlow 1.5。本篇同時是 2019 研究所課程報告下半部，上一篇介紹了 <a href=https://lytzeng.github.io/posts/sdn/introduction-to-mininet.html#sdn-%E8%88%87-openflow target=_blank rel="noopener noreffer">Mininnet 基本概念</a>，有興去可以參照。</p><h2 id=安裝-ryu>安裝 Ryu</h2><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>pip install ryu
+</span></span></code></pre></td></tr></table></div></div><p>Ryu 部分功能有依賴其他套件，可以一併安裝。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>pip install -r &lt;<span class=o>(</span>curl https://raw.githubusercontent.com/osrg/ryu/master/tools/optional-requires<span class=o>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>還有一些是必要的 Dependencies：</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>apt-get install -y gcc python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev zlib1g-dev
+</span></span></code></pre></td></tr></table></div></div><h2 id=或是使用-ryu-container>或是，使用 Ryu Container</h2><p>我很喜歡 Container 超好用，環境單純，不需要煩惱架設環境所踩到的雷，不過要想清楚的是 Container 間的網路怎麼連，目前我想讓 Mininet 容器能夠和 Ryu Controller 容器可以互連，因此使用預設的 bridge mode 即可。為了讓 Ryu 容器可以吃到我之後寫的 Python，所以要 Mount 一個 Volume 對應到主機的某資料夾。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>mkdir -p ~/ryu_test ~/tcpdump
+</span></span><span class=line><span class=cl><span class=c1># 開 Ryu</span>
+</span></span><span class=line><span class=cl>docker pull osrg/ryu
+</span></span><span class=line><span class=cl>docker run -it --name ryu <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             -v ~/ryu_test:/ryu_test <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             --hostname ryu <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             osrg/ryu
+</span></span></code></pre></td></tr></table></div></div><p>接著到另一個視窗開 Mininet</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>docker run -it --rm --privileged -e DISPLAY <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             --name mininet <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             -v /tmp/.X11-unix:/tmp/.X11-unix <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             -v /lib/modules:/lib/modules <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             -v ~/tcpdump:/tcpdump <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             --hostname mininet <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>             iwaseyusuke/mininet
+</span></span></code></pre></td></tr></table></div></div><p>查看 Ryu 的 IP，是<code>172.17.0.2</code>：</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>root@ryu:~# ip a
+</span></span><span class=line><span class=cl>1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+</span></span><span class=line><span class=cl>    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span><span class=line><span class=cl>    inet 127.0.0.1/8 scope host lo
+</span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
+</span></span><span class=line><span class=cl>20: eth0@if21: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default      
+</span></span><span class=line><span class=cl>    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span><span class=line><span class=cl>    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+</span></span><span class=line><span class=cl>       valid_lft forever preferred_lft forever
+</span></span></code></pre></td></tr></table></div></div><h2 id=執行-simple-switch>執行 Simple Switch</h2><p>運行 Ryu 的 Simple Switch: <code>ryu-manager ryu.app.simple_switch_15</code>， 測試 Controller 是否可以被 Mininet 連接。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>root@ryu:~# ryu-manager ryu.app.simple_switch_15
+</span></span><span class=line><span class=cl>loading app ryu.app.simple_switch_15
+</span></span><span class=line><span class=cl>loading app ryu.controller.ofp_handler
+</span></span><span class=line><span class=cl>instantiating app ryu.app.simple_switch_15 of SimpleSwitch15
+</span></span><span class=line><span class=cl>instantiating app ryu.controller.ofp_handler of OFPHandler
+</span></span></code></pre></td></tr></table></div></div><p>接著啟動 Mininet，控制器指定到 Ryu 的 IP：</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>root@mininet:~# mn --topo single,3 --mac \
+</span></span><span class=line><span class=cl>        --switch ovsk,protocols=OpenFlow15 \
+</span></span><span class=line><span class=cl>        --controller remote,ip=172.17.0.2
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>mininet&gt;
+</span></span></code></pre></td></tr></table></div></div><p>你會看見 Ryu 輸出一堆封包訊息：</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>packet in 1 00:00:00:00:00:01 33:33:ff:00:00:01 1
+</span></span><span class=line><span class=cl>packet in 1 00:00:00:00:00:03 33:33:00:00:00:16 3
+</span></span><span class=line><span class=cl>packet in 1 00:00:00:00:00:02 33:33:00:00:00:16 2
+</span></span><span class=line><span class=cl>packet in 1 00:00:00:00:00:01 33:33:00:00:00:16 1
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></td></tr></table></div></div><p>最後 Pingall 測試 Hosts 之間可以互通。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>mininet&gt; pingall
+</span></span><span class=line><span class=cl>*** Ping: testing ping reachability
+</span></span><span class=line><span class=cl>h1 -&gt; h2 h3 
+</span></span><span class=line><span class=cl>h2 -&gt; h1 h3 
+</span></span><span class=line><span class=cl>h3 -&gt; h1 h2
+</span></span><span class=line><span class=cl>*** Results: 0% dropped (6/6 received)
+</span></span></code></pre></td></tr></table></div></div><h2 id=ryu-開發框架結構>Ryu 開發框架結構</h2><p>下面這個程式還沒有任何功能，不過已經是一個最基本可以運行的 Ryu 程式。<code>ryu.base.app_manager.RyuApp(*_args, **_kwargs)</code> 這個 Class 是 Ryu 的 Base class，我們自己寫的 Class 必須繼承這個 Class。文件中規定，Constructor 中必須呼叫 Parent 的 Constructor，換句話說就是 <code>__init__</code> 中必須呼叫 <code>RyuApp.__init__</code>，也就是<code>super.__init__</code>。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>ryu.base</span> <span class=kn>import</span> <span class=n>app_manager</span>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>L2SW</span><span class=p>(</span><span class=n>app_manager</span><span class=o>.</span><span class=n>RyuApp</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=fm>__init__</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=nb>super</span><span class=p>(</span><span class=n>L2SW</span><span class=p>,</span> <span class=bp>self</span><span class=p>)</span><span class=o>.</span><span class=fm>__init__</span><span class=p>(</span><span class=o>*</span><span class=n>args</span><span class=p>,</span> <span class=o>**</span><span class=n>kwargs</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>接下來觀察 <code>simple_switch</code> 原始碼，藉此了解如何開發 Ryu Controller。
+Code <a href=https://github.com/osrg/ryu/blob/master/ryu/app/simple_switch_15.py target=_blank rel="noopener noreffer">在官方 Repo 中</a></p><h3 id=指定-openflow-版本>指定 OpenFlow 版本</h3><p>這個例子指定了 OpenFlow 1.5 版本</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>ryu.ofproto</span> <span class=kn>import</span> <span class=n>ofproto_v1_5</span>
+</span></span><span class=line><span class=cl><span class=o>...</span>
+</span></span><span class=line><span class=cl><span class=n>OFP_VERSIONS</span> <span class=o>=</span> <span class=p>[</span><span class=n>ofproto_v1_5</span><span class=o>.</span><span class=n>OFP_VERSION</span><span class=p>]</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=decorator-set_ev_clsev_cls-dispatchersnone>Decorator <code>@set_ev_cls(ev_cls, dispatchers=None)</code></h3><p>Ryu 讓我們透過 <code>@set_ev_cls</code> 這個 Decorated Method 來定義 Event Handeler 的角色，當該定義的 Event 發生時，就會執行 Decorator 下方的函式。這個 Decorated Method 接收兩個參數： <code>ev_cls</code> 和 <code>dispatcher</code>。<code>ev_cls</code> 這個 Event Class 參數要放入 OpenFlow 的 Messages and Structures，依照 OpenFlow 標準分為 Controller-to-Switch、Asynchronous 與 Symmetric，以 OpenFlow 1.5 為例，<a href=https://ryu.readthedocs.io/en/latest/ofproto_v1_5_ref.html target=_blank rel="noopener noreffer">文件中</a>就有列出所有的種類以及他們的作用。 <code>dispatcher</code> 參數用來決定要處理哪個 Negotiation Phase (Switch 與 Controller 交涉的階段)，總共有四個階段，取決於你放的 <code>ev_cls</code> 為何。</p><table>
+<thead>
+<tr>
+<th>Negotiation phase</th><th>Description</th></tr></thead><tbody>
+<tr>
+<td><code>ryu.controller.handler.HANDSHAKE_DISPATCHER</code></td><td>Sending and waiting for hello message</td></tr><tr>
+<td><code>ryu.controller.handler.CONFIG_DISPATCHER</code></td><td>Version negotiated and sent features-request message</td></tr><tr>
+<td><code>ryu.controller.handler.MAIN_DISPATCHER</code></td><td>Switch-features message received and sent set-config message</td></tr><tr>
+<td><code>ryu.controller.handler.DEAD_DISPATCHER</code></td><td>Disconnect from the peer. Or disconnecting due to some unrecoverable errors.</td></tr></tbody></table><p>例如 <code>simple_switch_15.py</code> 中，就包含兩個 Decorated Method。以下這段程式碼，<a href=https://ryu.readthedocs.io/en/latest/ofproto_v1_5_ref.html#ryu.ofproto.ofproto_v1_5_parser.OFPSwitchFeatures target=_blank rel="noopener noreffer"><code>ofp_event.EventOFPSwitchFeatures</code></a>代表函式會在 Switch 回應 Feature Reply 時觸發，對應到的 Negotiation phase 即為 <code>CONFIG_DISPATCHER</code>。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=nd>@set_ev_cls</span><span class=p>(</span><span class=n>ofp_event</span><span class=o>.</span><span class=n>EventOFPSwitchFeatures</span><span class=p>,</span> <span class=n>CONFIG_DISPATCHER</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>switch_features_handler</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>ev</span><span class=p>):</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>ofp_event.EventOFPPacketIn</code> 是 Packet-In Message，意即當 Switch 收到進入的封包時，所發送給 Controller 的訊息。當 Switch 收到封包時觸發，對應到的 Negotiation phase 為 <code>MAIN_DISPATCHER</code>。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=nd>@set_ev_cls</span><span class=p>(</span><span class=n>ofp_event</span><span class=o>.</span><span class=n>EventOFPPacketIn</span><span class=p>,</span> <span class=n>MAIN_DISPATCHER</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>_packet_in_handler</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>ev</span><span class=p>):</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=add-flow>Add Flow</h3><p>再來看看 Function 裡面的變數是如何使用的。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=nd>@set_ev_cls</span><span class=p>(</span><span class=n>ofp_event</span><span class=o>.</span><span class=n>EventOFPSwitchFeatures</span><span class=p>,</span> <span class=n>CONFIG_DISPATCHER</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>switch_features_handler</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>ev</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>datapath</span> <span class=o>=</span> <span class=n>ev</span><span class=o>.</span><span class=n>msg</span><span class=o>.</span><span class=n>datapath</span>
+</span></span><span class=line><span class=cl>    <span class=n>ofproto</span> <span class=o>=</span> <span class=n>datapath</span><span class=o>.</span><span class=n>ofproto</span>
+</span></span><span class=line><span class=cl>    <span class=n>parser</span> <span class=o>=</span> <span class=n>datapath</span><span class=o>.</span><span class=n>ofproto_parser</span>
+</span></span><span class=line><span class=cl>    <span class=n>match</span> <span class=o>=</span> <span class=n>parser</span><span class=o>.</span><span class=n>OFPMatch</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>actions</span> <span class=o>=</span> <span class=p>[</span><span class=n>parser</span><span class=o>.</span><span class=n>OFPActionOutput</span><span class=p>(</span><span class=n>ofproto</span><span class=o>.</span><span class=n>OFPP_CONTROLLER</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                                      <span class=n>ofproto</span><span class=o>.</span><span class=n>OFPCML_NO_BUFFER</span><span class=p>)]</span>
+</span></span><span class=line><span class=cl>    <span class=bp>self</span><span class=o>.</span><span class=n>add_flow</span><span class=p>(</span><span class=n>datapath</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>match</span><span class=p>,</span> <span class=n>actions</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><ul>
+<li><code>ev.msg.datapath</code> 代表 Switch 物件</li><li><code>datapath.ofproto</code> 與 <code>datapath.ofproto_parser</code> 代表著 OpenFlow protocol 物件</li><li><a href=https://github.com/osrg/ryu/blob/704dcc786aa9f975a9d486d9a1699fd7995ecd4b/ryu/ofproto/ofproto_v1_5_parser.py#L607 target=_blank rel="noopener noreffer"><code>OFPMatch</code></a> 用來指定 Flow Match，共<a href="https://www.opennetworking.org/wp-content/uploads/2014/10/openflow-switch-v1.5.1.pdf#page=78" target=_blank rel="noopener noreffer">40種</a>。這裡沒有定義何 Match。</li><li><code>OFPActionOutput</code> 用來決定封包要往哪個連接埠送出，主要參數是兩個 Flag，<code>port</code> 就是 Output port，<code>max_len</code> 指送給 Controller 的最大長度。<code>OFPP_CONTROLLER</code> 就是送到 Controller，<code>OFPCML_NO_BUFFER</code> 代表封包完整地給 Controller，這些值都是一個 Flag，可以在<a href=https://github.com/osrg/ryu/blob/704dcc786aa9f975a9d486d9a1699fd7995ecd4b/ryu/ofproto/ofproto_v1_5.py target=_blank rel="noopener noreffer">原始碼</a>查看。</li></ul><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>add_flow</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>datapath</span><span class=p>,</span> <span class=n>priority</span><span class=p>,</span> <span class=n>match</span><span class=p>,</span> <span class=n>actions</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>ofproto</span> <span class=o>=</span> <span class=n>datapath</span><span class=o>.</span><span class=n>ofproto</span>
+</span></span><span class=line><span class=cl>    <span class=n>parser</span> <span class=o>=</span> <span class=n>datapath</span><span class=o>.</span><span class=n>ofproto_parser</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>inst</span> <span class=o>=</span> <span class=p>[</span><span class=n>parser</span><span class=o>.</span><span class=n>OFPInstructionActions</span><span class=p>(</span><span class=n>ofproto</span><span class=o>.</span><span class=n>OFPIT_APPLY_ACTIONS</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                                         <span class=n>actions</span><span class=p>)]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>mod</span> <span class=o>=</span> <span class=n>parser</span><span class=o>.</span><span class=n>OFPFlowMod</span><span class=p>(</span><span class=n>datapath</span><span class=o>=</span><span class=n>datapath</span><span class=p>,</span> <span class=n>priority</span><span class=o>=</span><span class=n>priority</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                            <span class=n>match</span><span class=o>=</span><span class=n>match</span><span class=p>,</span> <span class=n>instructions</span><span class=o>=</span><span class=n>inst</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>datapath</span><span class=o>.</span><span class=n>send_msg</span><span class=p>(</span><span class=n>mod</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><ul>
+<li><code>OFPInstructionActions</code> 就是 OpenFlow 的 Instruction，種類由第一個參數設定，三選一如下，第二個參數放入 <code>OFPInstructionActions</code>。
+<ul>
+<li><code>OFPIT_WRITE_ACTIONS</code></li><li><code>OFPIT_APPLY_ACTIONS</code></li><li><code>OFPIT_CLEAR_ACTIONS</code></li></ul></li><li><code>OFPFlowMod</code> 用來讓 Controller 改變 Flow Table。
+<ul>
+<li><code>table_id</code> 如果有要指定 Table 來放入 Entry 可使用</li><li><code>instructions</code> 中用來傳入 <code>OFPInstructionActions</code></li></ul></li><li>最後透過 <code>datapath.send_msg(mod)</code> 將 OpenFlow 訊息送到交換器</li></ul><h2 id=references>References</h2><ul>
+<li><a href=https://ryu.readthedocs.io/en/latest/getting_started.html target=_blank rel="noopener noreffer">Getting Started — Ryu 4.30 documentation</a></li><li><a href=https://hub.docker.com/r/osrg/ryu target=_blank rel="noopener noreffer">osrg/ryu - Docker Hub</a></li><li><a href=http://ernie55ernie.github.io/mininet/ryu/python/2019/03/25/install-mininet-and-ryu-controller.html target=_blank rel="noopener noreffer">Install Mininet and Ryu Controller</a></li><li><a href=https://github.com/osrg/ryu target=_blank rel="noopener noreffer">osrg/ryu: Ryu component-based software defined networking framework</a></li><li><a href="https://www.opennetworking.org/wp-content/uploads/2014/10/openflow-switch-v1.5.1.pdf#page=78" target=_blank rel="noopener noreffer">openflow-switch-v1.5.1.pdf</a></li><li>張衛峰，<em>深度解析SDN：利益、戰略、技術、實踐</em>，台灣：碁峰，2014，第 68 至 83 頁。</li></ul><disqus></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022.03.02&nbsp;<a class=git-hash href=https://github.com/LYTzeng/blog2.0/commit/65c25060e2b23d2cc050f8799ee57ed7b17e2333 target=_blank title="commit by LYTzeng(oscar217b@gmail.com) 65c25060e2b23d2cc050f8799ee57ed7b17e2333: fix github actions...">
+<i class="fas fa-hashtag fa-fw"></i>65c2506</a></span>
+</div><div class=post-info-license></div></div><div class=post-info-line>
+<div class=post-info-md><span>
+<a class=link-to-markdown href=/introduction-to-ryu/index.md target=_blank>Read Markdown</a>
+</span></div><div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://o3r.moe/introduction-to-ryu/ data-title="OpenFlow 1.5 從入門到交報告 (二) - Ryu" data-hashtags=Ryu,OpenFlow,Python><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://o3r.moe/introduction-to-ryu/ data-hashtag=Ryu><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://o3r.moe/introduction-to-ryu/ data-title="OpenFlow 1.5 從入門到交報告 (二) - Ryu"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a></span>
+</div></div></div><div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/ryu/>Ryu</a>,&nbsp;<a href=/tags/openflow/>OpenFlow</a>,&nbsp;<a href=/tags/python/>Python</a></section><section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section></div><div class=post-nav><a href=/esxi-server-in-lab-structure/ class=prev rel=prev title="實驗室自架 Lab 環境 — 網路架構設計"><i class="fas fa-angle-left fa-fw"></i>實驗室自架 Lab 環境 — 網路架構設計</a>
+<a href=/introduction-to-mininet/ class=next rel=next title="OpenFlow 1.5 從入門到交報告 (一) - Mininet 基本概念">OpenFlow 1.5 從入門到交報告 (一) - Mininet 基本概念<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=valine class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.
+</noscript></div></article></div></main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2019 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/about/ target=_blank>Oscar Tseng</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/valine/valine.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.respimg.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.parent-fit.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.object-fit.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.blur-up.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript src=/lib/dayjs/dayjs.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20},comment:{valine:{appId:"mBVjhrJAGxI6vq161LiQRhKH-MdYXbMMI",appKey:"78ztEgoRX6GkV1LdNx0pghv8",avatar:"mp",el:"#valine",emojiCDN:"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/",emojiMaps:{100:"1f4af.png",alien:"1f47d.png",anger:"1f4a2.png",angry:"1f620.png",anguished:"1f627.png",astonished:"1f632.png",black_heart:"1f5a4.png",blue_heart:"1f499.png",blush:"1f60a.png",bomb:"1f4a3.png",boom:"1f4a5.png",broken_heart:"1f494.png",brown_heart:"1f90e.png",clown_face:"1f921.png",cold_face:"1f976.png",cold_sweat:"1f630.png",confounded:"1f616.png",confused:"1f615.png",cry:"1f622.png",crying_cat_face:"1f63f.png",cupid:"1f498.png",dash:"1f4a8.png",disappointed:"1f61e.png",disappointed_relieved:"1f625.png",dizzy:"1f4ab.png",dizzy_face:"1f635.png",drooling_face:"1f924.png",exploding_head:"1f92f.png",expressionless:"1f611.png",face_vomiting:"1f92e.png",face_with_cowboy_hat:"1f920.png",face_with_hand_over_mouth:"1f92d.png",face_with_head_bandage:"1f915.png",face_with_monocle:"1f9d0.png",face_with_raised_eyebrow:"1f928.png",face_with_rolling_eyes:"1f644.png",face_with_symbols_on_mouth:"1f92c.png",face_with_thermometer:"1f912.png",fearful:"1f628.png",flushed:"1f633.png",frowning:"1f626.png",ghost:"1f47b.png",gift_heart:"1f49d.png",green_heart:"1f49a.png",grimacing:"1f62c.png",grin:"1f601.png",grinning:"1f600.png",hankey:"1f4a9.png",hear_no_evil:"1f649.png",heart:"2764-fe0f.png",heart_decoration:"1f49f.png",heart_eyes:"1f60d.png",heart_eyes_cat:"1f63b.png",heartbeat:"1f493.png",heartpulse:"1f497.png",heavy_heart_exclamation_mark_ornament:"2763-fe0f.png",hole:"1f573-fe0f.png",hot_face:"1f975.png",hugging_face:"1f917.png",hushed:"1f62f.png",imp:"1f47f.png",innocent:"1f607.png",japanese_goblin:"1f47a.png",japanese_ogre:"1f479.png",joy:"1f602.png",joy_cat:"1f639.png",kiss:"1f48b.png",kissing:"1f617.png",kissing_cat:"1f63d.png",kissing_closed_eyes:"1f61a.png",kissing_heart:"1f618.png",kissing_smiling_eyes:"1f619.png",laughing:"1f606.png",left_speech_bubble:"1f5e8-fe0f.png",love_letter:"1f48c.png",lying_face:"1f925.png",mask:"1f637.png",money_mouth_face:"1f911.png",nauseated_face:"1f922.png",nerd_face:"1f913.png",neutral_face:"1f610.png",no_mouth:"1f636.png",open_mouth:"1f62e.png",orange_heart:"1f9e1.png",partying_face:"1f973.png",pensive:"1f614.png",persevere:"1f623.png",pleading_face:"1f97a.png",pouting_cat:"1f63e.png",purple_heart:"1f49c.png",rage:"1f621.png",relaxed:"263a-fe0f.png",relieved:"1f60c.png",revolving_hearts:"1f49e.png",right_anger_bubble:"1f5ef-fe0f.png",robot_face:"1f916.png",rolling_on_the_floor_laughing:"1f923.png",scream:"1f631.png",scream_cat:"1f640.png",see_no_evil:"1f648.png",shushing_face:"1f92b.png",skull:"1f480.png",skull_and_crossbones:"2620-fe0f.png",sleeping:"1f634.png",sleepy:"1f62a.png",slightly_frowning_face:"1f641.png",slightly_smiling_face:"1f642.png",smile:"1f604.png",smile_cat:"1f638.png",smiley:"1f603.png",smiley_cat:"1f63a.png",smiling_face_with_3_hearts:"1f970.png",smiling_imp:"1f608.png",smirk:"1f60f.png",smirk_cat:"1f63c.png",sneezing_face:"1f927.png",sob:"1f62d.png",space_invader:"1f47e.png",sparkling_heart:"1f496.png",speak_no_evil:"1f64a.png",speech_balloon:"1f4ac.png","star-struck":"1f929.png",stuck_out_tongue:"1f61b.png",stuck_out_tongue_closed_eyes:"1f61d.png",stuck_out_tongue_winking_eye:"1f61c.png",sunglasses:"1f60e.png",sweat:"1f613.png",sweat_drops:"1f4a6.png",sweat_smile:"1f605.png",thinking_face:"1f914.png",thought_balloon:"1f4ad.png",tired_face:"1f62b.png",triumph:"1f624.png",two_hearts:"1f495.png",unamused:"1f612.png",upside_down_face:"1f643.png",weary:"1f629.png",white_frowning_face:"2639-fe0f.png",white_heart:"1f90d.png",wink:"1f609.png",woozy_face:"1f974.png",worried:"1f61f.png",yawning_face:"1f971.png",yellow_heart:"1f49b.png",yum:"1f60b.png",zany_face:"1f92a.png",zipper_mouth_face:"1f910.png",zzz:"1f4a4.png"},enableQQ:!1,highlight:!0,lang:"en",pageSize:10,placeholder:"Your comment ...",recordIP:!0,serverURLs:"https://mbvjhrja.api.lncldglobal.com",visitor:!0}},search:{algoliaAppID:"CJDJYKXD2Y",algoliaIndex:"o3r.moe",algoliaSearchKey:"35ae54723dc9f540430a2b6e875d7505",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

@@ -1,0 +1,263 @@
+<!doctype html><html lang=zh-hant-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances - Blog O3R</title><meta name=Description content="目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具，直接呼叫 API 來控制和查看 EC2，免去登入 console 的麻煩，一定會方便許多。我使用 Go 寫了一個程式處理 Mattermost 傳入的資料，並且透過 aws-sdk-go 對 EC2 進行操作。程式會在 Lambda 上執行，原始碼請參考我的 Github：https://github.com/LYTzeng/ec2ctl，日後考慮用 CloudFormation 讓需要的人快速佈署。這篇主要會介紹 API Gateway、Lambda 和部份 SDK 的使用。"><meta property="og:title" content="透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances">
+<meta property="og:description" content="目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具，直接呼叫 API 來控制和查看 EC2，免去登入 console 的麻煩，一定會方便許多。我使用 Go 寫了一個程式處理 Mattermost 傳入的資料，並且透過 aws-sdk-go 對 EC2 進行操作。程式會在 Lambda 上執行，原始碼請參考我的 Github：https://github.com/LYTzeng/ec2ctl，日後考慮用 CloudFormation 讓需要的人快速佈署。這篇主要會介紹 API Gateway、Lambda 和部份 SDK 的使用。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://o3r.moe/lambda-apigateway-mattermost-go-ec2/"><meta property="og:image" content="https://o3r.moe/lambda-apigateway-mattermost-go-ec2/lambda-apigateway-mattermost-go-ec2-1.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2020-04-21T02:19:34+08:00">
+<meta property="article:modified_time" content="2022-03-02T15:02:38+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://o3r.moe/lambda-apigateway-mattermost-go-ec2/lambda-apigateway-mattermost-go-ec2-1.jpg">
+<meta name=twitter:title content="透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances">
+<meta name=twitter:description content="目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具，直接呼叫 API 來控制和查看 EC2，免去登入 console 的麻煩，一定會方便許多。我使用 Go 寫了一個程式處理 Mattermost 傳入的資料，並且透過 aws-sdk-go 對 EC2 進行操作。程式會在 Lambda 上執行，原始碼請參考我的 Github：https://github.com/LYTzeng/ec2ctl，日後考慮用 CloudFormation 讓需要的人快速佈署。這篇主要會介紹 API Gateway、Lambda 和部份 SDK 的使用。">
+<meta name=application-name content="LoveIt">
+<meta name=apple-mobile-web-app-title content="LoveIt"><meta name=theme-color content="#4E5260"><meta name=msapplication-TileColor content="#4E5260"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#4e5260><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://o3r.moe/lambda-apigateway-mattermost-go-ec2/><link rel=prev href=https://o3r.moe/monitoring-pfsense-via-kibana/><link rel=next href=https://o3r.moe/aws-internship-experience/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances","inLanguage":"zh-Hant-TW","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/o3r.moe\/lambda-apigateway-mattermost-go-ec2\/"},"image":[{"@type":"ImageObject","url":"https:\/\/o3r.moe\/lambda-apigateway-mattermost-go-ec2\/lambda-apigateway-mattermost-go-ec2-1.jpg","width":1542,"height":622}],"genre":"posts","keywords":"go, aws lambda, aws ec2, aws api gateway","wordcount":2402,"url":"https:\/\/o3r.moe\/lambda-apigateway-mattermost-go-ec2\/","datePublished":"2020-04-21T02:19:34+08:00","dateModified":"2022-03-02T15:02:38+00:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Oscar Tseng","logo":{"@type":"ImageObject","url":"https:\/\/o3r.moe\/images\/profile-pic.webp","width":1283,"height":1283}},"author":{"@type":"Person","name":"Oscar Tseng"},"description":"目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具，直接呼叫 API 來控制和查看 EC2，免去登入 console 的麻煩，一定會方便許多。我使用 Go 寫了一個程式處理 Mattermost 傳入的資料，並且透過 aws-sdk-go 對 EC2 進行操作。程式會在 Lambda 上執行，原始碼請參考我的 Github：https://github.com/LYTzeng/ec2ctl，日後考慮用 CloudFormation 讓需要的人快速佈署。這篇主要會介紹 API Gateway、Lambda 和部份 SDK 的使用。"}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("theme","dark")</script>
+<div id=mask></div><div class=wrapper><div style=display:none><img class=lazyload src=/svg/loading.min.svg data-src=/images/header-bg-lowsrc.webp data-srcset="/images/header-bg-lowsrc.webp, /images/header-bg-lowsrc.webp 1.5x, /images/header-bg-lowsrc.webp 2x" data-sizes=auto alt=/images/header-bg-lowsrc.webp title=/images/header-bg-lowsrc.webp></div><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Blog O3R">O3R</a>
+</div><div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div></div><div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about/ title>About</a><a class=menu-item href=https://github.com/LYTzeng title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div></div></header><div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div></div><div class="header-bg-wrapper mobile">
+<div class=mediabox>
+<img class="mediabox-img lazyload" data-srcset=/images/header-bg.webp data-lowsrc=/images/header-bg-lowsrc.webp data-sizes=auto alt=/images/header-bg.webp title=/images/header-bg.webp>
+</div></div><div class="brand-logo mobile">
+<div class=blog>BLOG&nbsp</div><div class=othreer-glitch-stack style=--stacks:3>
+<span class=othreer style=--index:0>o3R</span>
+<span class=othreer style=--index:1>o3R</span>
+<span class=othreer style=--index:2>o3R</span>
+</div></div><header class=desktop id=header-desktop>
+<div class=header-wrapper is-sticky=false>
+<div class=header-title>
+<a href=/ title="Blog O3R">O3R</a>
+</div><div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about/> About </a><a class=menu-item href=https://github.com/LYTzeng title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i> </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div></div></div><div class=header-bg-wrapper><div class=mediabox>
+<img class="mediabox-img lazyload" data-srcset=/images/header-bg.webp data-lowsrc=/images/header-bg-lowsrc.webp data-sizes=auto alt=/images/header-bg.webp title=/images/header-bg.webp>
+</div></div><div class=brand-logo>
+<div class=blog>BLOG&nbsp</div><div class=othreer-glitch-stack style=--stacks:3>
+<span class=othreer style=--index:0>o3R</span>
+<span class=othreer style=--index:1>o3R</span>
+<span class=othreer style=--index:2>o3R</span>
+</div></div><div class=header-bg-credits>
+Artwork by&nbsp;<a href=https://www.pixiv.net/users/73785165 target=_blank rel="noopener noreferrer">6L36</a>&nbsp;<a href=https://twitter.com/6L36DlPKD21KqZQ title=Twitter target=_blank rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div></header><main class=main>
+<div class=container><div id=sidebar><div id=sidebar-profile><div class=sidebar-avatar><a href=/posts/ title=Posts><img class=lazyload src=/svg/loading.min.svg data-src=/images/profile-pic.webp data-srcset="/images/profile-pic.webp, /images/profile-pic.webp 1.5x, /images/profile-pic.webp 2x" data-sizes=auto alt=/images/profile-pic.webp title=/images/profile-pic.webp></a></div><h1 class=sidebar-title>Oscar T.</h1><div class=links><a href=https://github.com/LYTzeng title=GitHub target=_blank rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href=https://linkedin.com/in/li-yen-tseng title=LinkedIn target=_blank rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href=https://steamcommunity.com/id/yen-host title=Steam target=_blank rel="noopener noreffer me"><i class="fab fa-steam fa-fw"></i></a><a href=https://www.twitch.tv/0scar0x0 title=Twitch target=_blank rel="noopener noreffer me"><i class="fab fa-twitch fa-fw"></i></a><a href=mailto:oscar@o3r.moe title=Email rel=me><i class="far fa-envelope fa-fw"></i></a><a href=https://discordapp.com/users/697020575989628989 title=Discord target=_blank rel="noopener noreffer me"><i class="fab fa-discord fa-fw"></i></a><a href=/index.xml title=RSS target=_blank rel="noopener noreffer me"><i class="fas fa-rss fa-fw"></i></a></div><div id=sidebar-intro>
+<div class=sidebar-intro-tabs-container><div class=sidebar-intro-tab tab-index=0>我在做什麼</div><div class=sidebar-intro-tab tab-index=1>最愛的妹紙</div><div class=sidebar-intro-tab tab-index=2>最喜歡的遊戲</div><div class=sidebar-intro-tab tab-index=3>最喜歡的作品</div><div class=sidebar-intro-tab tab-index=4>裝備</div></div><div class=sidebar-intro-content-container><div class="sidebar-intro-content hide-content" tab-index=0>
+<div>在 AWS 技術支援打工，懂一點網路，擅長什麼都不擅長</div></div><div class="sidebar-intro-content hide-content" tab-index=1>
+<div>神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)</div></div><div class="sidebar-intro-content hide-content" tab-index=2>
+<div>Nier: Automata、Pokemon全系列、Dark Souls 3、愛上火車、茂伸奇談</div></div><div class="sidebar-intro-content hide-content" tab-index=3>
+<div>遊戲人生、點兔、賢惠幼妻仙狐小姐、奮鬥吧！系統工程師、動物朋友(僅第一季)</div></div><div class="sidebar-intro-content hide-content" tab-index=4>
+<div>MacBook Pro (13", 2021公司配) & (13", 2019)、iPhone13 Pro、自組R9 5900X主機、Filco Hakua白、森海HD25</div></div></div></div></div><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div></div><article class="page single"><h1 class="single-title animated flipInX">透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/about/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Oscar Tseng</a></span>&nbsp;<span class=post-category>included in <a href=/categories/aws/><i class="far fa-folder fa-fw"></i>AWS</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020.04.21>2020.04.21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2402 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;5 minutes&nbsp;<span id=/lambda-apigateway-mattermost-go-ec2/ class=leancloud_visitors data-flag-title="透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances">
+<i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+</span>&nbsp;</div></div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/lambda-apigateway-mattermost-go-ec2/lambda-apigateway-mattermost-go-ec2-1.jpg data-srcset="/lambda-apigateway-mattermost-go-ec2/lambda-apigateway-mattermost-go-ec2-1.jpg, /lambda-apigateway-mattermost-go-ec2/lambda-apigateway-mattermost-go-ec2-1.jpg 1.5x, /lambda-apigateway-mattermost-go-ec2/lambda-apigateway-mattermost-go-ec2-1.jpg 2x" data-sizes=auto alt=/lambda-apigateway-mattermost-go-ec2/lambda-apigateway-mattermost-go-ec2-1.jpg title="目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具，直接呼叫 API 來控制和查看 EC2，免去登入 console 的麻煩，一定會方便許多。我使用 Go 寫了一個程式處理 Mattermost 傳入的資料，並且透過 aws-sdk-go 對 EC2 進行操作。程式會在 Lambda 上執行，原始碼請參考我的 Github：https://github.com/LYTzeng/ec2ctl，日後考慮用 CloudFormation 讓需要的人快速佈署。這篇主要會介紹 API Gateway、Lambda 和部份 SDK 的使用。"></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#api-gateway>API Gateway</a>
+<ul>
+<li><a href=#iam-role>IAM Role</a></li><li><a href=#建立-api-gateway>建立 API Gateway</a>
+<ul>
+<li><a href=#建立-resource>建立 Resource</a></li><li><a href=#建立-method>建立 Method</a></li><li><a href=#resource-policy>Resource Policy</a></li><li><a href=#deploy-api-到指定-stage>Deploy API 到指定 Stage</a></li></ul></li></ul></li><li><a href=#lambda>Lambda</a>
+<ul>
+<li><a href=#iam-role-1>IAM Role</a></li><li><a href=#建立-function>建立 Function</a></li></ul></li><li><a href=#mattermost-架設與設定>Mattermost 架設與設定</a></li><li><a href=#使用-mattermost-測試>使用 Mattermost 測試</a></li><li><a href=#使用-postman-測試>使用 Postman 測試</a></li><li><a href=#references>References</a></li></ul></nav></div></div><div class=content id=content><p>目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具，直接呼叫 API 來控制和查看 EC2，免去登入 console 的麻煩，一定會方便許多。整體架構如上圖</p><p>我使用 Go 寫了一個程式處理 Mattermost 傳入的資料，並且透過 <a href=https://github.com/aws/aws-sdk-go target=_blank rel="noopener noreffer">aws-sdk-go</a> 對 EC2 進行操作。程式會在 Lambda 上執行，原始碼請參考我的 Github：<a href=https://github.com/LYTzeng/ec2ctl target=_blank rel="noopener noreffer">https://github.com/LYTzeng/ec2ctl</a>，日後考慮用 CloudFormation 讓需要的人快速佈署。這篇主要會介紹 API Gateway、Lambda 和部份 SDK 的使用。</p><p>先展示成果：</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/PEndaZv.gif data-srcset="https://i.imgur.com/PEndaZv.gif, https://i.imgur.com/PEndaZv.gif 1.5x, https://i.imgur.com/PEndaZv.gif 2x" data-sizes=auto alt=https://i.imgur.com/PEndaZv.gif title=https://i.imgur.com/PEndaZv.gif></p><h2 id=api-gateway>API Gateway</h2><h3 id=iam-role>IAM Role</h3><p>在建立一個 API 之前，我們先創一個 IAM Policy 並 Attach 到 Role。API Gateway 需要 Invoke Lambda 以及寫入 CLoudWatch 的權限。
+進入 IAM 管理介面，首先 Create 一個 Policy 使其允許 Invoke Lambda，我們使用 JSON 來建立 Policy：</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;Version&#34;</span><span class=p>:</span> <span class=s2>&#34;2012-10-17&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;Statement&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Sid&#34;</span><span class=p>:</span> <span class=s2>&#34;VisualEditor0&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Effect&#34;</span><span class=p>:</span> <span class=s2>&#34;Allow&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Action&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;lambda:InvokeFunction&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                <span class=s2>&#34;lambda:PutFunctionEventInvokeConfig&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=p>],</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Resource&#34;</span><span class=p>:</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>接著建立一個 Role 並 <strong>Attach policies</strong>。除了 attach 剛才建立的 policy，還需要 attach 一個 <code>AmazonAPIGatewayPushToCloudWatchLogs</code> 的 policy，可以直接搜尋，順便將 <strong>Role ARN</strong>複製下來，之後會使用到。接下來就可以建立一個 API。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/QmuRVgE.png data-srcset="https://i.imgur.com/QmuRVgE.png, https://i.imgur.com/QmuRVgE.png 1.5x, https://i.imgur.com/QmuRVgE.png 2x" data-sizes=auto alt=https://i.imgur.com/QmuRVgE.png title=https://i.imgur.com/QmuRVgE.png></p><h3 id=建立-api-gateway>建立 API Gateway</h3><p>進入 API Gateway 介面，選擇 <strong>Create API</strong>，找到 <strong>REST API</strong> 選擇 Build，<strong>Choose the protocol</strong> 選 <strong>REST</strong>，<strong>Create new API</strong> 選擇 <strong>New PIA</strong>。<strong>API Name</strong>輸入 API 名稱，<strong>Endpoint Type</strong> 保留預設 <strong>Regional</strong> 即可。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/G4IZFLx.png data-srcset="https://i.imgur.com/G4IZFLx.png, https://i.imgur.com/G4IZFLx.png 1.5x, https://i.imgur.com/G4IZFLx.png 2x" data-sizes=auto alt=https://i.imgur.com/G4IZFLx.png title=https://i.imgur.com/G4IZFLx.png></p><p><strong>Create API</strong> 後進入 API 設定的頁面。選擇左側選單最下面的 <strong>Settings</strong>，將之前複製的 <strong>Role ARN</strong> 貼上，<strong>Role ARN</strong> 就是一個 IAM Role 的 ID，這可以提供 API Gateway 寫入 CloudWatch 的權限。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/jhhmCyx.png data-srcset="https://i.imgur.com/jhhmCyx.png, https://i.imgur.com/jhhmCyx.png 1.5x, https://i.imgur.com/jhhmCyx.png 2x" data-sizes=auto alt=https://i.imgur.com/jhhmCyx.png title=https://i.imgur.com/jhhmCyx.png></p><p>API Gateway 幾個組成元素大概有 <strong>Resource</strong>、<strong>Method</strong>、<strong>Stages</strong> 和 <strong>Resource Policy</strong>，這幾點設置完畢就能有一個可以運作的簡單 API 了。先簡單說明這幾個項目：</p><ul>
+<li>
+<p><strong>Resources</strong>
+一個 Resource 可以接收多種的 HTTP request method，例如 GET/POST/OPTION 等等。 Resource 的名稱會包含在 URL 裡面。</p></li><li>
+<p><strong>Methods</strong>
+HTTP request 的單一種類，並且決定接收到這個 method 後下一步該做什麼，以及如何做出 response。例如：收到 HTTP POST 時 觸發 Lambda function，並且將 body 傳送至 Lambda，隨後將 Lambda 回傳的 response (如：402 Unauthorized) 回應給 Client。流程會顯示在設定頁面中。
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/jqrJpru.png data-srcset="https://i.imgur.com/jqrJpru.png, https://i.imgur.com/jqrJpru.png 1.5x, https://i.imgur.com/jqrJpru.png 2x" data-sizes=auto alt=https://i.imgur.com/jqrJpru.png title=https://i.imgur.com/jqrJpru.png></p></li><li>
+<p><strong>Stages</strong>
+Stage 代表這個 API 的開發階段，例如 <code>dev, prod, beta, v2</code>等，要產生一個可以被呼叫的 API，一定要 <strong>Deploy</strong> 到一個 Stage，Stage 的名稱會包含在 URL 中。</p></li><li>
+<p><strong>Resource Policy</strong>
+提供 API 存取控制的機制，使用 JSON 格式來設定，條件可以使用 IAM，或是單一主機 IP等，可用來決定
+被允許/禁止的動作，避免被不明人士存取到 API。</p></li></ul><p>API Gateway 的 REST API 的 URL 的格式為：</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>https://{restapi-id}.execute-api.{region}.amazonaws.com/{stageName}/{resource}
+</span></span></code></pre></td></tr></table></div></div><p>假設我建立一個名為 <code>ec2ctl</code> 的 <strong>resource</strong>，<strong>stage</strong> 為 <code>dev</code>，API 位於 <code>us-west-2</code> 的 region，則我的 API URL 會是 <code>https://{restapi-id}.execute-api.us-west-2.amazonaws.com/dev/ec2ctl</code> 。</p><h4 id=建立-resource>建立 Resource</h4><p>左側選單選擇 <strong>Resources</strong>，會看到只有<code>/</code>這個符號，代表我們位於 base url，點擊 <strong>Action</strong> > <strong>Create Resource</strong> 建立 Resource，並決定 <strong>resource name</strong> 與 <strong>resource path</strong>。
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/IJYR2UF.png data-srcset="https://i.imgur.com/IJYR2UF.png, https://i.imgur.com/IJYR2UF.png 1.5x, https://i.imgur.com/IJYR2UF.png 2x" data-sizes=auto alt=https://i.imgur.com/IJYR2UF.png title=https://i.imgur.com/IJYR2UF.png></p><h4 id=建立-method>建立 Method</h4><p>選擇 Action > Create Method，並選擇 POST。
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/GImWVwX.png data-srcset="https://i.imgur.com/GImWVwX.png, https://i.imgur.com/GImWVwX.png 1.5x, https://i.imgur.com/GImWVwX.png 2x" data-sizes=auto alt=https://i.imgur.com/GImWVwX.png title=https://i.imgur.com/GImWVwX.png>
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/RpvVp6E.png data-srcset="https://i.imgur.com/RpvVp6E.png, https://i.imgur.com/RpvVp6E.png 1.5x, https://i.imgur.com/RpvVp6E.png 2x" data-sizes=auto alt=https://i.imgur.com/RpvVp6E.png title=https://i.imgur.com/RpvVp6E.png></p><h4 id=resource-policy>Resource Policy</h4><p>我們需要允許 API Gateway invoke Lambda funciton，而且只有 Mattermost server 和我們的測試主機的 <strong>SourceIp</strong> 是被允許的，使用 JSON 格式輸入設定。</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;Version&#34;</span><span class=p>:</span> <span class=s2>&#34;2012-10-17&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;Statement&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>        <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Effect&#34;</span><span class=p>:</span> <span class=s2>&#34;Allow&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Principal&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&#34;AWS&#34;</span><span class=p>:</span> <span class=s2>&#34;*&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=p>},</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Action&#34;</span><span class=p>:</span> <span class=s2>&#34;execute-api:Invoke&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Resource&#34;</span><span class=p>:</span> <span class=s2>&#34;execute-api:/*/*/ec2ctl&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>            <span class=nt>&#34;Condition&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=nt>&#34;IpAddress&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=nt>&#34;aws:SourceIp&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>                        <span class=s2>&#34;192.0.2.1/32&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>                        <span class=s2>&#34;192.0.2.2/32&#34;</span>
+</span></span><span class=line><span class=cl>                    <span class=p>]</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=deploy-api-到指定-stage>Deploy API 到指定 Stage</h4><p>點選左側選單 <strong>Resources</strong>，<strong>Action</strong> > <strong>Deploy API</strong>，<strong>[New Stage]</strong> 後輸入 stage name，deploy 後即可使用這個 API。
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/IlIV3He.png data-srcset="https://i.imgur.com/IlIV3He.png, https://i.imgur.com/IlIV3He.png 1.5x, https://i.imgur.com/IlIV3He.png 2x" data-sizes=auto alt=https://i.imgur.com/IlIV3He.png title=https://i.imgur.com/IlIV3He.png></p><p>有一點需要特別注意的是，<mark>對 API 設定做任何更動後，請記得要重新 <strong>Deploy</strong> 才會生效</mark>。</p><p>接著我們需要使用 Lambda 來和 API Gateway 串接。</p><h2 id=lambda>Lambda</h2><h3 id=iam-role-1>IAM Role</h3><p>我們會使用 Lambda 達成幾項功能：讀取所有 region 的 EC2，並回傳相關資訊，以及開啟/關閉指定的 EC2。要進行這些操作，我們需要賦予 Lambda function 權限，所以須建立 IAM Role。先新增所需的 Policy，JSON 設定請複製這裡：<a href rel>https://gist.github.com/LYTzeng/f935732d160c8fa72e90a18deeed9ae4</a> ，再將這個 Policy Attach 至新增的 Role。</p><h3 id=建立-function>建立 Function</h3><p>到 Lambda 界面，選擇 <strong>Create Function</strong>，<strong>Runtime</strong> 選擇 <strong>Go 1.x</strong>，<strong>Permissions</strong> 選擇 <strong>Use an existing role</strong> 找到剛才建立的 Role 並套用。</p><p>因為這次使用 Go 撰寫程式，必須先 compile 成能夠讓 Linux 執行的 binary (Lambda 底層 OS 使用 Amazon Linux) 並上傳，而且只能寫在 <code>package main</code> 裡面。你可以直接<a href=https://github.com/LYTzeng/ec2ctl/releases/download/0.1.0/main.zip target=_blank rel="noopener noreffer">下載 compile 過的執行檔</a>，透過 console 上傳 <strong>Function Package</strong>，<strong>Handler</strong> 設定為 <code>main.upx</code>。</p><p>接著找到 <strong>Environment Variables</strong> 區塊新增環境變數，<strong>Key</strong> 請輸入 <code>MATTERMOST_TOKEN</code>，<strong>Value</strong> 為你的 Mattermost server 的 Slash command <strong>token</strong>。</p><p>接著新增一個 <strong>Trigger</strong>：
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/VYJkazR.png data-srcset="https://i.imgur.com/VYJkazR.png, https://i.imgur.com/VYJkazR.png 1.5x, https://i.imgur.com/VYJkazR.png 2x" data-sizes=auto alt=https://i.imgur.com/VYJkazR.png title=https://i.imgur.com/VYJkazR.png></p><p>選擇 <strong>API Gateway</strong>，<strong>API</strong> 就是剛才建立的 API，<strong>Deployment Stage</strong> 是剛才 Deploy 時命名的名稱 (如：<code>dev</code>)，<strong>Security</strong> 選 <strong>Open</strong>，我們已經用 Token 做驗證，加上用 Resource Policy 白名單過濾，不必擔心這個 Open 設定。
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/jheCEwG.png data-srcset="https://i.imgur.com/jheCEwG.png, https://i.imgur.com/jheCEwG.png 1.5x, https://i.imgur.com/jheCEwG.png 2x" data-sizes=auto alt=https://i.imgur.com/jheCEwG.png title=https://i.imgur.com/jheCEwG.png></p><p>接著回到 <strong>API Gateway</strong> 頁面，選擇 <code>/ec2ctl</code> 底下的 <strong>POST</strong>，設定 <strong>Integration Request</strong></p><ul>
+<li><strong>Integration type</strong> 為 <strong>Lambda Function</strong></li><li><strong>Use Lambda Proxy integration 務必勾選</strong>，此選項可透過 event 將 Request body 傳送至 Lambda。</li><li><strong>Lambda Function</strong> 即剛才建立的 function
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/Js98mml.png data-srcset="https://i.imgur.com/Js98mml.png, https://i.imgur.com/Js98mml.png 1.5x, https://i.imgur.com/Js98mml.png 2x" data-sizes=auto alt=https://i.imgur.com/Js98mml.png title=https://i.imgur.com/Js98mml.png>
+儲存後可以看到整個 Method Execution 流程。</li></ul><p><img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/VinbrZD.png data-srcset="https://i.imgur.com/VinbrZD.png, https://i.imgur.com/VinbrZD.png 1.5x, https://i.imgur.com/VinbrZD.png 2x" data-sizes=auto alt=https://i.imgur.com/VinbrZD.png title=https://i.imgur.com/VinbrZD.png></p><p>這樣系統已經建制完畢，接下來可以使用 Postman 進行測試，或是直接在 Mattermost 開發環境測試。</p><h2 id=mattermost-架設與設定>Mattermost 架設與設定</h2><p>本篇不會詳述這部份操作，請參考 Mattermost 的官方文件：</p><ul>
+<li>開發環境架設
+<a href=https://developers.mattermost.com/contribute/server/developer-setup/ target=_blank rel="noopener noreffer">https://developers.mattermost.com/contribute/server/developer-setup/</a></li><li>Slash Command 設定
+<a href=https://docs.mattermost.com/developer/slash-commands.html target=_blank rel="noopener noreffer">https://docs.mattermost.com/developer/slash-commands.html</a>
+<a href=https://developers.mattermost.com/integrate/slash-commands/ target=_blank rel="noopener noreffer">https://developers.mattermost.com/integrate/slash-commands/</a>
+Slash Command 設定可以參考這裡的範例：</li></ul><blockquote>
+<ul>
+<li>Title: <code>ec2ctl</code></li><li>Description: <code>Start/stop/list EC2 instances from Mattermost.</code></li><li>Command Trigger Word: <code>ec2ctl</code></li><li>Request URL: <code>https://{restapi-id}.execute-api.{region}.amazonaws.com/dev/ec2ctl</code></li><li>Request Method: <code>POST</code></li><li>Response Username: <code>留空白</code></li><li>Response Icon: <code>留空白</code></li><li>Autocomplete: ✔</li><li>Autocomplete Hint: <code>(version | (start | stop) -i &lt;instance id> | ls [-r &lt;region>])</code></li><li>Autocomplete Description: <code>Start/stop/list EC2 instances from Mattermost.</code></li></ul></blockquote><p>設定完畢請複製 <strong>token</strong> 並貼上至 Lambda 的 Environment Variable <code>MATTERMOST_TOKEN</code> 中。
+<img class=lazyload src=/svg/loading.min.svg data-src=https://docs.mattermost.com/_images/slash_commands_token.png data-srcset="https://docs.mattermost.com/_images/slash_commands_token.png, https://docs.mattermost.com/_images/slash_commands_token.png 1.5x, https://docs.mattermost.com/_images/slash_commands_token.png 2x" data-sizes=auto alt=https://docs.mattermost.com/_images/slash_commands_token.png title=https://docs.mattermost.com/_images/slash_commands_token.png></p><h2 id=使用-mattermost-測試>使用 Mattermost 測試</h2><p>此程式 <a href=https://github.com/LYTzeng/ec2ctl target=_blank rel="noopener noreffer">ec2ctl</a> 的 Slash command 規則如下：</p><div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Usage:
+</span></span><span class=line><span class=cl>    ec2ctl version
+</span></span><span class=line><span class=cl>    ec2ctl (stop | start) -i &lt;id&gt;
+</span></span><span class=line><span class=cl>    ec2ctl ls [-r &lt;region&gt;]
+</span></span><span class=line><span class=cl>Options:
+</span></span><span class=line><span class=cl>    -i &lt;id&gt;    Specify an instance ID.
+</span></span><span class=line><span class=cl>    -r &lt;region&gt;    Specify a region.
+</span></span></code></pre></td></tr></table></div></div><p>測試指令是否正常，<code>/ec2ctl ls -r us-west-2</code>輸入後可以看到輸出如下：
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/jaTBuco.png data-srcset="https://i.imgur.com/jaTBuco.png, https://i.imgur.com/jaTBuco.png 1.5x, https://i.imgur.com/jaTBuco.png 2x" data-sizes=auto alt=https://i.imgur.com/jaTBuco.png title=https://i.imgur.com/jaTBuco.png></p><h2 id=使用-postman-測試>使用 Postman 測試</h2><p>使用 Postman 測試時需要模仿 Mattermost 的 HTTP Request 格式，否則程式會出錯。圖中 Postman 的設置都是必要的參數，不過只須設定 <strong>Headers</strong> 以及 <strong>Body</strong>：</p><p><strong>Content-Type</strong>：<code>application/x-www-from-urlencoded</code>
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/JhnYTU2.png data-srcset="https://i.imgur.com/JhnYTU2.png, https://i.imgur.com/JhnYTU2.png 1.5x, https://i.imgur.com/JhnYTU2.png 2x" data-sizes=auto alt=https://i.imgur.com/JhnYTU2.png title=https://i.imgur.com/JhnYTU2.png></p><p><strong>token</strong> 為 Mattermost slash command token
+<strong>text</strong> 欄位就是指令的內容 （不含 slash command 的 trigger <code>/ec2ctl</code>），例如<code>ls -r us-west-2</code> 或 <code>stop -i i-134134fwifi</code>。
+<strong>user_name</strong> 請隨意輸入
+<img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/1l8ueF8.png data-srcset="https://i.imgur.com/1l8ueF8.png, https://i.imgur.com/1l8ueF8.png 1.5x, https://i.imgur.com/1l8ueF8.png 2x" data-sizes=auto alt=https://i.imgur.com/1l8ueF8.png title=https://i.imgur.com/1l8ueF8.png></p><p>若看到 <code>Status: 200 OK</code> 和一些內容，代表成功了。</p><p><img class=lazyload src=/svg/loading.min.svg data-src=https://i.imgur.com/c2t7NUi.png data-srcset="https://i.imgur.com/c2t7NUi.png, https://i.imgur.com/c2t7NUi.png 1.5x, https://i.imgur.com/c2t7NUi.png 2x" data-sizes=auto alt=https://i.imgur.com/c2t7NUi.png title=https://i.imgur.com/c2t7NUi.png></p><h2 id=references>References</h2><ul>
+<li><a href=https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html target=_blank rel="noopener noreffer">IAM JSON Policy Reference </a></li><li><a href=https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html target=_blank rel="noopener noreffer">Deploying a REST API in Amazon API Gateway</a></li></ul></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022.03.02&nbsp;<a class=git-hash href=https://github.com/LYTzeng/blog2.0/commit/65c25060e2b23d2cc050f8799ee57ed7b17e2333 target=_blank title="commit by LYTzeng(oscar217b@gmail.com) 65c25060e2b23d2cc050f8799ee57ed7b17e2333: fix github actions...">
+<i class="fas fa-hashtag fa-fw"></i>65c2506</a></span>
+</div><div class=post-info-license></div></div><div class=post-info-line>
+<div class=post-info-md><span>
+<a class=link-to-markdown href=/lambda-apigateway-mattermost-go-ec2/index.md target=_blank>Read Markdown</a>
+</span></div><div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://o3r.moe/lambda-apigateway-mattermost-go-ec2/ data-title="透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances" data-hashtags="go,aws lambda,aws ec2,aws api gateway"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://o3r.moe/lambda-apigateway-mattermost-go-ec2/ data-hashtag=go><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://o3r.moe/lambda-apigateway-mattermost-go-ec2/ data-title="透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a></span>
+</div></div></div><div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/go/>go</a>,&nbsp;<a href=/tags/aws-lambda/>aws lambda</a>,&nbsp;<a href=/tags/aws-ec2/>aws ec2</a>,&nbsp;<a href=/tags/aws-api-gateway/>aws api gateway</a></section><section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section></div><div class=post-nav><a href=/monitoring-pfsense-via-kibana/ class=prev rel=prev title="ELK Stack 整合 pfSense (三)：Kibana Dashboard"><i class="fas fa-angle-left fa-fw"></i>ELK Stack 整合 pfSense (三)：Kibana Dashboard</a>
+<a href=/aws-internship-experience/ class=next rel=next title="AWS Taiwan 實習感想 2020-2021">AWS Taiwan 實習感想 2020-2021<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=valine class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.
+</noscript></div></article></div></main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2019 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/about/ target=_blank>Oscar Tseng</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/valine/valine.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.respimg.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.parent-fit.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.object-fit.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.blur-up.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript src=/lib/dayjs/dayjs.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20},comment:{valine:{appId:"mBVjhrJAGxI6vq161LiQRhKH-MdYXbMMI",appKey:"78ztEgoRX6GkV1LdNx0pghv8",avatar:"mp",el:"#valine",emojiCDN:"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/",emojiMaps:{100:"1f4af.png",alien:"1f47d.png",anger:"1f4a2.png",angry:"1f620.png",anguished:"1f627.png",astonished:"1f632.png",black_heart:"1f5a4.png",blue_heart:"1f499.png",blush:"1f60a.png",bomb:"1f4a3.png",boom:"1f4a5.png",broken_heart:"1f494.png",brown_heart:"1f90e.png",clown_face:"1f921.png",cold_face:"1f976.png",cold_sweat:"1f630.png",confounded:"1f616.png",confused:"1f615.png",cry:"1f622.png",crying_cat_face:"1f63f.png",cupid:"1f498.png",dash:"1f4a8.png",disappointed:"1f61e.png",disappointed_relieved:"1f625.png",dizzy:"1f4ab.png",dizzy_face:"1f635.png",drooling_face:"1f924.png",exploding_head:"1f92f.png",expressionless:"1f611.png",face_vomiting:"1f92e.png",face_with_cowboy_hat:"1f920.png",face_with_hand_over_mouth:"1f92d.png",face_with_head_bandage:"1f915.png",face_with_monocle:"1f9d0.png",face_with_raised_eyebrow:"1f928.png",face_with_rolling_eyes:"1f644.png",face_with_symbols_on_mouth:"1f92c.png",face_with_thermometer:"1f912.png",fearful:"1f628.png",flushed:"1f633.png",frowning:"1f626.png",ghost:"1f47b.png",gift_heart:"1f49d.png",green_heart:"1f49a.png",grimacing:"1f62c.png",grin:"1f601.png",grinning:"1f600.png",hankey:"1f4a9.png",hear_no_evil:"1f649.png",heart:"2764-fe0f.png",heart_decoration:"1f49f.png",heart_eyes:"1f60d.png",heart_eyes_cat:"1f63b.png",heartbeat:"1f493.png",heartpulse:"1f497.png",heavy_heart_exclamation_mark_ornament:"2763-fe0f.png",hole:"1f573-fe0f.png",hot_face:"1f975.png",hugging_face:"1f917.png",hushed:"1f62f.png",imp:"1f47f.png",innocent:"1f607.png",japanese_goblin:"1f47a.png",japanese_ogre:"1f479.png",joy:"1f602.png",joy_cat:"1f639.png",kiss:"1f48b.png",kissing:"1f617.png",kissing_cat:"1f63d.png",kissing_closed_eyes:"1f61a.png",kissing_heart:"1f618.png",kissing_smiling_eyes:"1f619.png",laughing:"1f606.png",left_speech_bubble:"1f5e8-fe0f.png",love_letter:"1f48c.png",lying_face:"1f925.png",mask:"1f637.png",money_mouth_face:"1f911.png",nauseated_face:"1f922.png",nerd_face:"1f913.png",neutral_face:"1f610.png",no_mouth:"1f636.png",open_mouth:"1f62e.png",orange_heart:"1f9e1.png",partying_face:"1f973.png",pensive:"1f614.png",persevere:"1f623.png",pleading_face:"1f97a.png",pouting_cat:"1f63e.png",purple_heart:"1f49c.png",rage:"1f621.png",relaxed:"263a-fe0f.png",relieved:"1f60c.png",revolving_hearts:"1f49e.png",right_anger_bubble:"1f5ef-fe0f.png",robot_face:"1f916.png",rolling_on_the_floor_laughing:"1f923.png",scream:"1f631.png",scream_cat:"1f640.png",see_no_evil:"1f648.png",shushing_face:"1f92b.png",skull:"1f480.png",skull_and_crossbones:"2620-fe0f.png",sleeping:"1f634.png",sleepy:"1f62a.png",slightly_frowning_face:"1f641.png",slightly_smiling_face:"1f642.png",smile:"1f604.png",smile_cat:"1f638.png",smiley:"1f603.png",smiley_cat:"1f63a.png",smiling_face_with_3_hearts:"1f970.png",smiling_imp:"1f608.png",smirk:"1f60f.png",smirk_cat:"1f63c.png",sneezing_face:"1f927.png",sob:"1f62d.png",space_invader:"1f47e.png",sparkling_heart:"1f496.png",speak_no_evil:"1f64a.png",speech_balloon:"1f4ac.png","star-struck":"1f929.png",stuck_out_tongue:"1f61b.png",stuck_out_tongue_closed_eyes:"1f61d.png",stuck_out_tongue_winking_eye:"1f61c.png",sunglasses:"1f60e.png",sweat:"1f613.png",sweat_drops:"1f4a6.png",sweat_smile:"1f605.png",thinking_face:"1f914.png",thought_balloon:"1f4ad.png",tired_face:"1f62b.png",triumph:"1f624.png",two_hearts:"1f495.png",unamused:"1f612.png",upside_down_face:"1f643.png",weary:"1f629.png",white_frowning_face:"2639-fe0f.png",white_heart:"1f90d.png",wink:"1f609.png",woozy_face:"1f974.png",worried:"1f61f.png",yawning_face:"1f971.png",yellow_heart:"1f49b.png",yum:"1f60b.png",zany_face:"1f92a.png",zipper_mouth_face:"1f910.png",zzz:"1f4a4.png"},enableQQ:!1,highlight:!0,lang:"en",pageSize:10,placeholder:"Your comment ...",recordIP:!0,serverURLs:"https://mbvjhrja.api.lncldglobal.com",visitor:!0}},search:{algoliaAppID:"CJDJYKXD2Y",algoliaIndex:"o3r.moe",algoliaSearchKey:"35ae54723dc9f540430a2b6e875d7505",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>

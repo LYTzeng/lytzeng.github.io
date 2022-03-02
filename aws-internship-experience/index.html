@@ -1,0 +1,163 @@
+<!doctype html><html lang=zh-hant-tw>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<meta http-equiv=x-ua-compatible content="IE=edge, chrome=1">
+<title>AWS Taiwan 實習感想 2020-2021 - Blog O3R</title><meta name=Description content="Blog O3R"><meta property="og:title" content="AWS Taiwan 實習感想 2020-2021">
+<meta property="og:description" content="在 2020 年，剛好是我在臺北科技大學唸研究所的時候，經過重重關卡，很幸運能進入 AWS 做 Cloud Support Intern。 但是寫這篇感想文時，已經是 2022 了 (也已轉為正職)">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://o3r.moe/aws-internship-experience/"><meta property="og:image" content="https://o3r.moe/aws-internship-experience/P_20200828_133029.webp"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-02-21T15:10:53+00:00">
+<meta property="article:modified_time" content="2022-03-02T15:02:38+00:00">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://o3r.moe/aws-internship-experience/P_20200828_133029.webp">
+<meta name=twitter:title content="AWS Taiwan 實習感想 2020-2021">
+<meta name=twitter:description content="在 2020 年，剛好是我在臺北科技大學唸研究所的時候，經過重重關卡，很幸運能進入 AWS 做 Cloud Support Intern。 但是寫這篇感想文時，已經是 2022 了 (也已轉為正職)">
+<meta name=application-name content="LoveIt">
+<meta name=apple-mobile-web-app-title content="LoveIt"><meta name=theme-color content="#4E5260"><meta name=msapplication-TileColor content="#4E5260"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#4e5260><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://o3r.moe/aws-internship-experience/><link rel=prev href=https://o3r.moe/lambda-apigateway-mattermost-go-ec2/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"AWS Taiwan 實習感想 2020-2021","inLanguage":"zh-Hant-TW","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/o3r.moe\/aws-internship-experience\/"},"image":[{"@type":"ImageObject","url":"https:\/\/o3r.moe\/aws-internship-experience\/P_20200828_133029.webp","width":3916,"height":2936}],"genre":"posts","keywords":"AWS, Experiences, Interview","wordcount":3084,"url":"https:\/\/o3r.moe\/aws-internship-experience\/","datePublished":"2022-02-21T15:10:53+00:00","dateModified":"2022-03-02T15:02:38+00:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"Oscar Tseng","logo":{"@type":"ImageObject","url":"https:\/\/o3r.moe\/images\/profile-pic.webp","width":1283,"height":1283}},"author":{"@type":"Person","name":"Oscar Tseng"},"description":""}</script></head><body header-desktop=fixed header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"dark"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"dark"==="dark")&&document.body.setAttribute("theme","dark")</script>
+<div id=mask></div><div class=wrapper><div style=display:none><img class=lazyload src=/svg/loading.min.svg data-src=/images/header-bg-lowsrc.webp data-srcset="/images/header-bg-lowsrc.webp, /images/header-bg-lowsrc.webp 1.5x, /images/header-bg-lowsrc.webp 2x" data-sizes=auto alt=/images/header-bg-lowsrc.webp title=/images/header-bg-lowsrc.webp></div><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title="Blog O3R">O3R</a>
+</div><div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div></div><div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title>Posts</a><a class=menu-item href=/tags/ title>Tags</a><a class=menu-item href=/categories/ title>Categories</a><a class=menu-item href=/about/ title>About</a><a class=menu-item href=https://github.com/LYTzeng title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title>
+<i class="fas fa-adjust fa-fw"></i>
+</a></div></div></header><div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div></div><div class="header-bg-wrapper mobile">
+<div class=mediabox>
+<img class="mediabox-img lazyload" data-srcset=/images/header-bg.webp data-lowsrc=/images/header-bg-lowsrc.webp data-sizes=auto alt=/images/header-bg.webp title=/images/header-bg.webp>
+</div></div><div class="brand-logo mobile">
+<div class=blog>BLOG&nbsp</div><div class=othreer-glitch-stack style=--stacks:3>
+<span class=othreer style=--index:0>o3R</span>
+<span class=othreer style=--index:1>o3R</span>
+<span class=othreer style=--index:2>o3R</span>
+</div></div><header class=desktop id=header-desktop>
+<div class=header-wrapper is-sticky=false>
+<div class=header-title>
+<a href=/ title="Blog O3R">O3R</a>
+</div><div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/> Posts </a><a class=menu-item href=/tags/> Tags </a><a class=menu-item href=/categories/> Categories </a><a class=menu-item href=/about/> About </a><a class=menu-item href=https://github.com/LYTzeng title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i> </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title>
+<i class="fas fa-adjust fa-fw"></i>
+</a>
+</div></div></div><div class=header-bg-wrapper><div class=mediabox>
+<img class="mediabox-img lazyload" data-srcset=/images/header-bg.webp data-lowsrc=/images/header-bg-lowsrc.webp data-sizes=auto alt=/images/header-bg.webp title=/images/header-bg.webp>
+</div></div><div class=brand-logo>
+<div class=blog>BLOG&nbsp</div><div class=othreer-glitch-stack style=--stacks:3>
+<span class=othreer style=--index:0>o3R</span>
+<span class=othreer style=--index:1>o3R</span>
+<span class=othreer style=--index:2>o3R</span>
+</div></div><div class=header-bg-credits>
+Artwork by&nbsp;<a href=https://www.pixiv.net/users/73785165 target=_blank rel="noopener noreferrer">6L36</a>&nbsp;<a href=https://twitter.com/6L36DlPKD21KqZQ title=Twitter target=_blank rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div></header><main class=main>
+<div class=container><div id=sidebar><div id=sidebar-profile><div class=sidebar-avatar><a href=/posts/ title=Posts><img class=lazyload src=/svg/loading.min.svg data-src=/images/profile-pic.webp data-srcset="/images/profile-pic.webp, /images/profile-pic.webp 1.5x, /images/profile-pic.webp 2x" data-sizes=auto alt=/images/profile-pic.webp title=/images/profile-pic.webp></a></div><h1 class=sidebar-title>Oscar T.</h1><div class=links><a href=https://github.com/LYTzeng title=GitHub target=_blank rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href=https://linkedin.com/in/li-yen-tseng title=LinkedIn target=_blank rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href=https://steamcommunity.com/id/yen-host title=Steam target=_blank rel="noopener noreffer me"><i class="fab fa-steam fa-fw"></i></a><a href=https://www.twitch.tv/0scar0x0 title=Twitch target=_blank rel="noopener noreffer me"><i class="fab fa-twitch fa-fw"></i></a><a href=mailto:oscar@o3r.moe title=Email rel=me><i class="far fa-envelope fa-fw"></i></a><a href=https://discordapp.com/users/697020575989628989 title=Discord target=_blank rel="noopener noreffer me"><i class="fab fa-discord fa-fw"></i></a><a href=/index.xml title=RSS target=_blank rel="noopener noreffer me"><i class="fas fa-rss fa-fw"></i></a></div><div id=sidebar-intro>
+<div class=sidebar-intro-tabs-container><div class=sidebar-intro-tab tab-index=0>我在做什麼</div><div class=sidebar-intro-tab tab-index=1>最愛的妹紙</div><div class=sidebar-intro-tab tab-index=2>最喜歡的遊戲</div><div class=sidebar-intro-tab tab-index=3>最喜歡的作品</div><div class=sidebar-intro-tab tab-index=4>裝備</div></div><div class=sidebar-intro-content-container><div class="sidebar-intro-content hide-content" tab-index=0>
+<div>在 AWS 技術支援打工，懂一點網路，擅長什麼都不擅長</div></div><div class="sidebar-intro-content hide-content" tab-index=1>
+<div>神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)</div></div><div class="sidebar-intro-content hide-content" tab-index=2>
+<div>Nier: Automata、Pokemon全系列、Dark Souls 3、愛上火車、茂伸奇談</div></div><div class="sidebar-intro-content hide-content" tab-index=3>
+<div>遊戲人生、點兔、賢惠幼妻仙狐小姐、奮鬥吧！系統工程師、動物朋友(僅第一季)</div></div><div class="sidebar-intro-content hide-content" tab-index=4>
+<div>MacBook Pro (13", 2021公司配) & (13", 2019)、iPhone13 Pro、自組R9 5900X主機、Filco Hakua白、森海HD25</div></div></div></div></div><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2><div class=toc-content id=toc-content-auto></div></div></div><article class="page single"><h1 class="single-title animated flipInX">AWS Taiwan 實習感想 2020-2021</h1><div class=post-meta>
+<div class=post-meta-line><span class=post-author><a href=/about/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>Oscar Tseng</a></span>&nbsp;<span class=post-category>included in <a href=/categories/thoughts/><i class="far fa-folder fa-fw"></i>Thoughts</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022.02.21>2022.02.21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3084 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;<span id=/aws-internship-experience/ class=leancloud_visitors data-flag-title="AWS Taiwan 實習感想 2020-2021">
+<i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+</span>&nbsp;</div></div><div class=featured-image><img class=lazyload src=/svg/loading.min.svg data-src=/aws-internship-experience/P_20200828_133029.webp data-srcset="/aws-internship-experience/P_20200828_133029.webp, /aws-internship-experience/P_20200828_133029.webp 1.5x, /aws-internship-experience/P_20200828_133029.webp 2x" data-sizes=auto alt=/aws-internship-experience/P_20200828_133029.webp title=/aws-internship-experience/P_20200828_133029.webp></div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#第一次接觸>第一次接觸</a></li><li><a href=#面試>面試</a>
+<ul>
+<li><a href=#面試準備小建議>面試準備小建議</a></li><li><a href=#面試過程>面試過程</a></li></ul></li><li><a href=#day-one>Day One</a></li><li><a href=#工作內容模式>工作內容/模式</a></li><li><a href=#環境>環境</a></li><li><a href=#我的失衡>我的失衡</a></li><li><a href=#結語>結語</a></li></ul></nav></div></div><div class=content id=content><p>在 2020 年，剛好是我在臺北科技大學唸研究所的時候，經過重重關卡，很幸運能進入 AWS 做 Cloud Support Intern。
+但是寫這篇感想文時，已經是 2022 了 (也已轉為正職)，所以透過回顧的方式，將記憶中能撈出來的寫下來。
+文筆沒有很好還請見諒。</p><h2 id=第一次接觸>第一次接觸</h2><p>這是更早以前的事，發生在2019的一個颱風天週末。</p><p>當時參加AWS為學生舉辦的「雲端技術支援工程師體驗營」，為期兩天的活動，由AWS的工程師帶大家進行一連串 Hands-on labs，活動第二天下午則是刺激的 Troubleshooting 實戰考試 (對，他們說這攸關面試錄取機會)。
+當時了解到 <strong><ruby>雲端技術支援工程師<rt>Cloud Support Engineer</rt></ruby></strong> 的工作內容，也覺得蠻適合「不想做軟體開發(SDE)工作」的我。
+不過礙於還有前一份打工的合約，只好再等等，順便繼續點技能樹。</p><p>關於 Cloud Support Engineer 的工作內容，我打算在另一篇文章分享。</p><blockquote>
+<p>Disclaimer: 這篇分享文屬於個人觀點，不能代表公司言論，且招聘情況/政策會隨時變化。</p></blockquote><h2 id=面試>面試</h2><p>2020年正好研究所課都差不多修完，剛好 <a href=https://amazon.jobs target=_blank rel="noopener noreffer">amazon.jobs</a> 也有台北 Cloud Support Intern 的缺，就投了。
+雖然實習生不用協助解決客戶的技術問題，但是 Cloud Support Intern 未來是要成為 Cloud Support Associate，因此你必須具備足夠的技術知識。
+Cloud Support Associate 或 Engineer 會依據你專精的領域，分為不同的 <strong>Profile</strong>，面試前須選擇一個 Profile ，recruiter 會安排相同 profile 的面試官與你面試。
+之前對網路比較有接觸，所以我是選了 <strong>Networking</strong>，其餘 profile 可以參考 JD。</p><h3 id=面試準備小建議>面試準備小建議</h3><p>面試前大概準備了兩週，有幾項需要準備：</p><ol>
+<li>
+<p>profile 涵蓋的基礎知識：
+以 networking 為例，可以著重在複習 Layer 3 以上的東西 (IP, TCP/UDP, NAT, DHCP, HTTP/S, TLS, DNS&mldr;etc.可能還有很多)</p></li><li>
+<p>盡可能回想，曾經遇過的幾個 困難的 Troubleshooting 經驗，以及除錯過程的細節，如果面試官問到，就可以拿出來討論。面試官會依據你提及的相關技術，進一步 Dive deep。</p></li><li>
+<p><a href=https://www.amazon.jobs/en/principles target=_blank rel="noopener noreffer">Leadership Principles</a>：
+收集一些你過去實習/分組專案等等的故事，展現你符合 Leadership Principles 內的特質吧，這個非常重要哦！</p></li></ol><h3 id=面試過程>面試過程</h3><p>一開始先做 Online Assessment，這個可以在規定的期限內，挑一個方便的時間完成。過關的話，會進入一連串的面試。我的情況是大約 2-3 位工程師面試，加上一位主管進行面試，每次一小時。當時分兩天進行，因為武漢肺炎的關係改採 Chime 線上面試。</p><h2 id=day-one>Day One</h2><figure><a class=lightgallery href=/aws-internship-experience/P_20200818_135321.webp title=/aws-internship-experience/P_20200818_135321.webp data-thumbnail=/aws-internship-experience/P_20200818_135321.webp data-sub-html="<h2>Day one @AWS (那個鍵盤不是我的)</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=P_20200818_135321.webp data-srcset="/aws-internship-experience/P_20200818_135321.webp, P_20200818_135321.webp 1.5x, /aws-internship-experience/P_20200818_135321.webp 2x" data-sizes=auto alt=/aws-internship-experience/P_20200818_135321.webp>
+</a><figcaption class=image-caption>Day one @AWS (那個鍵盤不是我的)</figcaption></figure><p>第一天我就發現，公司有非常多內部系統，而且開發得非常完善，當然我必須趕緊熟悉這些工具、以及各種簡稱/縮寫。
+可以學習的資源非常多，但是我馬上了解到：資源不會主動找上你，你必須善用內部平台去找尋，或是詢問主管/同事或其他實習生。尤其當時大家已經開始 WFH，無法和大家面對面的接觸，反而更需要善用通訊軟體和大家聯繫 <del>當網友</del>。</p><p>Day One 除了指 onboarding 的第一天，在 Amazon，Day One 具有特殊的意含。
+我所理解的「Day One 精神」代表每天你需要持有接觸全新事物的心態、勇於嘗試、勇於接納嘗試後的失敗。每天都可能出現你以前沒處理過的問題類型，而不是只停留在自己知識所涵蓋的<strong><ruby>範圍<rt>舒適圈</rt></ruby></strong>內、也不能只做著一成不變的工作。這意味著，有時我們需要做出快速的決策，而不是害怕出錯導致花了很久的時間去survey。</p><ul>
+<li><a href="https://aws.amazon.com/executive-insights/content/how-amazon-defines-and-operationalizes-a-day-1-culture/?nc1=h_ls" target=_blank rel="noopener noreffer">Elements of Amazon’s Day 1 Culture</a></li><li><a href=https://shit.management/one-way-and-two-way-door-decisions/ target=_blank rel="noopener noreffer">One-way and Two-way Door Decisions</a></li></ul><div class="details admonition quote open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-quote-right fa-fw"></i>Quote<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div><div class=details-content>
+<div class=admonition-content>Day 2 is stasis. Followed by irrelevance. Followed by excruciating, painful decline. Followed by death. And that is why it is always Day 1. &ndash; <em>Jeff Bezos</em></div></div></div><h2 id=工作內容模式>工作內容/模式</h2><p>實習生的工作主要是協助開發和維護內部工具，來協助其他工程師或是主管。專案中除了程式開發以外，我們也負責將程式碼Deploy、以及維護自己開發的服務。因此專案進行過程中有可能需要整合 AWS 的服務，也需要熟悉內部的 CI/CD 流程。如果自己開發的服務突然掛掉，需要自己去搶修，也可能當天沒班，回來發現神之同事已經修好了。我對內部的東西比較熟悉之後，看到其他實習生的服務掛掉，也會幫忙去修。在這裡不會有人說 &ldquo;It&rsquo;s not my job&rdquo;，這就是 Ownership。</p><p>專案的需求通常是正職工程師或主管提出 initiative，包含流程自動化、收集metric進行統計等等，主要是協助工程師/主管的工作流程，可以間接提升對客戶的服務品質。實習生可以用任何方式實做，只要夠有效率、且程式/架構的維護成本不高，有很大的空間可以發揮。我做的第一個專案甚至需要想出不同團隊合作的流程，畢竟這會影響到程式/UI要如何實做。對於不熟悉內部流程的實習生來說，其實這是熟悉正職工遲師們工作流程的好方式，對於轉為正職後可以大大減低上手的時間。</p><p>另外我覺得這裡是文件導向的公司，大家會透過共享文件作為溝通，因此你可以查看過去實習生使用內部工具開發的細節，減少很多踩坑的機率。
+透過文件撰寫，也可以減少很多開會的時間，大家在開會前先閱讀主講者的文件，增加溝通效率。</p><ul>
+<li><a href=https://www.aboutamazon.com/news/company-news/2017-letter-to-shareholders target=_blank rel="noopener noreffer">2017 Letter to Shareholders - Six-Page Narratives</a></li></ul><p>我們需要為每個專案撰寫詳細的文件，這樣對交接給後來的實習生非常有幫助，一個專案甚至可以交接了3-4位實習生繼續開發。
+在我實習期間，總共進行2個專案，另外又接手維護5個前人開發的專案。</p><h2 id=環境>環境</h2><p>內部的學習資源非常多，多到看不完，無論是教學影片、過去的 broadcast 錄影或是內部 Wiki等等，這些資源需要你主動挖掘，而且實習生有非常多時間可以看這些資源。
+另外每週會有幾名工程師和實習生開會，一同討論當週進度以及專案遇到的瓶頸，任何人只要有想法都可以提出解答。每一、兩週也會與主管進行一對一的會議，可以提出任何 concern 或是問題。</p><p>因為疫情的關係都是線上會議，難免會覺得有疏離感，或是覺得自己被孤立。但是如果積極的聯繫/溝通，大家都非常樂意提供幫助。工程師明明超級忙，很感謝他們願意抽個半小時、一小時的時間討論專案的事情。因此 <strong>主動的reach out</strong> 非常重要。</p><figure><a class=lightgallery href=/aws-internship-experience/P_20200922_173338.webp title=/aws-internship-experience/P_20200922_173338.webp data-thumbnail=/aws-internship-experience/P_20200922_173338.webp data-sub-html="<h2>中秋禮盒</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=P_20200922_173338.webp data-srcset="/aws-internship-experience/P_20200922_173338.webp, P_20200922_173338.webp 1.5x, /aws-internship-experience/P_20200922_173338.webp 2x" data-sizes=auto alt=/aws-internship-experience/P_20200922_173338.webp>
+</a><figcaption class=image-caption>中秋禮盒</figcaption></figure><figure><a class=lightgallery href=/aws-internship-experience/P_20200922_173427.webp title=/aws-internship-experience/P_20200922_173427.webp data-thumbnail=/aws-internship-experience/P_20200922_173427.webp data-sub-html="<h2>中秋禮盒居然是威士忌杯冰石木合組!! <3</h2>">
+<img class=lazyload src=/svg/loading.min.svg data-src=P_20200922_173427.webp data-srcset="/aws-internship-experience/P_20200922_173427.webp, P_20200922_173427.webp 1.5x, /aws-internship-experience/P_20200922_173427.webp 2x" data-sizes=auto alt=/aws-internship-experience/P_20200922_173427.webp>
+</a><figcaption class=image-caption>中秋禮盒居然是威士忌杯冰石木合組!! &lt;3</figcaption></figure><h2 id=我的失衡>我的失衡</h2><p>這份實習剛好是我碩二的時候，所以同時要寫論文、做實驗和準備口試。之前因為時間分配不均，讓公司的事情佔用大部分時間導致論文沒什麼進度。聽起來像藉口，不過如果你念過研究所應該知道這個壓力在哪裡。
+如果沒有如期畢業，意味著會影響到在AWS轉正職後的工作，可能延後、甚至是沒了offer都有可能。建議大家，前萬不要在碩二的時候找一個一年期的實習，會很累！！</p><p>我要非常感謝我的主管，在口試前的最後幾個月允許我減少上班的天數 (當然$$也少拿了&mldr;QQ) ，讓我專心趕論文。
+因為北科大對論文的標準&mldr;不會太高，不會要求你用英文寫，也不用投國外期刊，所以我大概只花了三個月的時間，從零開始做程式撰寫、實驗測試和論文撰寫。
+能夠三個月完成是因為，實驗方向和架構已經在我腦袋轉了大約半年，因此只需要花三個月克服實作和理想上的差距。
+經過這密集的三個月，幸好最後完成了，也通過口試委員的認可得以準時畢業。</p><p>但是口試完馬上就是轉正職的面試，完全沒有歇息的機會。經過這兩個考驗之後，我的聽覺出現了異常，類似耳鳴，導致其中一耳的低頻喪失，且一耳聽到的頻率和另一耳差了大約一個<strong><ruby>半音<rt>semitone</rt></ruby></strong>。
+主要是因為肌肉過度緊繃導致，看完醫生吃了整整一週的肌肉放鬆藥物才緩解。</p><h2 id=結語>結語</h2><p>在 AWS 的實習真的是很難得的經驗，可以藉這個機會一窺大型外商內部的運作方式，尤其 Amazon 是一個很特別的地方，雖然看到層層組織架構和長久維護的龐大資訊系統，但是縮小範圍觀察每個小團隊、每個部門的運作，又像是新創一樣靈活變動。
+也可能是因為台灣的團隊相比其他國家來說不是很大的關係，但是這一年團隊成長的速度真的很快。</p><p>實習結束後我讓自己放了一個月的長假。當所有階段任務都落定後的輕鬆感，實在非常可貴。
+雖然在疫情荼毒之下，我還是去台東玩玩 放鬆心情，而且打了幾週的 Dark Souls 3，當個難得的短暫廢人。</p><p>「回到 AWS 之後，準備面對更多意想不到的困難挑戰吧」，我當時是這麼想的。</p></div><div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022.03.02&nbsp;<a class=git-hash href=https://github.com/LYTzeng/blog2.0/commit/65c25060e2b23d2cc050f8799ee57ed7b17e2333 target=_blank title="commit by LYTzeng(oscar217b@gmail.com) 65c25060e2b23d2cc050f8799ee57ed7b17e2333: fix github actions...">
+<i class="fas fa-hashtag fa-fw"></i>65c2506</a></span>
+</div><div class=post-info-license></div></div><div class=post-info-line>
+<div class=post-info-md><span>
+<a class=link-to-markdown href=/aws-internship-experience/index.md target=_blank>Read Markdown</a>
+</span></div><div class=post-info-share>
+<span><a href=javascript:void(0); title="Share on Twitter" data-sharer=twitter data-url=https://o3r.moe/aws-internship-experience/ data-title="AWS Taiwan 實習感想 2020-2021" data-hashtags=AWS,Experiences,Interview><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="Share on Facebook" data-sharer=facebook data-url=https://o3r.moe/aws-internship-experience/ data-hashtag=AWS><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="Share on Line" data-sharer=line data-url=https://o3r.moe/aws-internship-experience/ data-title="AWS Taiwan 實習感想 2020-2021"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a></span>
+</div></div></div><div class=post-info-more>
+<section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/tags/aws/>AWS</a>,&nbsp;<a href=/tags/experiences/>Experiences</a>,&nbsp;<a href=/tags/interview/>Interview</a></section><section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section></div><div class=post-nav><a href=/lambda-apigateway-mattermost-go-ec2/ class=prev rel=prev title="透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances"><i class="fas fa-angle-left fa-fw"></i>透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances</a></div></div><div id=comments><div id=valine class=comment></div><noscript>
+Please enable JavaScript to view the comments powered by <a href=https://valine.js.org/>Valine</a>.
+</noscript></div></article></div></main><footer class=footer>
+<div class=footer-container><div class=footer-line>Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2019 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/about/ target=_blank>Oscar Tseng</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><link rel=stylesheet href=/lib/valine/valine.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.respimg.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.parent-fit.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.object-fit.min.js></script><script type=text/javascript src=/lib/lazysizes/plugins/ls.blur-up.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript src=/lib/dayjs/dayjs.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:20},comment:{valine:{appId:"mBVjhrJAGxI6vq161LiQRhKH-MdYXbMMI",appKey:"78ztEgoRX6GkV1LdNx0pghv8",avatar:"mp",el:"#valine",emojiCDN:"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/",emojiMaps:{100:"1f4af.png",alien:"1f47d.png",anger:"1f4a2.png",angry:"1f620.png",anguished:"1f627.png",astonished:"1f632.png",black_heart:"1f5a4.png",blue_heart:"1f499.png",blush:"1f60a.png",bomb:"1f4a3.png",boom:"1f4a5.png",broken_heart:"1f494.png",brown_heart:"1f90e.png",clown_face:"1f921.png",cold_face:"1f976.png",cold_sweat:"1f630.png",confounded:"1f616.png",confused:"1f615.png",cry:"1f622.png",crying_cat_face:"1f63f.png",cupid:"1f498.png",dash:"1f4a8.png",disappointed:"1f61e.png",disappointed_relieved:"1f625.png",dizzy:"1f4ab.png",dizzy_face:"1f635.png",drooling_face:"1f924.png",exploding_head:"1f92f.png",expressionless:"1f611.png",face_vomiting:"1f92e.png",face_with_cowboy_hat:"1f920.png",face_with_hand_over_mouth:"1f92d.png",face_with_head_bandage:"1f915.png",face_with_monocle:"1f9d0.png",face_with_raised_eyebrow:"1f928.png",face_with_rolling_eyes:"1f644.png",face_with_symbols_on_mouth:"1f92c.png",face_with_thermometer:"1f912.png",fearful:"1f628.png",flushed:"1f633.png",frowning:"1f626.png",ghost:"1f47b.png",gift_heart:"1f49d.png",green_heart:"1f49a.png",grimacing:"1f62c.png",grin:"1f601.png",grinning:"1f600.png",hankey:"1f4a9.png",hear_no_evil:"1f649.png",heart:"2764-fe0f.png",heart_decoration:"1f49f.png",heart_eyes:"1f60d.png",heart_eyes_cat:"1f63b.png",heartbeat:"1f493.png",heartpulse:"1f497.png",heavy_heart_exclamation_mark_ornament:"2763-fe0f.png",hole:"1f573-fe0f.png",hot_face:"1f975.png",hugging_face:"1f917.png",hushed:"1f62f.png",imp:"1f47f.png",innocent:"1f607.png",japanese_goblin:"1f47a.png",japanese_ogre:"1f479.png",joy:"1f602.png",joy_cat:"1f639.png",kiss:"1f48b.png",kissing:"1f617.png",kissing_cat:"1f63d.png",kissing_closed_eyes:"1f61a.png",kissing_heart:"1f618.png",kissing_smiling_eyes:"1f619.png",laughing:"1f606.png",left_speech_bubble:"1f5e8-fe0f.png",love_letter:"1f48c.png",lying_face:"1f925.png",mask:"1f637.png",money_mouth_face:"1f911.png",nauseated_face:"1f922.png",nerd_face:"1f913.png",neutral_face:"1f610.png",no_mouth:"1f636.png",open_mouth:"1f62e.png",orange_heart:"1f9e1.png",partying_face:"1f973.png",pensive:"1f614.png",persevere:"1f623.png",pleading_face:"1f97a.png",pouting_cat:"1f63e.png",purple_heart:"1f49c.png",rage:"1f621.png",relaxed:"263a-fe0f.png",relieved:"1f60c.png",revolving_hearts:"1f49e.png",right_anger_bubble:"1f5ef-fe0f.png",robot_face:"1f916.png",rolling_on_the_floor_laughing:"1f923.png",scream:"1f631.png",scream_cat:"1f640.png",see_no_evil:"1f648.png",shushing_face:"1f92b.png",skull:"1f480.png",skull_and_crossbones:"2620-fe0f.png",sleeping:"1f634.png",sleepy:"1f62a.png",slightly_frowning_face:"1f641.png",slightly_smiling_face:"1f642.png",smile:"1f604.png",smile_cat:"1f638.png",smiley:"1f603.png",smiley_cat:"1f63a.png",smiling_face_with_3_hearts:"1f970.png",smiling_imp:"1f608.png",smirk:"1f60f.png",smirk_cat:"1f63c.png",sneezing_face:"1f927.png",sob:"1f62d.png",space_invader:"1f47e.png",sparkling_heart:"1f496.png",speak_no_evil:"1f64a.png",speech_balloon:"1f4ac.png","star-struck":"1f929.png",stuck_out_tongue:"1f61b.png",stuck_out_tongue_closed_eyes:"1f61d.png",stuck_out_tongue_winking_eye:"1f61c.png",sunglasses:"1f60e.png",sweat:"1f613.png",sweat_drops:"1f4a6.png",sweat_smile:"1f605.png",thinking_face:"1f914.png",thought_balloon:"1f4ad.png",tired_face:"1f62b.png",triumph:"1f624.png",two_hearts:"1f495.png",unamused:"1f612.png",upside_down_face:"1f643.png",weary:"1f629.png",white_frowning_face:"2639-fe0f.png",white_heart:"1f90d.png",wink:"1f609.png",woozy_face:"1f974.png",worried:"1f61f.png",yawning_face:"1f971.png",yellow_heart:"1f49b.png",yum:"1f60b.png",zany_face:"1f92a.png",zipper_mouth_face:"1f910.png",zzz:"1f4a4.png"},enableQQ:!1,highlight:!0,lang:"en",pageSize:10,placeholder:"Your comment ...",recordIP:!0,serverURLs:"https://mbvjhrja.api.lncldglobal.com",visitor:!0}},lightGallery:{actualSize:!1,exThumbImage:"data-thumbnail",hideBarsDelay:2e3,selector:".lightgallery",speed:400,thumbContHeight:80,thumbWidth:80,thumbnail:!0},search:{algoliaAppID:"CJDJYKXD2Y",algoliaIndex:"o3r.moe",algoliaSearchKey:"35ae54723dc9f540430a2b6e875d7505",highlightTag:"em",maxResultLength:10,noResultsFound:"No results found",snippetLength:30,type:"algolia"}}</script><script type=text/javascript src=/js/theme.min.js></script></body></html>
