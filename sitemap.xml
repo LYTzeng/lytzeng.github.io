@@ -2,15 +2,15 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://o3r.moe/tags/aws/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/aws-internship-experience/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/categories/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/tags/experiences/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/tags/interview/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/posts/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/tags/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/categories/thoughts/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://o3r.moe/tags/aws/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/aws-internship-experience/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/categories/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/tags/experiences/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/tags/interview/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/posts/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/tags/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/categories/thoughts/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
             <loc>https://o3r.moe/about/</loc><lastmod>2022-03-02T07:29:05&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://o3r.moe/categories/aws/</loc><lastmod>2022-02-20T13:53:59&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
             <loc>https://o3r.moe/tags/aws-api-gateway/</loc><lastmod>2022-02-20T13:53:59&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
@@ -38,9 +38,9 @@
             <loc>https://o3r.moe/tags/openvpn/</loc><lastmod>2022-02-20T10:52:27&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
             <loc>https://o3r.moe/esxi-server-in-lab-structure/</loc><lastmod>2022-02-20T10:52:27&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
             <loc>https://o3r.moe/self-hosted-esxi-server-in-lab/</loc><lastmod>2022-02-20T10:52:27&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
-            <loc>https://o3r.moe/categories/frontend/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/tags/vuepress/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://o3r.moe/vuepress-blog-3/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://o3r.moe/categories/frontend/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/tags/vuepress/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
+            <loc>https://o3r.moe/vuepress-blog-3/</loc><lastmod>2022-02-23T11:21:14&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
             <loc>https://o3r.moe/vuepress-blog-2/</loc><lastmod>2022-02-20T10:52:27&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
             <loc>https://o3r.moe/vuepress-blog-1/</loc><lastmod>2022-02-20T10:52:27&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
             <loc>https://o3r.moe/categories/misc/</loc><lastmod>2022-02-20T10:52:27&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url><url>
