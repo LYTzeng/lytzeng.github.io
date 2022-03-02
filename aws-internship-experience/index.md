@@ -19,6 +19,8 @@
 
 ## 面試
 
+{{< music auto="https://music.163.com/#/song?id=1398665773" >}}
+
 2020年正好研究所課都差不多修完，剛好 [amazon.jobs](https://amazon.jobs) 也有台北 Cloud Support Intern 的缺，就投了。
 雖然實習生不用協助解決客戶的技術問題，但是 Cloud Support Intern 未來是要成為 Cloud Support Associate，因此你必須具備足夠的技術知識。
 Cloud Support Associate 或 Engineer 會依據你專精的領域，分為不同的 **Profile**，面試前須選擇一個 Profile ，recruiter 會安排相同 profile 的面試官與你面試。
@@ -83,6 +85,7 @@ Day 2 is stasis. Followed by irrelevance. Followed by excruciating, painful decl
 {{< image src="P_20200922_173427.webp" caption="中秋禮盒居然是威士忌杯冰石木合組!! <3" >}}
 
 ## 我的失衡
+{{< music auto="https://music.163.com/#/song?id=1480059632" >}}
 
 這份實習剛好是我碩二的時候，所以同時要寫論文、做實驗和準備口試。之前因為時間分配不均，讓公司的事情佔用大部分時間導致論文沒什麼進度。聽起來像藉口，不過如果你念過研究所應該知道這個壓力在哪裡。
 如果沒有如期畢業，意味著會影響到在AWS轉正職後的工作，可能延後、甚至是沒了offer都有可能。建議大家，前萬不要在碩二的時候找一個一年期的實習，會很累！！
