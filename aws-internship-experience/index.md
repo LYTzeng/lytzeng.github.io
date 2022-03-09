@@ -108,3 +108,12 @@ Day 2 is stasis. Followed by irrelevance. Followed by excruciating, painful decl
 
 「回到 AWS 之後，準備面對更多意想不到的困難挑戰吧」，我當時是這麼想的。
 
+## 同時來看看我同事/前輩們的AWS實習心得吧～
+
+以下是 曾經和我一起當實習生、剛好也有寫 Blog 的同學們心得分享！
+- Jack - [AWS 雲端技術支援工程師體驗營心得](https://jackkuo.org/post/aws%E9%9B%B2%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%AB%E9%AB%94%E9%A9%97%E7%87%9F%E5%BF%83%E5%BE%97/)
+- Wilson - [AWS Support 實習心得 (2020)](https://josix.tw/aws-support-intern-review-2020/)
+
+另外這是我的學長 Eason 的實習心得。他是最早的台北 AWS 實習生，目前是 Cloud Support Engineer，是實力非常強的前輩！
+- [我是如何在還沒畢業就錄取並進入到 Amazon 工作 ](https://easoncao.com/how-am-I-get-into-amazon-before-graduate/)
+
