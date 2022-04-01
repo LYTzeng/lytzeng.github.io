@@ -58,8 +58,10 @@ Summer Intern
 > 如果世界上沒有人守護Kana了 代表我已經不在這個世界上了
 
 ### 橫幅背景 (About the Banner Image)
+橫幅背景是我[委託花咲-san]()所精心繪製的可愛 Kana，請尊重花咲ちゆ的著作權。
+- 繪師(Artist): [花咲ちゆ](https://twitter.com/hanasakichu)
 - 角色(Character)：[Kamiko Kana](https://www.twitch.tv/kana)
-- 繪師(Artist): [6L36](https://www.pixiv.net/users/73785165)
+- 委託(Commission)：https://skeb.jp/@hanasakichu/works/5
 
 ---
 ## :warning: 授權條款 License :warning:
