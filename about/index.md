@@ -38,9 +38,23 @@ Summer Intern
 |                                                                                                    |                                                                                                 |                                                                                                   |
 | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | {{< image src="AWS-SAA.png" caption="AWS Solutions Architect Associate" width=200 linked=false >}} | {{< image src="CCNA.jpg" caption="Cisco Certified Network Associate" width=200 linked=false >}} | {{< image src="AWS-ACP.png" caption="AWS Certified Cloud Practitioner" width=200 linked=false >}} |
-
+---
 
 ## 其他東西
+
+### pc spec
+- gpu: gtx 1080ti
+- cpu: R9 5900x with Kraken Z53 water cooling
+- ram: 4 * 16GB DDR4 Kingston 3200 MHz CL22
+- motherboard: Gigabyte Aorus X570S master
+- monitor: EIZO FlexScan EV2457 (white)
+- audio interface: Audient iD4 2in/2out
+- speakers: krk rp5g3
+
+peripherals
+- keyboard: AARU TKL + cherry reds lubed with Krytox 205g0 and filmed with 0.13mm films
+- keyboard2: Filco Majestouch Hakua with cherry browns
+- mouse: a cheap razer deathadder essential
 
 ### 音樂製作
 
@@ -60,8 +74,8 @@ Summer Intern
 ### 橫幅背景 (About the Banner Image)
 橫幅背景是我[委託花咲-san]()所精心繪製的可愛 Kana，請尊重花咲ちゆ的著作權。
 - 繪師(Artist): [花咲ちゆ](https://twitter.com/hanasakichu)
-- 角色(Character)：[Kamiko Kana](https://www.twitch.tv/kana)
-- 委託(Commission)：https://skeb.jp/@hanasakichu/works/5
+- 角色(Character): [Kamiko Kana](https://www.twitch.tv/kana)
+- 委託(Commission): https://skeb.jp/@hanasakichu/works/5
 
 ---
 ## :warning: 授權條款 License :warning:
@@ -79,9 +93,15 @@ You must give appropriate credit, provide a link to the license, and indicate if
 {{< /admonition >}}
 
 {{< admonition failure "非商業性  (NonCommercial)" >}}
-不得增加額外限制 — 你不能增設法律條款或科技措施，來限制別人依授權條款本已許可的作為。
+你不得將本素材進行商業目的之使用。
 
 You may not use the material for commercial purposes. 
+{{< /admonition >}}
+
+{{< admonition failure "不得增加額外限制  (No additional restrictions)" >}}
+你不能增設法律條款或科技措施，來限制別人依授權條款本已許可的作為。
+
+You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 {{< /admonition >}}
 
 {{< admonition success "你可自由 You are free to" >}}
