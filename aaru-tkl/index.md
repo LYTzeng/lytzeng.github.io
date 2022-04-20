@@ -51,7 +51,7 @@ AARU 的外盒就充滿古埃及的設計，但說實在左下那個法老王的
 
 - Cherry MX red * 100 顆，雖然 TKL 只需要 87 鍵，建議多買一些以免把軸體拆開時弄壞，也可以解決良率問題。
 - Krytox 205g0 潤滑油
-- 軸間紙 (我選擇 1.3mm，手感會比 1.5mm 軟)
+- 軸間紙 (我選擇 0.13mm，手感會比 0.15mm 軟)
 - 開軸器
 - 拔軸器
 - 潤軸筆
@@ -143,7 +143,7 @@ https://www.keyboard.university/guides/using-screw-in-stabilizers-7nxj6
 
 {{< image src="stabilizer_assemble_step-2.png.webp" caption="source: https://www.keyboard.university/guides/using-screw-in-stabilizers-7nxj6" linked="false">}}
 
-接著將鋼絲稍微用力卡進 hosing 的卡扣裡面固定：
+接著將鋼絲稍微用力卡進 housing 的卡扣裡面固定：
 
 {{< image src="stabilizer_assemble_step-3.png.webp" caption="source: https://www.keyboard.university/guides/using-screw-in-stabilizers-7nxj6" linked="false">}}
 
@@ -204,7 +204,7 @@ https://www.keyboard.university/guides/using-screw-in-stabilizers-7nxj6
 
 ### 鍵帽
 
-鍵帽的選擇對我而言十分困難，因為個人這次想要的鍵帽是：白色、PCB、兩色成型 (不要熱昇華或雷雕)、英文、不透光、非Ducky製以及非淘寶。
+鍵帽的選擇對我而言十分困難，因為個人這次想要的鍵帽是：白色、PBT、兩色成型 (不要熱昇華或雷雕)、英文、不透光、非Ducky製以及非淘寶。
 
 剛好硬派有出 [108鍵 黑白 PBT二色鍵帽組](https://www.inpad.com.tw/product.php?act=view&id=7150)，符合上條件 (雖然不是全白)，但是價格划算，因此先暫時使用這款。
 之後來等等看 Mass Drop 出我喜歡的款式及 profile 吧。
