@@ -21,7 +21,7 @@ AARU TKL 是 Helix Lab 設計的第一款鍵盤，創辦人**佛屠**在網站�
 - [Helix Lab 官方網站](https://www.helix.site/)
 - [Helix Lab 官方 Discord](https://discord.gg/YM4T7HH4XX)
 
-直到 2022 三月，突然看到[硬派京璽](https://www.inpad.com.tw/)開了[團購](https://www.inpad.com.tw/product.php?act=view&id=7385)而且有現貨，因此決定著手組裝我的第一把客製化鍵盤。
+直到 2022 三月，突然看到[硬派精璽](https://www.inpad.com.tw/)開了[團購](https://www.inpad.com.tw/product.php?act=view&id=7385)而且有現貨，因此決定著手組裝我的第一把客製化鍵盤。
 
 - [硬派 Discord](https://discord.gg/teqyTnSHJ5)
 
