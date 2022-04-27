@@ -10,7 +10,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://o3r.moe/introduction-to-mininet/" /><meta property="og:image" content="https://o3r.moe/logo.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-01-23T18:36:17+08:00" />
-<meta property="article:modified_time" content="2022-04-27T17:04:59+00:00" />
+<meta property="article:modified_time" content="2022-04-27T17:09:04+00:00" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://o3r.moe/logo.png"/>
@@ -30,7 +30,7 @@
             "@type": "WebPage",
             "@id": "https:\/\/o3r.moe\/introduction-to-mininet\/"
         },"image": ["https:\/\/o3r.moe\/images\/Apple-Devices-Preview.png"],"genre": "posts","keywords": "Mininet, OpenFlow","wordcount":  2442 ,
-        "url": "https:\/\/o3r.moe\/introduction-to-mininet\/","datePublished": "2020-01-23T18:36:17+08:00","dateModified": "2022-04-27T17:04:59+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+        "url": "https:\/\/o3r.moe\/introduction-to-mininet\/","datePublished": "2020-01-23T18:36:17+08:00","dateModified": "2022-04-27T17:09:04+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Oscar Tseng","logo": {
                     "@type": "ImageObject",
@@ -47,7 +47,7 @@
 
         <div id="mask"></div><div class="wrapper"><div style="display: none;"><img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="/images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
         data-srcset="/images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp, /images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp 1.5x, /images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp 2x"
         data-sizes="auto"
@@ -171,7 +171,7 @@
 </header><main class="main">
                 <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/about/" title="About"><img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="/images/pfp-e8adc8913acf61888314b907b3f03b41.webp"
         data-srcset="/images/pfp-e8adc8913acf61888314b907b3f03b41.webp, /images/pfp-e8adc8913acf61888314b907b3f03b41.webp 1.5x, /images/pfp-e8adc8913acf61888314b907b3f03b41.webp 2x"
         data-sizes="auto"
@@ -224,7 +224,7 @@
 </nav></div>
             </div><div class="content" id="content"><p><img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="http://mininet.org/images/frontpage_diagram.png"
         data-srcset="http://mininet.org/images/frontpage_diagram.png, http://mininet.org/images/frontpage_diagram.png 1.5x, http://mininet.org/images/frontpage_diagram.png 2x"
         data-sizes="auto"
@@ -235,7 +235,7 @@
 <p>簡易來說，Controller 負責決定封包如何轉發，即負責 Control Plane 的部分。Controller 透過南向介面與 Switch 溝通，並調整 Switch 的 Flow Table，更動 Flow Table 中的 Entry。 而 Switch 只會依照 Flow Entry 的規則進行轉發，也就是負責 Data Plane 的部分。OpenFlow 就是 Controller 和交換器間的溝通協定。</p>
 <p><img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="/images/SDN&amp;#32;Structure.png"
         data-srcset="/images/SDN&amp;#32;Structure.png, /images/SDN&amp;#32;Structure.png 1.5x, /images/SDN&amp;#32;Structure.png 2x"
         data-sizes="auto"
@@ -244,7 +244,7 @@
 <p>基本上 Cotroller 和 Switch 的溝通是透過南向介面 (Southbound Interfaces)，包含 OpenFlow、NETCONF、SNMP 等。而北向介面 (Northbound Interfaces) 是各種服務與 Controller 溝通的介面，例如許多廠牌如 Cisco ACI 解決方案，具備讓使用者透過圖形介面操作 Controller 的功能，則北向介面使用 RESTful API 居多。北向介面也包含 gRPC、RESTCONF、YANG Data Model 等。接著使用 Mininet 操作 SDN 拓樸，我會把實際做過的 Commands 列出，並搭配解釋說明。</p>
 <p><img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="/images/Southbound&amp;#32;&amp;&amp;#32;Northbound.png"
         data-srcset="/images/Southbound&amp;#32;&amp;&amp;#32;Northbound.png, /images/Southbound&amp;#32;&amp;&amp;#32;Northbound.png 1.5x, /images/Southbound&amp;#32;&amp;&amp;#32;Northbound.png 2x"
         data-sizes="auto"
@@ -344,7 +344,7 @@
 <p>這個網路架構會長這樣，參考自官方 Tutorial</p>
 <p><img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="https://i.imgur.com/Swvc2xk.png"
         data-srcset="https://i.imgur.com/Swvc2xk.png, https://i.imgur.com/Swvc2xk.png 1.5x, https://i.imgur.com/Swvc2xk.png 2x"
         data-sizes="auto"
@@ -634,7 +634,7 @@
 </div><p>接著我們需要至少3個 CLI 視窗，方便操作。我是使用 Hyper Terminal 操作，分割4個視窗很方便。其中3個都<code>exec</code>到 Container 裡面。</p>
 <p><img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="https://i.imgur.com/XCik8CR.png"
         data-srcset="https://i.imgur.com/XCik8CR.png, https://i.imgur.com/XCik8CR.png 1.5x, https://i.imgur.com/XCik8CR.png 2x"
         data-sizes="auto"
@@ -685,7 +685,7 @@
 </div><p>結束 tcpdump，將檔案放進 Wireshark 研究封包</p>
 <p><img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="https://i.imgur.com/1ihFAFw.png"
         data-srcset="https://i.imgur.com/1ihFAFw.png, https://i.imgur.com/1ihFAFw.png 1.5x, https://i.imgur.com/1ihFAFw.png 2x"
         data-sizes="auto"
@@ -727,7 +727,7 @@
 <td>Switch-&gt;Controller</td>
 <td>Switch 將支援的功能回應給 Controller，如圖 <img
         class="lazyload"
-        src="/svg/fox-loading.min.min.svg"
+        src="/svg/fox-loading.min.svg"
         data-src="https://i.imgur.com/Pv5yTzS.png"
         data-srcset="https://i.imgur.com/Pv5yTzS.png, https://i.imgur.com/Pv5yTzS.png 1.5x, https://i.imgur.com/Pv5yTzS.png 2x"
         data-sizes="auto"
@@ -787,8 +787,8 @@
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2022.04.27&nbsp;<a class="git-hash" href="https://github.com/LYTzeng/blog2.0/commit/7e103eeb034664385800ac681e5950757aa9304f" target="_blank" title="commit by LYTzeng(oscar217b@gmail.com) 7e103eeb034664385800ac681e5950757aa9304f: remove minify flag from hugo build command">
-                                    <i class="fas fa-hashtag fa-fw"></i>7e103ee</a></span>
+                <span>Updated on 2022.04.27&nbsp;<a class="git-hash" href="https://github.com/LYTzeng/blog2.0/commit/d46908d68ee14d73a4cf2656a4a3d5ab80fab39e" target="_blank" title="commit by LYTzeng(oscar217b@gmail.com) d46908d68ee14d73a4cf2656a4a3d5ab80fab39e: fix broken animated svg spinner due to minifier">
+                                    <i class="fas fa-hashtag fa-fw"></i>d46908d</a></span>
             </div>
             <div class="post-info-license"></div>
         </div>
