@@ -1,1 +1,14 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Keyboards - Category - Blog O3R</title><link>https://o3r.moe/categories/keyboards/</link><description>Keyboards - Category - Blog O3R</description><generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 18 Apr 2022 18:15:37 +0000</lastBuildDate><atom:link href="https://o3r.moe/categories/keyboards/" rel="self" type="application/rss+xml"/><item><title>Helix Lab AARU TKL 客製化鍵盤，第一次組裝就上手</title><link>https://o3r.moe/aaru-tkl/</link><pubDate>Mon, 18 Apr 2022 18:15:37 +0000</pubDate><author>Author</author><guid>https://o3r.moe/aaru-tkl/</guid><description>前言 第一次使用機械式鍵盤大約是在大學唸資工系時，因為寫程式需要爽感才寫得下去，因此入手一個雜牌青軸。 一直到研究所時，陸續換了 Ducky One 2 櫻桃紅軸和</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Keyboards - Category - Blog O3R</title>
+        <link>https://o3r.moe/categories/keyboards/</link>
+        <description>Keyboards - Category - Blog O3R</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 18 Apr 2022 18:15:37 &#43;0000</lastBuildDate><atom:link href="https://o3r.moe/categories/keyboards/" rel="self" type="application/rss+xml" /><item>
+    <title>Helix Lab AARU TKL 客製化鍵盤，第一次組裝就上手</title>
+    <link>https://o3r.moe/aaru-tkl/</link>
+    <pubDate>Mon, 18 Apr 2022 18:15:37 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/aaru-tkl/</guid>
+    <description><![CDATA[前言 第一次使用機械式鍵盤大約是在大學唸資工系時，因為寫程式需要爽感才寫得下去，因此入手一個雜牌青軸。 一直到研究所時，陸續換了 Ducky One 2 櫻桃紅軸和]]></description>
+</item></channel>
+</rss>

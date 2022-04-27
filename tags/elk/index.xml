@@ -1,1 +1,28 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>ELK - Tag - Blog O3R</title><link>https://o3r.moe/tags/elk/</link><description>ELK - Tag - Blog O3R</description><generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sat, 14 Mar 2020 12:07:47 +0800</lastBuildDate><atom:link href="https://o3r.moe/tags/elk/" rel="self" type="application/rss+xml"/><item><title>ELK Stack 整合 pfSense (三)：Kibana Dashboard</title><link>https://o3r.moe/monitoring-pfsense-via-kibana/</link><pubDate>Sat, 14 Mar 2020 12:07:47 +0800</pubDate><author>Author</author><guid>https://o3r.moe/monitoring-pfsense-via-kibana/</guid><description>Kibana 能夠將資料視覺化成各種圖表並進行分析，同時提供 ELK Stack 的管理介面，架設完成的 ELK Stack 之後只需進入 Kibana，就可以透過這個 portal 瀏覽一切 Elastic 的服務。之</description></item><item><title>ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash</title><link>https://o3r.moe/sending-logs-from-pfsense-2-logstash/</link><pubDate>Fri, 13 Mar 2020 08:27:24 +0800</pubDate><author>Author</author><guid>https://o3r.moe/sending-logs-from-pfsense-2-logstash/</guid><description>Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser</description></item><item><title>ELK Stack 整合 pfSense (二)：Elasticsearch</title><link>https://o3r.moe/elasticsearch-receives-data-from-logstash/</link><pubDate>Thu, 12 Mar 2020 09:55:28 +0800</pubDate><author>Author</author><guid>https://o3r.moe/elasticsearch-receives-data-from-logstash/</guid><description>本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。Elasticsearch 是個全文搜尋引擎，透過 Inverted Index 的資料結構來提供即時的</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>ELK - Tag - Blog O3R</title>
+        <link>https://o3r.moe/tags/elk/</link>
+        <description>ELK - Tag - Blog O3R</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Sat, 14 Mar 2020 12:07:47 &#43;0800</lastBuildDate><atom:link href="https://o3r.moe/tags/elk/" rel="self" type="application/rss+xml" /><item>
+    <title>ELK Stack 整合 pfSense (三)：Kibana Dashboard</title>
+    <link>https://o3r.moe/monitoring-pfsense-via-kibana/</link>
+    <pubDate>Sat, 14 Mar 2020 12:07:47 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/monitoring-pfsense-via-kibana/</guid>
+    <description><![CDATA[Kibana 能夠將資料視覺化成各種圖表並進行分析，同時提供 ELK Stack 的管理介面，架設完成的 ELK Stack 之後只需進入 Kibana，就可以透過這個 portal 瀏覽一切 Elastic 的服務。之]]></description>
+</item><item>
+    <title>ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash</title>
+    <link>https://o3r.moe/sending-logs-from-pfsense-2-logstash/</link>
+    <pubDate>Fri, 13 Mar 2020 08:27:24 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/sending-logs-from-pfsense-2-logstash/</guid>
+    <description><![CDATA[Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser]]></description>
+</item><item>
+    <title>ELK Stack 整合 pfSense (二)：Elasticsearch</title>
+    <link>https://o3r.moe/elasticsearch-receives-data-from-logstash/</link>
+    <pubDate>Thu, 12 Mar 2020 09:55:28 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/elasticsearch-receives-data-from-logstash/</guid>
+    <description><![CDATA[本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。Elasticsearch 是個全文搜尋引擎，透過 Inverted Index 的資料結構來提供即時的]]></description>
+</item></channel>
+</rss>

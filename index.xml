@@ -1,1 +1,79 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Blog O3R</title><link>https://o3r.moe/</link><description>Blog O3R</description><generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 18 Apr 2022 18:15:37 +0000</lastBuildDate><atom:link href="https://o3r.moe/index.xml" rel="self" type="application/rss+xml"/><item><title>Helix Lab AARU TKL 客製化鍵盤，第一次組裝就上手</title><link>https://o3r.moe/aaru-tkl/</link><pubDate>Mon, 18 Apr 2022 18:15:37 +0000</pubDate><author>Author</author><guid>https://o3r.moe/aaru-tkl/</guid><description>前言 第一次使用機械式鍵盤大約是在大學唸資工系時，因為寫程式需要爽感才寫得下去，因此入手一個雜牌青軸。 一直到研究所時，陸續換了 Ducky One 2 櫻桃紅軸和</description></item><item><title>AWS Taiwan 實習感想 2020-2021</title><link>https://o3r.moe/aws-internship-experience/</link><pubDate>Mon, 21 Feb 2022 15:10:53 +0000</pubDate><author>Author</author><guid>https://o3r.moe/aws-internship-experience/</guid><description>在 2020 年，剛好是我在臺北科技大學唸研究所的時候，經過重重關卡，很幸運能進入 AWS 做 Cloud Support Intern。 但是寫這篇感想文時，已經是 2022 了 (也已轉為正職)</description></item><item><title>透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances</title><link>https://o3r.moe/lambda-apigateway-mattermost-go-ec2/</link><pubDate>Tue, 21 Apr 2020 02:19:34 +0800</pubDate><author>Author</author><guid>https://o3r.moe/lambda-apigateway-mattermost-go-ec2/</guid><description>目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具</description></item><item><title>ELK Stack 整合 pfSense (三)：Kibana Dashboard</title><link>https://o3r.moe/monitoring-pfsense-via-kibana/</link><pubDate>Sat, 14 Mar 2020 12:07:47 +0800</pubDate><author>Author</author><guid>https://o3r.moe/monitoring-pfsense-via-kibana/</guid><description>Kibana 能夠將資料視覺化成各種圖表並進行分析，同時提供 ELK Stack 的管理介面，架設完成的 ELK Stack 之後只需進入 Kibana，就可以透過這個 portal 瀏覽一切 Elastic 的服務。之</description></item><item><title>ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash</title><link>https://o3r.moe/sending-logs-from-pfsense-2-logstash/</link><pubDate>Fri, 13 Mar 2020 08:27:24 +0800</pubDate><author>Author</author><guid>https://o3r.moe/sending-logs-from-pfsense-2-logstash/</guid><description>Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser</description></item><item><title>ELK Stack 整合 pfSense (二)：Elasticsearch</title><link>https://o3r.moe/elasticsearch-receives-data-from-logstash/</link><pubDate>Thu, 12 Mar 2020 09:55:28 +0800</pubDate><author>Author</author><guid>https://o3r.moe/elasticsearch-receives-data-from-logstash/</guid><description>本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。Elasticsearch 是個全文搜尋引擎，透過 Inverted Index 的資料結構來提供即時的</description></item><item><title>想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7</title><link>https://o3r.moe/installing-macos-on-esxi/</link><pubDate>Mon, 27 Jan 2020 17:33:25 +0800</pubDate><author>Author</author><guid>https://o3r.moe/installing-macos-on-esxi/</guid><description>蘋果真高價，何不自己架？ — me 如果覺得蘋果的刨絲器 Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有</description></item><item><title>OpenFlow 1.5 從入門到交報告 (一) - Mininet 基本概念</title><link>https://o3r.moe/introduction-to-mininet/</link><pubDate>Thu, 23 Jan 2020 18:36:17 +0800</pubDate><author>Author</author><guid>https://o3r.moe/introduction-to-mininet/</guid><description>Mininet 是一個虛擬網路的模擬器，可以在單一主機、VM 或 Container 中執行。一開始我想用 Container 的環境玩玩看 Mininet，主要目的是學習 OpenFlow。為了產出</description></item><item><title>OpenFlow 1.5 從入門到交報告 (二) - Ryu</title><link>https://o3r.moe/introduction-to-ryu/</link><pubDate>Sat, 04 Jan 2020 09:32:07 +0800</pubDate><author>Author</author><guid>https://o3r.moe/introduction-to-ryu/</guid><description>支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支</description></item><item><title>實驗室自架 Lab 環境 — 網路架構設計</title><link>https://o3r.moe/esxi-server-in-lab-structure/</link><pubDate>Wed, 18 Dec 2019 08:34:14 +0800</pubDate><author>Author</author><guid>https://o3r.moe/esxi-server-in-lab-structure/</guid><description>前陣子學校電腦教室汰換之電腦，有幾台送給實驗室利用，我藉這個機會使用那些資源架設一台 ESXi。架設完成後，接下來考量到一些需求與環境因素，開</description></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Blog O3R</title>
+        <link>https://o3r.moe/</link>
+        <description>Blog O3R</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 18 Apr 2022 18:15:37 &#43;0000</lastBuildDate>
+            <atom:link href="https://o3r.moe/index.xml" rel="self" type="application/rss+xml" />
+        <item>
+    <title>Helix Lab AARU TKL 客製化鍵盤，第一次組裝就上手</title>
+    <link>https://o3r.moe/aaru-tkl/</link>
+    <pubDate>Mon, 18 Apr 2022 18:15:37 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/aaru-tkl/</guid>
+    <description><![CDATA[前言 第一次使用機械式鍵盤大約是在大學唸資工系時，因為寫程式需要爽感才寫得下去，因此入手一個雜牌青軸。 一直到研究所時，陸續換了 Ducky One 2 櫻桃紅軸和]]></description>
+</item><item>
+    <title>AWS Taiwan 實習感想 2020-2021</title>
+    <link>https://o3r.moe/aws-internship-experience/</link>
+    <pubDate>Mon, 21 Feb 2022 15:10:53 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/aws-internship-experience/</guid>
+    <description><![CDATA[在 2020 年，剛好是我在臺北科技大學唸研究所的時候，經過重重關卡，很幸運能進入 AWS 做 Cloud Support Intern。 但是寫這篇感想文時，已經是 2022 了 (也已轉為正職)]]></description>
+</item><item>
+    <title>透過 AWS Lambda、API Gateway 和 AWS Go SDK，從 Mattermost 查看/開關 EC2 Instances</title>
+    <link>https://o3r.moe/lambda-apigateway-mattermost-go-ec2/</link>
+    <pubDate>Tue, 21 Apr 2020 02:19:34 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/lambda-apigateway-mattermost-go-ec2/</guid>
+    <description><![CDATA[目前我實習的公司使用 Mattermost 作為內部通訊軟體，且 Mattermost 支援 Webhook 和 Slash Command。為了方便隨時隨地可以快速開啟/關閉 EC2，因此想寫一個下 Slash Command 指令的工具]]></description>
+</item><item>
+    <title>ELK Stack 整合 pfSense (三)：Kibana Dashboard</title>
+    <link>https://o3r.moe/monitoring-pfsense-via-kibana/</link>
+    <pubDate>Sat, 14 Mar 2020 12:07:47 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/monitoring-pfsense-via-kibana/</guid>
+    <description><![CDATA[Kibana 能夠將資料視覺化成各種圖表並進行分析，同時提供 ELK Stack 的管理介面，架設完成的 ELK Stack 之後只需進入 Kibana，就可以透過這個 portal 瀏覽一切 Elastic 的服務。之]]></description>
+</item><item>
+    <title>ELK Stack 整合 pfSense (一)：將 pfSense 防火牆阻擋紀錄傳送到 Logstash</title>
+    <link>https://o3r.moe/sending-logs-from-pfsense-2-logstash/</link>
+    <pubDate>Fri, 13 Mar 2020 08:27:24 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/sending-logs-from-pfsense-2-logstash/</guid>
+    <description><![CDATA[Logstash 的功能像是一個接收器，支援從許多種 Protocol 接收 Log，如 Syslog、Netflow等，並且透過 Parser 將非結構化資料轉換成半結構化資料。Parser]]></description>
+</item><item>
+    <title>ELK Stack 整合 pfSense (二)：Elasticsearch</title>
+    <link>https://o3r.moe/elasticsearch-receives-data-from-logstash/</link>
+    <pubDate>Thu, 12 Mar 2020 09:55:28 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/elasticsearch-receives-data-from-logstash/</guid>
+    <description><![CDATA[本系列文章介紹 pfSense 與 ELK Stack (7.6 版) 的整合，藉此分析與收集阻擋的連接紀錄。Elasticsearch 是個全文搜尋引擎，透過 Inverted Index 的資料結構來提供即時的]]></description>
+</item><item>
+    <title>想擁有一台伺服器等級 Mac? macOS 10.15 Catalina on VMware ESXi 6.7</title>
+    <link>https://o3r.moe/installing-macos-on-esxi/</link>
+    <pubDate>Mon, 27 Jan 2020 17:33:25 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/installing-macos-on-esxi/</guid>
+    <description><![CDATA[蘋果真高價，何不自己架？ — me 如果覺得蘋果的刨絲器 Mac Pro 很貴，或是說需要更進一步客製化硬體，何不考慮自己在伺服器上架設一台 Mac 呢？要多少 Storage 和 Memory 就有]]></description>
+</item><item>
+    <title>OpenFlow 1.5 從入門到交報告 (一) - Mininet 基本概念</title>
+    <link>https://o3r.moe/introduction-to-mininet/</link>
+    <pubDate>Thu, 23 Jan 2020 18:36:17 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/introduction-to-mininet/</guid>
+    <description><![CDATA[Mininet 是一個虛擬網路的模擬器，可以在單一主機、VM 或 Container 中執行。一開始我想用 Container 的環境玩玩看 Mininet，主要目的是學習 OpenFlow。為了產出]]></description>
+</item><item>
+    <title>OpenFlow 1.5 從入門到交報告 (二) - Ryu</title>
+    <link>https://o3r.moe/introduction-to-ryu/</link>
+    <pubDate>Sat, 04 Jan 2020 09:32:07 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/introduction-to-ryu/</guid>
+    <description><![CDATA[支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支]]></description>
+</item><item>
+    <title>實驗室自架 Lab 環境 — 網路架構設計</title>
+    <link>https://o3r.moe/esxi-server-in-lab-structure/</link>
+    <pubDate>Wed, 18 Dec 2019 08:34:14 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/esxi-server-in-lab-structure/</guid>
+    <description><![CDATA[前陣子學校電腦教室汰換之電腦，有幾台送給實驗室利用，我藉這個機會使用那些資源架設一台 ESXi。架設完成後，接下來考量到一些需求與環境因素，開]]></description>
+</item></channel>
+</rss>
