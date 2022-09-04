@@ -8,7 +8,11 @@ Hello～ 可以叫我 Oscar，這個部落格的名稱 O3R 就是 [Oscar]^(O3R) 
 
 {{< timeline >}}
 
-    {{% timeline-event title="Amazon Web Services" from="2021-09-28" %}}
+    {{% timeline-event title="Amazon Web Services" from="2022-08-09" %}}
+Cloud Support Engineer
+    {{% /timeline-event %}}
+
+    {{% timeline-event title="Amazon Web Services" from="2021-09-28" to="2022-08-09" %}}
 Cloud Support Associate
     {{% /timeline-event %}}
 

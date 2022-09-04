@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>透過相同域名，將用戶依據地理位置路由至對應 S3 bucket - Blog O3R</title><meta name="Description" content="Blog O3R"><meta property="og:title" content="透過相同域名，將用戶依據地理位置路由至對應 S3 bucket" />
+<meta property="og:description" content="前言 最近遇到客戶有上傳至 S3 的應用，因為客戶希望使用同一個域名，依據用戶所在國家，自動路由到最接近的 region 的 S3 bucket 進行上傳，以增進用戶上傳速度體驗。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/" /><meta property="og:image" content="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-09-01T22:38:38+08:00" />
+<meta property="article:modified_time" content="2022-09-04T22:38:13+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png"/>
+<meta name="twitter:title" content="透過相同域名，將用戶依據地理位置路由至對應 S3 bucket"/>
+<meta name="twitter:description" content="前言 最近遇到客戶有上傳至 S3 的應用，因為客戶希望使用同一個域名，依據用戶所在國家，自動路由到最接近的 region 的 S3 bucket 進行上傳，以增進用戶上傳速度體驗。"/>
+<meta name="application-name" content="Blog O3R">
+<meta name="apple-mobile-web-app-title" content="Blog O3R"><meta name="theme-color" content="#4E5260"><meta name="msapplication-TileColor" content="#4E5260"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4E5260"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/" /><link rel="prev" href="https://o3r.moe/aaru-tkl/" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "透過相同域名，將用戶依據地理位置路由至對應 S3 bucket",
+        "inLanguage": "zh-Hant-TW",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/o3r.moe\/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "https:\/\/o3r.moe\/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location\/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png",
+                            "width":  779 ,
+                            "height":  508 
+                        }],"genre": "posts","keywords": "aws, s3, cloudfront, route53, l@e","wordcount":  3254 ,
+        "url": "https:\/\/o3r.moe\/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location\/","datePublished": "2022-09-01T22:38:38+08:00","dateModified": "2022-09-04T22:38:13+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": "Oscar Tseng","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/o3r.moe\/images\/pfp-e8adc8913acf61888314b907b3f03b41.webp",
+                    "width":  812 ,
+                    "height":  812 
+                }},"author": {
+                "@type": "Person",
+                "name": "Oscar Tseng"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('dark' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'dark' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><div style="display: none;"><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="/images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
+        data-srcset="/images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp, /images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp 1.5x, /images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp 2x"
+        data-sizes="auto"
+        alt="/images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
+        title="/images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp" /></div><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Blog O3R">O3R</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                <div class="search mobile" id="search-mobile">
+                    <input type="text"
+                        placeholder="Search titles or contents..."
+                        id="search-input-mobile">
+                    <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile"
+                        title="Search">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile"
+                        title="Clear">
+                        <i class="fas fa-times-circle fa-fw"></i>
+                    </a>
+                    <span class="search-button search-loading" id="search-loading-mobile">
+                        <i class="fas fa-spinner fa-fw fa-spin"></i>
+                    </span>
+                </div>
+                <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                    Cancel
+                </a>
+            </div><a class="menu-item" href="/posts/" title="" >Posts</a><a class="menu-item" href="/tags/" title="" >Tags</a><a class="menu-item" href="/categories/" title="" >Categories</a><a class="menu-item" href="/about/" title="" >About</a><a class="menu-item" href="/myfigures/" title="" >My Figures</a><a class="menu-item" href="https://github.com/LYTzeng" title="GitHub" 
+                rel="noopener noreffer" target="_blank" ><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<div class="header-bg-wrapper mobile">
+    <div class="mediabox">
+    <img
+        class="mediabox-img lazyload"
+        data-srcset="/images/header-bg-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
+        data-lowsrc="/images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
+        data-sizes="auto"
+        alt="/images/header-bg-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
+        title="/images/header-bg-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp" />
+</div>
+</div>
+<div class="brand-logo mobile">
+    <div class="blog">BLOG&nbsp</div>
+    <div class="othreer-glitch-stack" style="--stacks: 3;">
+        <span class="othreer" style="--index: 0;">o3R</span>
+        <span class="othreer" style="--index: 1;">o3R</span>
+        <span class="othreer" style="--index: 2;">o3R</span>
+    </div>
+</div>
+<div class="header-bg-credits mobile">
+    Artwork by&nbsp;<a href="https://www.pixiv.net/users/22675109" target="_blank" rel="noopener noreferrer">花咲ちゆ</a>&nbsp;<a href="https://twitter.com/hanasakichu" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div><header class="desktop" id="header-desktop">
+    <div class="header-wrapper" is-sticky="false">
+        <div class="header-title">
+            <a href="/" title="Blog O3R">O3R</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item"
+                    href="/posts/" > Posts </a><a class="menu-item"
+                    href="/tags/" > Tags </a><a class="menu-item"
+                    href="/categories/" > Categories </a><a class="menu-item"
+                    href="/about/" > About </a><a class="menu-item"
+                    href="/myfigures/" > My Figures </a><a class="menu-item"
+                    href="https://github.com/LYTzeng"  title="GitHub" 
+                    rel="noopener noreffer" target="_blank" ><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                    <input type="text"
+                        placeholder="Search titles or contents..."
+                        id="search-input-desktop">
+                    <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop"
+                        title="Search">
+                        <i class="fas fa-search fa-fw"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop"
+                        title="Clear">
+                        <i class="fas fa-times-circle fa-fw"></i>
+                    </a>
+                    <span class="search-button search-loading" id="search-loading-desktop">
+                        <i class="fas fa-spinner fa-fw fa-spin"></i>
+                    </span>
+                </span><a href="javascript:void(0);" class="menu-item theme-switch" title="">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="header-bg-wrapper"><div class="mediabox">
+    <img
+        class="mediabox-img lazyload"
+        data-srcset="/images/header-bg-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
+        data-lowsrc="/images/header-bg-lowsrc-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
+        data-sizes="auto"
+        alt="/images/header-bg-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp"
+        title="/images/header-bg-U2F0IEFwciAgMiAwODowOToxNiBVVEMgMjAyMgo=.webp" />
+</div>
+</div>
+    <div class="brand-logo">
+        <div class="blog">BLOG&nbsp</div>
+        <div class="othreer-glitch-stack" style="--stacks: 3;">
+            <span class="othreer" style="--index: 0;">o3R</span>
+            <span class="othreer" style="--index: 1;">o3R</span>
+            <span class="othreer" style="--index: 2;">o3R</span>
+        </div>
+    </div>
+    <div class="header-bg-credits desktop">
+        Artwork by&nbsp;<a href="https://www.pixiv.net/users/22675109" target="_blank" rel="noopener noreferrer">花咲ちゆ</a>&nbsp;<a href="https://twitter.com/hanasakichu" title="Twitter" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitter fa-fw"></i></a></div>
+</header><main class="main">
+                <div class="container"><div id="sidebar"><div id="sidebar-profile"><div class="sidebar-avatar"><a href="/about/" title="About"><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="/images/pfp-e8adc8913acf61888314b907b3f03b41.webp"
+        data-srcset="/images/pfp-e8adc8913acf61888314b907b3f03b41.webp, /images/pfp-e8adc8913acf61888314b907b3f03b41.webp 1.5x, /images/pfp-e8adc8913acf61888314b907b3f03b41.webp 2x"
+        data-sizes="auto"
+        alt="/images/pfp-e8adc8913acf61888314b907b3f03b41.webp"
+        title="pfp by 中森 煙 @kemurismoke" /></a></div><h1 class="sidebar-title">Oscar T.</h1><div class="links"><a href="https://github.com/LYTzeng" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://linkedin.com/in/li-yen-tseng" title="LinkedIn" target="_blank" rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href="https://steamcommunity.com/id/yen-host" title="Steam" target="_blank" rel="noopener noreffer me"><i class="fab fa-steam fa-fw"></i></a><a href="https://www.twitch.tv/0scar0x0" title="Twitch" target="_blank" rel="noopener noreffer me"><i class="fab fa-twitch fa-fw"></i></a><a href="mailto:oscar@o3r.moe" title="Email" rel=" me"><i class="far fa-envelope fa-fw"></i></a><a href="https://discordapp.com/users/697020575989628989" title="Discord" target="_blank" rel="noopener noreffer me"><i class="fab fa-discord fa-fw"></i></a><a href="/index.xml" title="RSS" target="_blank" rel="noopener noreffer me"><i class="fas fa-rss fa-fw"></i></a></div><div id="sidebar-intro">
+        <div class="sidebar-intro-tabs-container"><div class="sidebar-intro-tab" tab-index="0">我在做什麼</div><div class="sidebar-intro-tab" tab-index="1">最愛的妹紙</div><div class="sidebar-intro-tab" tab-index="2">最喜歡的遊戲</div><div class="sidebar-intro-tab" tab-index="3">最喜歡的作品</div><div class="sidebar-intro-tab" tab-index="4">裝備</div></div>
+        <div class="sidebar-intro-content-container"><div class="sidebar-intro-content hide-content" tab-index="0">
+                    <div>在 AWS 技術支援打工，懂一點網路，擅長什麼都不擅長</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="1">
+                    <div>神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)、神狐かな (Kamiko Kana)</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="2">
+                    <div>Elden Ring、Nier: Automata、Pokemon全系列、Dark Souls 3、愛上火車、茂伸奇談</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="3">
+                    <div>遊戲人生、點兔、賢惠幼妻仙狐小姐、奮鬥吧！系統工程師、動物朋友(僅第一季)</div>
+                </div><div class="sidebar-intro-content hide-content" tab-index="4">
+                    <div>MacBook Pro (13&#34;, 2021公司配) &amp; (13&#34;, 2019)、iPhone13 Pro、自組R9 5900X主機、AARU TKL、森海HD25</div>
+                </div></div>
+    </div></div>
+<div class="toc" id="toc-auto">
+                <h2 class="toc-title">Contents</h2>
+                <div class="toc-content" id="toc-content-auto"></div>
+            </div></div>
+
+    <article class="page single"><h1 class="single-title animated flipInX">透過相同域名，將用戶依據地理位置路由至對應 S3 bucket</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/about/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Oscar Tseng</a></span>&nbsp;<span class="post-category">included in <a href="/categories/aws/"><i class="far fa-folder fa-fw"></i>AWS</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022.09.01">2022.09.01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3254 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;<span id="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/" class="leancloud_visitors" data-flag-title="透過相同域名，將用戶依據地理位置路由至對應 S3 bucket">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;views
+                    </span>&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png"
+        data-srcset="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png, /using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png 1.5x, /using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png 2x"
+        data-sizes="auto"
+        alt="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png"
+        title="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#建立-s3-bucket">建立 S3 bucket</a></li>
+    <li><a href="#建立-cloudfront-distribution">建立 Cloudfront distribution</a>
+      <ul>
+        <li><a href="#添加另一個-s3-bucket-作為第二個-s3-origin">添加另一個 S3 bucket 作為第二個 S3 Origin</a></li>
+        <li><a href="#修改兩個-s3-bucket-權限允許-s3putobject-行為">修改兩個 S3 bucket 權限，允許 <code>s3:PutObject</code> 行為</a></li>
+      </ul>
+    </li>
+    <li><a href="#透過-cloudfront-signel-url-讓只有允許的用戶存取-s3">透過 CloudFront Signel URL 讓只有允許的用戶存取 S3</a>
+      <ul>
+        <li><a href="#建立-cloudfront-key-pair-提供-cloudfront-signed-url-使用">建立 Cloudfront Key Pair 提供 CloudFront signed URL 使用</a></li>
+        <li><a href="#將-private-key-上傳至-secrets-manager">將 private key 上傳至 Secrets Manager</a></li>
+        <li><a href="#建立生成-cloudfront-signed-url-的-lambda">建立生成 CloudFront Signed URL 的 Lambda</a></li>
+      </ul>
+    </li>
+    <li><a href="#建立-lambdaedge-function">建立 Lambda@Edge function</a></li>
+    <li><a href="#route53">Route53</a></li>
+    <li><a href="#測試結果">測試結果</a></li>
+    <li><a href="#結語">結語</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#q-不能透過-route-53-geolocation-routing-實現嗎">Q: 不能透過 Route 53 Geolocation Routing 實現嗎?</a></li>
+            <li><a href="#q-s3-multiregion-access-point-呢">Q: S3 multiregion access point 呢?</a></li>
+            <li><a href="#q-那-route-53-geolocation-routing-加上一層-cloudfront-再串-s3-呢">Q: 那 Route 53 Geolocation Routing 加上一層 CloudFront 再串 S3 呢?</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#參考">參考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="前言">前言</h2>
+<p>最近遇到客戶有上傳至 S3 的應用，因為客戶希望使用同一個域名，依據用戶所在國家，自動路由到最接近的 region 的 S3 bucket 進行上傳，以增進用戶上傳速度體驗。
+由於 S3 的機制，有一些限制導致無法直接使用 Rotue53 加上 Geolocation routing，實際做起來會比想像中複雜。
+而且客戶因為在中國也有業務，也有使用中國的 S3 bucket，因此<strong>無法直接使用 S3 multiregion access point</strong>。
+本文主要紀錄實現步驟，以滿足這項需求。</p>
+<p><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png"
+        data-srcset="using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png, using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png 1.5x, using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png 2x"
+        data-sizes="auto"
+        alt="using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png"
+        title="using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png" /></p>
+<h2 id="建立-s3-bucket">建立 S3 bucket</h2>
+<p>首先建立兩個 S3 bucket，這邊以 us-east-1 以及 ap-east-1 (香港) 作為示範，因為香港的 S3 剛好不支援 multiregion access point。</p>
+<ul>
+<li>bucket name: o3r-us
+<ul>
+<li>region: US East (N. Virginia) us-east-1</li>
+</ul>
+</li>
+<li>bucket name: o3r-hk
+<ul>
+<li>region: Asia Pacific (Hong Kong) ap-east-1</li>
+</ul>
+</li>
+</ul>
+<p>接著各上傳一個 index.html 做為測試，其實稍後會使用 S3 presigned URL 進行上傳。</p>
+<h2 id="建立-cloudfront-distribution">建立 Cloudfront distribution</h2>
+<p>建立一個 Cloudfront distribution，Origin domain 可以隨便選一個 bucket，因為接下來我們會透過 Lambda@Edge 依據用戶地理位置選擇適當的 S3 bucket 作為 origin。
+CloudFront 設定:</p>
+<ul>
+<li>Origin
+<ul>
+<li>Origin domain: o3r-us.s3.us-east-1.amazonaws.com</li>
+<li>Origin path: 空</li>
+<li>Origin access: Legacy access identities</li>
+</ul>
+</li>
+</ul>
+<p>點選 Legacy access identities 下的 Create OAI，建立完成後在 Origin access identity 選擇剛才創建的 OAI，Bucket policy 下選擇 Yes, update the bucket policy。</p>
+<ul>
+<li>Default cache behavior
+<ul>
+<li>Viewer protocol policy: HTTP and HTTPS 或 Redirect HTTP to HTTPS 皆可，建議選擇後者</li>
+<li>Allowed HTTP methods: GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE</li>
+<li>Cache key and origin requests
+<ul>
+<li>為了簡單化步驟，選擇 Legacy cache settings</li>
+<li>Headers 選擇 Include the following headers，勾選 <strong>CloudFront-Viewer-Country</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="fig1.png"
+        data-srcset="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig1.png, fig1.png 1.5x, /using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig1.png 2x"
+        data-sizes="auto"
+        alt="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig1.png"
+        title="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig1.png" /></p>
+<ul>
+<li>拉到下方的 Settings 區塊
+<ul>
+<li>Alternate domain name (CNAME) 選擇 Add item，輸入您想提供用戶存取 S3 的域名，這邊以 <code>s3domain.o3r.moe</code> 做示範</li>
+<li>Custom SSL certificate 有在 ACM 申請的話，也一起加入。</li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="fig2.png"
+        data-srcset="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig2.png, fig2.png 1.5x, /using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig2.png 2x"
+        data-sizes="auto"
+        alt="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig2.png"
+        title="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig2.png" /></p>
+<h3 id="添加另一個-s3-bucket-作為第二個-s3-origin">添加另一個 S3 bucket 作為第二個 S3 Origin</h3>
+<p>在 CloudFront 的 Origin 設定中，新增一個 Origin。</p>
+<ul>
+<li>Origin domain: o3r-hk.s3.ap-east-1.amazonaws.com</li>
+<li>Origin path: 空</li>
+<li>Origin access: Legacy access identities (設定步驟請參考上述第一個 S3 origin 的設定，並選擇相同的 OAI)</li>
+</ul>
+<h3 id="修改兩個-s3-bucket-權限允許-s3putobject-行為">修改兩個 S3 bucket 權限，允許 <code>s3:PutObject</code> 行為</h3>
+<p>前往 S3 頁面，編輯兩個 bucket 的 policy，添加 <code>s3:PutObject</code> 如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2008-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;Id&#34;</span><span class="p">:</span> <span class="s2">&#34;PolicyForCloudFrontPrivateContent&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">		<span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nt">&#34;Sid&#34;</span><span class="p">:</span> <span class="s2">&#34;1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nt">&#34;AWS&#34;</span><span class="p">:</span> <span class="s2">&#34;arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity E34XXXXXXX9QA&#34;</span>
+</span></span><span class="line"><span class="cl">			<span class="p">},</span>
+</span></span><span class="line"><span class="cl">			<span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;s3:GetObject&#34;</span><span class="p">,</span><span class="s2">&#34;s3:PutObject&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">			<span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;arn:aws:s3:::bucket-name/*&#34;</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="透過-cloudfront-signel-url-讓只有允許的用戶存取-s3">透過 CloudFront Signel URL 讓只有允許的用戶存取 S3</h2>
+<h3 id="建立-cloudfront-key-pair-提供-cloudfront-signed-url-使用">建立 Cloudfront Key Pair 提供 CloudFront signed URL 使用</h3>
+<p>CloudFront signed URL 是使用我們自行生成的 RSA 金鑰對，public key 會放在 CloudFront Key Group 中，private key 會放在 AWS Secrets Manager 中，我們會透過撰寫 Lambda 來獲得 Secrets Manager 中的 private key 產生 CloudFront Signed URL，用戶獲得這個 URL 便可透過 CloudFront 上傳或下載背後的 S3。</p>
+<p>首先在 Linux 執行以下指令:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">openssl genrsa -out cf_private_key.pem <span class="m">2048</span>
+</span></span><span class="line"><span class="cl">openssl rsa -pubout -in cf_private_key.pem -out cf_public_key.pem
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接著複製 <code>cf_public_key.pem</code> 的內容 (請連同 BEGIN PUBLIC KEY 一起複製)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ cat cf_public_key.pem
+</span></span><span class="line"><span class="cl">-----BEGIN PUBLIC KEY-----
+</span></span><span class="line"><span class="cl">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA8hOjjASNcMJYPgoLTb89
+</span></span><span class="line"><span class="cl">(中間省略)
+</span></span><span class="line"><span class="cl">fxTZtxWf73lV5wcWbnBiQfYn7Up+glu05IzOK43D4vVjtAgYEg2XlpzoMKybkOCL
+</span></span><span class="line"><span class="cl">CQIDAQAB
+</span></span><span class="line"><span class="cl">-----END PUBLIC KEY-----
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>前往 <a href="https://us-east-1.console.aws.amazon.com/cloudfront/v3/home?region=us-east-1#/publickey" target="_blank" rel="noopener noreffer">CloudFront Public Key 頁面</a>，點選 Create publie key，將以上內容貼在下方 Key 中。
+請記下 Public Key 的 ID (例如 K2XXXXXXXXXXXX)，稍後建立 Lambda 會使用到。
+創建完成後，前往 <a href="https://us-east-1.console.aws.amazon.com/cloudfront/v3/home?region=us-east-1#/keygrouplist" target="_blank" rel="noopener noreffer">Key Groups</a>，選擇 Create Key Group，Public Keys 選擇剛才創建的 public key。</p>
+<h3 id="將-private-key-上傳至-secrets-manager">將 private key 上傳至 Secrets Manager</h3>
+<ol>
+<li>前往 <a href="https://us-west-2.console.aws.amazon.com/secretsmanager" target="_blank" rel="noopener noreffer">AWS Secrets Manager</a>.</li>
+<li>選擇一個區域 (us-east-1)</li>
+<li>選擇 Store a new secret.</li>
+<li>Select secret type 選擇 Other type of secrets.</li>
+<li>Specify the key/value pairs to be stored in this secret 選擇 Plaintext.</li>
+<li>將之前產生的 <code>cf_private_key.pem</code> 內容貼上</li>
+<li>接著下一步，為密鑰命名</li>
+<li>其餘設定先不管他，我們直接下一步直到點選 Store</li>
+<li>記下 Secret 的名稱 以及 ARN，接下來會用到。如果沒看到東西，請重整頁面</li>
+</ol>
+<h3 id="建立生成-cloudfront-signed-url-的-lambda">建立生成 CloudFront Signed URL 的 Lambda</h3>
+<p>這是第一個 Lambda function，請參考以下步驟:</p>
+<ol>
+<li>在 <a href="https://us-east-1.console.aws.amazon.com/lambda/home?region=us-east-1#/functions" target="_blank" rel="noopener noreffer">Lambda 主控台</a>選擇和剛才 AWS Secrets Manager 相同的區域</li>
+<li>選擇 Create function.</li>
+<li>選擇 Author from scratch.</li>
+<li>為 Function 命名</li>
+<li>Runtime 為 Node.js 12.x.</li>
+<li>在 Change default execution role 下方選擇 Create a new role with basic Lambda permissions.</li>
+<li>選擇 Create Function，並將以下程式碼覆蓋貼上:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">AWS</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;aws-sdk&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">secretsManager</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">SecretsManager</span><span class="p">({</span><span class="nx">region</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">awsRegion</span><span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crypto&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">replacementChars</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;+&#39;</span><span class="o">:</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="o">:</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="o">:</span><span class="s1">&#39;~&#39;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">getKeyFromSecretsManager</span> <span class="o">=</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">secretsManager</span><span class="p">.</span><span class="nx">getSecretValue</span><span class="p">({</span><span class="nx">SecretId</span><span class="o">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">awsSecretsManagerSecretName</span><span class="p">},</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s2">&#34;Get Secret Error&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nx">reject</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;Private key retrieved&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">resolve</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">SecretString</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">  <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">expiration</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">queryStringParameters</span><span class="p">.</span><span class="nx">expiration</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span><span class="o">|</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">let</span> <span class="nx">baseUrl</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">queryStringParameters</span><span class="p">.</span><span class="nx">baseUrl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nx">cannedPolicy</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Statement&#34;</span><span class="o">:</span><span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Resource&#34;</span><span class="o">:</span> <span class="nx">baseUrl</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Condition&#34;</span><span class="o">:</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="s2">&#34;DateLessThan&#34;</span><span class="o">:</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;AWS:EpochTime&#34;</span><span class="o">:</span> <span class="nx">expiration</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">cannedPolicy</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">cannedPolicy</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nx">encodedPolicy</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">cannedPolicy</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="s2">&#34;base64&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">encodedPolicy</span> <span class="o">=</span> <span class="nx">encodedPolicy</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[+=/]/g</span><span class="p">,</span> <span class="nx">m</span> <span class="p">=&gt;</span> <span class="nx">replacementChars</span><span class="p">[</span><span class="nx">m</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">signer</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createSign</span><span class="p">(</span><span class="s1">&#39;RSA-SHA1&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">signer</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">cannedPolicy</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nx">signedPolicy</span> <span class="o">=</span> <span class="nx">signer</span><span class="p">.</span><span class="nx">sign</span><span class="p">(</span><span class="kr">await</span> <span class="nx">getKeyFromSecretsManager</span><span class="p">(),</span> <span class="s1">&#39;base64&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">signedPolicy</span> <span class="o">=</span> <span class="nx">signedPolicy</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[+=/]/g</span><span class="p">,</span> <span class="nx">m</span> <span class="p">=&gt;</span> <span class="nx">replacementChars</span><span class="p">[</span><span class="nx">m</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">paramDelimiter</span> <span class="o">=</span> <span class="p">(</span><span class="nx">baseUrl</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;?&#39;</span> <span class="o">:</span> <span class="s1">&#39;&amp;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">cfSignedUrl</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="nx">baseUrl</span><span class="si">}${</span><span class="nx">paramDelimiter</span><span class="si">}</span><span class="sb">Expires=</span><span class="si">${</span><span class="nx">expiration</span><span class="si">}</span><span class="sb">&amp;Signature=</span><span class="si">${</span><span class="nx">signedPolicy</span><span class="si">}</span><span class="sb">&amp;Key-Pair-Id=</span><span class="si">${</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">amazonCloudFrontKeyPairId</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">cfSignedUrl</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="8">
+<li>在 Lambda environment variables 中新增以下環境變數 :</li>
+</ol>
+<ul>
+<li>awsRegion: &ldquo;us-east-1&rdquo; // 區域名稱</li>
+<li>amazonCloudFrontKeyPairId: &ldquo;K2XXXXXXXXXXXX&rdquo; // CloudFront 上的 Public Key ID</li>
+<li>awsSecretsManagerSecretName: &ldquo;your_secret_name&rdquo; // secrets manager 的密鑰名稱</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="fig6.png"
+        data-srcset="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig6.png, fig6.png 1.5x, /using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig6.png 2x"
+        data-sizes="auto"
+        alt="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig6.png"
+        title="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig6.png" /></p>
+<ol start="9">
+<li>儲存 (File &gt; Save) 並 deploy</li>
+<li>修改剛才建立 Lambda 過程中建立的 IAM Role policy，新增以下的內容讓 Lambda 有權限讀取 secrets manager 中的密鑰，請記得將 ARN 替換為您剛才建立的 secrets manager 密鑰 ARN。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;secretsmanager:GetSecretValue&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="s2">&#34;arn:aws:secretsmanager:us-east-1:8xxxxxxxxxx6:secret​:your_secret_name&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="11">
+<li>接著在 Lambda 進入 Configuration 頁籤，選擇 Function URL，點選 create function URL，Auth type 選擇 NONE。您會獲得一個 Function URL。</li>
+<li>使用以下指令測試:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl https://7xegi64psvsqbxr3dgljq6hlve0vnoki.lambda-url.us-east-1.on.aws/?baseUrl<span class="o">=</span>https%3A%2F%2Fs3domain.o3r.moe%2Findex.html<span class="p">&amp;</span><span class="nv">expiration</span><span class="o">=</span>12%2F12%2F2022%2012%3A30%3A30%20EST
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這樣用戶/APP 可以透過這個 URL 發送請求來獲得 CloudFront 的 signed URL，讓用戶只能透過 APP 獲得連接 CloudFront 的權限。
+我們透過兩個 query string 提供資訊給 Lambda function URL，<code>baseUrl</code> 是允許用戶訪問的 URL 路徑，<code>expiration</code> 則是指定 signed URL 的時效，query string 格式如下:</p>
+<ul>
+<li>名稱:<code>baseUrl</code>，值: <a href="https://xxxx.cloudfront.net/path1/.../pathN" target="_blank" rel="noopener noreffer">https://xxxx.cloudfront.net/path1/.../pathN</a></li>
+<li>名稱:<code>expiration</code>，值: 例如 12/12/2022 12:30:30 EST，只要 JavaScript <code>Date.parse()</code> 可以辨識的格式都可以，詳細可參考 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse" target="_blank" rel="noopener noreffer">Date.parse() 的說明</a>。</li>
+</ul>
+<p><strong>注意: 以上 query string 的&quot;值&quot;必須經過 URL encode 的字串處理。</strong></p>
+<h2 id="建立-lambdaedge-function">建立 Lambda@Edge function</h2>
+<p>Lambda@Edge 就是一透過 Lambda function 的程式碼客製化 CloudFront 的行為，並佈署到全球的 CloudFront 節點上實現功能。</p>
+<p>這會是第二個 Lambda function，
+請注意，Lambda 必須使用 us-east-1 區域，才能佈署到 Cloudfront 的 Lambda@Edge。</p>
+<p>參考 [3] 新增 Lambda function，runtime 選擇 Node.js 16.x，Change default execution role 選擇 Create a new role from AWS policy templates，在 Policy templates 選擇 Basic Lambda@Edge permissions (for CloudFront trigger)。
+名稱命名為 s3-bucket-country-based-routing。</p>
+<p><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="fig3.png"
+        data-srcset="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig3.png, fig3.png 1.5x, /using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig3.png 2x"
+        data-sizes="auto"
+        alt="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig3.png"
+        title="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig3.png" /></p>
+<p>建立完成後，將以下程式碼覆蓋到 Lambda 程式碼編輯視窗內。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Records</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">cf</span><span class="p">.</span><span class="nx">request</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">headers</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">origin</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">origin</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">//Setup the two different origins
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kr">const</span> <span class="nx">usBucket</span> <span class="o">=</span> <span class="s2">&#34;o3r-us.s3.us-east-1.amazonaws.com&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">hkBucket</span> <span class="o">=</span> <span class="s2">&#34;o3r-hk.s3.ap-east-1.amazonaws.com&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;cloudfront-viewer-country&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;cloudfront-viewer-country&#39;</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;cloudfront-viewer-country&#39;</span><span class="p">][</span><span class="nx">i</span><span class="p">].</span><span class="nx">value</span> <span class="o">==</span> <span class="s1">&#39;US&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">key</span><span class="o">:</span> <span class="s1">&#39;host&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">usBucket</span><span class="p">}];</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">origin</span><span class="p">.</span><span class="nx">s3</span><span class="p">.</span><span class="nx">domainName</span> <span class="o">=</span> <span class="nx">usBucket</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">origin</span><span class="p">.</span><span class="nx">s3</span><span class="p">.</span><span class="nx">region</span> <span class="o">=</span> <span class="s1">&#39;us-east-1&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;cloudfront-viewer-country&#39;</span><span class="p">][</span><span class="nx">i</span><span class="p">].</span><span class="nx">value</span> <span class="o">==</span> <span class="s1">&#39;CN&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">headers</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">key</span><span class="o">:</span> <span class="s1">&#39;host&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="nx">hkBucket</span><span class="p">}];</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">origin</span><span class="p">.</span><span class="nx">s3</span><span class="p">.</span><span class="nx">domainName</span> <span class="o">=</span> <span class="nx">hkBucket</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="nx">origin</span><span class="p">.</span><span class="nx">s3</span><span class="p">.</span><span class="nx">region</span> <span class="o">=</span> <span class="s1">&#39;ap-east-1&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">request</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接著點選 Test 旁的 Deploy 佈署新版本，並切換到 Versions 頁籤，點選 deploy new version。
+接著頁面會導向到 Lambda 版本頁面，請複製 ARN，ARN 是有版本區別的，請注意結尾的數字就是版本。例如: <code>arn:aws:lambda:us-east-1:123456789012:function:s3-bucket-country-based-routing:1</code></p>
+<p>接著回到 Cloudfront 頁面，在 Bahavior 編輯 Default(*) behavior，在最下方 Function associations 的 Origin request 選擇 Lambda@edge，並貼上剛才複製的 ARN。</p>
+<p><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="fig5.png"
+        data-srcset="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig5.png, fig5.png 1.5x, /using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig5.png 2x"
+        data-sizes="auto"
+        alt="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig5.png"
+        title="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig5.png" /></p>
+<h2 id="route53">Route53</h2>
+<p>在 Route53 新增一筆紀錄，對應到剛才新建的 Cloudfront。
+如果 CloudFront 和 Route53 域名是位於同一個帳戶，可以使用 A record type 加上開啟 Alias，並且輸入 CloudFront 的域名。</p>
+<p><img
+        class="lazyload"
+        src="/svg/fox-loading.min.svg"
+        data-src="fig4.png"
+        data-srcset="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig4.png, fig4.png 1.5x, /using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig4.png 2x"
+        data-sizes="auto"
+        alt="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig4.png"
+        title="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/fig4.png" /></p>
+<h2 id="測試結果">測試結果</h2>
+<p>我在北京 AWS 的 EC2 透過 curl 測試，CloudFront 確實按照請求來源國家，路由到指定對應的 bucket:</p>
+<p>測試下載檔案:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl https://s3domain.o3r.moe/index.html<span class="se">\?</span>Expires<span class="se">\=</span>1670866230<span class="se">\&amp;</span>Signature<span class="se">\=</span>iv7CdZyY3P9rYk....90xijA__<span class="se">\&amp;</span>Key-Pair-Id<span class="se">\=</span>KXXXXXXXX6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>輸出為一個我之前放在香港 bucket 的識別用網頁:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;h1&gt; Bucket in HK &lt;/h1&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>測試上傳檔案 (PUT 請求):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl -sv --upload-file ‘test.txt’ ‘https://s3domain.o3r.moe/path/test?Expires<span class="o">=</span>1670866230<span class="p">&amp;</span><span class="nv">Signature</span><span class="o">=</span>DO-THpe.....zrOQ__<span class="p">&amp;</span>Key-Pair-Id<span class="o">=</span>KXXXXXXX6’
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>到對應的 bucket 檢查，確實檔案上傳至 CloudFront signed URL 指定的路徑。</p>
+<p>另外在 us-east-1 測試路由效果:
+測試下載檔案:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">curl https://s3domain.o3r.moe/index.html<span class="se">\?</span>Expires<span class="se">\=</span>1670866230<span class="se">\&amp;</span>Signature<span class="se">\=</span>iv7CdZyY3P9rYk....90xijA__<span class="se">\&amp;</span>Key-Pair-Id<span class="se">\=</span>KXXXXXXXX6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>輸出為一個我之前放在 us-east-1 bucket 的識別用網頁:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;h1&gt; Bucket in US &lt;/h1&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>測試上傳檔案，檔案上傳到 us-east-1 bucket。</p>
+<h2 id="結語">結語</h2>
+<p>建置過程較複雜，因為服務上有許多限制，導致必須 coding 並使用 Lambda@Edge，加上 CloudFront Signed URL 導致架構變得複雜。
+以下是一些 Q&amp;A 以及限制的說明：</p>
+<h4 id="q-不能透過-route-53-geolocation-routing-實現嗎">Q: 不能透過 Route 53 Geolocation Routing 實現嗎?</h4>
+<p>A: 想得太簡單，依據 <a href="https://www.rfc-editor.org/rfc/rfc7230#section-5.4" target="_blank" rel="noopener noreffer">RFC 7230</a> 規定:</p>
+<blockquote>
+<p>A client <strong>MUST</strong> send a Host header field in all HTTP/1.1 request messages</p>
+</blockquote>
+<p>所以 client 會依據 Route 53 的 domain 作為 Host header，然而 S3 有一個限制，如果要使用 Route53 + S3，bucket 名稱必須就是 domain name。
+例如: Route53 <code>example.com</code> CNAME &ndash;&gt; S3 bucket <code>example.com.s3.amazonaws.com</code>。
+S3 是依據 client 發送的 Host header 來判斷請求要路由至哪個 bucket，因為不同 bucket 會共用相同的 S3 伺服器(i.e. 共用 IP pool)，因此 S3 也必須透過這個方式在多租戶環境下進行區別。
+所以不可能建立第二個相同名稱的 bucket，這是 s3 的限制。</p>
+<h4 id="q-s3-multiregion-access-point-呢">Q: S3 multiregion access point 呢?</h4>
+<p>A: 客戶情境是有些 bucket 在不支援 multiregion access point 的 region 中。</p>
+<h4 id="q-那-route-53-geolocation-routing-加上一層-cloudfront-再串-s3-呢">Q: 那 Route 53 Geolocation Routing 加上一層 CloudFront 再串 S3 呢?</h4>
+<p>A: CloudFront 自己沒有 Geolocation Routing 的功能，照這樣變成要使用兩個 CloudFront 並提供給 Route53 兩個 Geolocation Routing 紀錄使用。
+但是 CloudFront 也是透過 Host header 判斷路由至哪個 distribution，所以最後問題會和 Route53 + 純 S3 一樣不可行。</p>
+<h2 id="參考">參考</h2>
+<ul>
+<li>[1] <a href="https://aws.amazon.com/blogs/networking-and-content-delivery/dynamically-route-viewer-req" target="_blank" rel="noopener noreffer">Dynamically Route Viewer Requests to Any Origin Using Lambda@Edge</a></li>
+<li>[2] <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html" target="_blank" rel="noopener noreffer">Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a></li>
+<li>[3] <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-how-it-works-tutorial.html#lambda-edge-how-it-works-tutorial-create-function" target="_blank" rel="noopener noreffer">Create your function</a></li>
+<li>[4] <a href="https://github.com/aws-samples/amazon-cloudfront-signed-urls-using-lambda-secretsmanager" target="_blank" rel="noopener noreffer">Example: Amazon CloudFront Signed URLs using Lambda and Secrets Manager</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022.09.04&nbsp;<a class="git-hash" href="https://github.com/LYTzeng/blog2.0/commit/19394d9ec18837bd853c44716045fd8f93977310" target="_blank" title="commit by LYTzeng(oscar217b@gmail.com) 19394d9ec18837bd853c44716045fd8f93977310: changed job title">
+                                    <i class="fas fa-hashtag fa-fw"></i>19394d9</a></span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/" data-title="透過相同域名，將用戶依據地理位置路由至對應 S3 bucket" data-hashtags="aws,s3,cloudfront,route53,l@e"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/" data-hashtag="aws"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/" data-title="透過相同域名，將用戶依據地理位置路由至對應 S3 bucket"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/aws/">aws</a>,&nbsp;<a href="/tags/s3/">s3</a>,&nbsp;<a href="/tags/cloudfront/">cloudfront</a>,&nbsp;<a href="/tags/route53/">route53</a>,&nbsp;<a href="/tags/le/">l@e</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/aaru-tkl/" class="prev" rel="prev" title="Helix Lab AARU TKL 客製化鍵盤，第一次組裝就上手"><i class="fas fa-angle-left fa-fw"></i>Helix Lab AARU TKL 客製化鍵盤，第一次組裝就上手</a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.93.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about/" target="_blank">Oscar Tseng</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div>
+<link rel="stylesheet" href="/lib/valine/valine.min.css"><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/plugins/ls.respimg.min.js"></script><script type="text/javascript" src="/lib/lazysizes/plugins/ls.parent-fit.min.js"></script><script type="text/javascript" src="/lib/lazysizes/plugins/ls.object-fit.min.js"></script><script type="text/javascript" src="/lib/lazysizes/plugins/ls.blur-up.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js"></script><script type="text/javascript" src="/lib/dayjs/dayjs.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":20},"comment":{"valine":{"appId":"mBVjhrJAGxI6vq161LiQRhKH-MdYXbMMI","appKey":"78ztEgoRX6GkV1LdNx0pghv8","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"en","pageSize":10,"placeholder":"Your comment ...","recordIP":true,"serverURLs":"https://mbvjhrja.api.lncldglobal.com","visitor":true}},"search":{"algoliaAppID":"CJDJYKXD2Y","algoliaIndex":"o3r.moe","algoliaSearchKey":"35ae54723dc9f540430a2b6e875d7505","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

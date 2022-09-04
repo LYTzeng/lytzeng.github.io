@@ -3,9 +3,16 @@
         <title>Blog O3R</title>
         <link>https://o3r.moe/</link>
         <description>Blog O3R</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Mon, 18 Apr 2022 18:15:37 &#43;0000</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>zh-Hant-TW</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 01 Sep 2022 22:38:38 &#43;0800</lastBuildDate>
             <atom:link href="https://o3r.moe/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>透過相同域名，將用戶依據地理位置路由至對應 S3 bucket</title>
+    <link>https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/</link>
+    <pubDate>Thu, 01 Sep 2022 22:38:38 &#43;0800</pubDate>
+    <author>Author</author>
+    <guid>https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/</guid>
+    <description><![CDATA[前言 最近遇到客戶有上傳至 S3 的應用，因為客戶希望使用同一個域名，依據用戶所在國家，自動路由到最接近的 region 的 S3 bucket 進行上傳，以增進用戶上傳速度體驗。]]></description>
+</item><item>
     <title>Helix Lab AARU TKL 客製化鍵盤，第一次組裝就上手</title>
     <link>https://o3r.moe/aaru-tkl/</link>
     <pubDate>Mon, 18 Apr 2022 18:15:37 &#43;0000</pubDate>
@@ -68,12 +75,5 @@
     <author>Author</author>
     <guid>https://o3r.moe/introduction-to-ryu/</guid>
     <description><![CDATA[支援 OpenFlow 的 Controller 有很多種，Ryu 就是其中一員。Ryu 是一個開源的 OpenFlow Controller 開發框架，主要語言是 Python，由日本 NTT 的實驗室創造。截至目前為止，Ryu 支]]></description>
-</item><item>
-    <title>實驗室自架 Lab 環境 — 網路架構設計</title>
-    <link>https://o3r.moe/esxi-server-in-lab-structure/</link>
-    <pubDate>Wed, 18 Dec 2019 08:34:14 &#43;0800</pubDate>
-    <author>Author</author>
-    <guid>https://o3r.moe/esxi-server-in-lab-structure/</guid>
-    <description><![CDATA[前陣子學校電腦教室汰換之電腦，有幾台送給實驗室利用，我藉這個機會使用那些資源架設一台 ESXi。架設完成後，接下來考量到一些需求與環境因素，開]]></description>
 </item></channel>
 </rss>
