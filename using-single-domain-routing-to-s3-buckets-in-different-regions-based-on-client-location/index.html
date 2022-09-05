@@ -10,7 +10,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/" /><meta property="og:image" content="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-09-01T22:38:38+08:00" />
-<meta property="article:modified_time" content="2022-09-04T22:56:03+08:00" />
+<meta property="article:modified_time" content="2022-09-05T22:05:24+08:00" />
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://o3r.moe/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location.png"/>
@@ -34,7 +34,7 @@
                             "width":  779 ,
                             "height":  508 
                         }],"genre": "posts","keywords": "aws, s3, cloudfront, route53, l@e","wordcount":  3254 ,
-        "url": "https:\/\/o3r.moe\/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location\/","datePublished": "2022-09-01T22:38:38+08:00","dateModified": "2022-09-04T22:56:03+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+        "url": "https:\/\/o3r.moe\/using-single-domain-routing-to-s3-buckets-in-different-regions-based-on-client-location\/","datePublished": "2022-09-01T22:38:38+08:00","dateModified": "2022-09-05T22:05:24+08:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
             "@type": "Organization",
             "name": "Oscar Tseng","logo": {
                     "@type": "ImageObject",
@@ -278,7 +278,7 @@
 </ul>
 </li>
 </ul>
-<p>接著各上傳一個 index.html 做為測試，其實稍後會使用 S3 presigned URL 進行上傳。</p>
+<p>接著各上傳一個 index.html 做為測試，其實稍後會使用 CloudFront signed URL 進行上傳。</p>
 <h2 id="建立-cloudfront-distribution">建立 Cloudfront distribution</h2>
 <p>建立一個 Cloudfront distribution，Origin domain 可以隨便選一個 bucket，因為接下來我們會透過 Lambda@Edge 依據用戶地理位置選擇適當的 S3 bucket 作為 origin。
 CloudFront 設定:</p>
@@ -772,8 +772,8 @@ S3 是依據 client 發送的 Host header 來判斷請求要路由至哪個 buck
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2022.09.04&nbsp;<a class="git-hash" href="https://github.com/LYTzeng/blog2.0/commit/8d00826868898f4c9174e34e5247035a728b497f" target="_blank" title="commit by LYTzeng(oscar217b@gmail.com) 8d00826868898f4c9174e34e5247035a728b497f: updated actions/checkout from v2 to v3 in gh actions workflow">
-                                    <i class="fas fa-hashtag fa-fw"></i>8d00826</a></span>
+                <span>Updated on 2022.09.05&nbsp;<a class="git-hash" href="https://github.com/LYTzeng/blog2.0/commit/8b46b658b674ace0eca2c356f8f2f08bef8f129f" target="_blank" title="commit by LYTzeng(oscar217b@gmail.com) 8b46b658b674ace0eca2c356f8f2f08bef8f129f: fixed typo">
+                                    <i class="fas fa-hashtag fa-fw"></i>8b46b65</a></span>
             </div>
             <div class="post-info-license"></div>
         </div>

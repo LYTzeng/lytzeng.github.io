@@ -17,7 +17,7 @@
 - bucket name: o3r-hk
   - region: Asia Pacific (Hong Kong) ap-east-1
 
-接著各上傳一個 index.html 做為測試，其實稍後會使用 S3 presigned URL 進行上傳。
+接著各上傳一個 index.html 做為測試，其實稍後會使用 CloudFront signed URL 進行上傳。
 
 ## 建立 Cloudfront distribution
 建立一個 Cloudfront distribution，Origin domain 可以隨便選一個 bucket，因為接下來我們會透過 Lambda@Edge 依據用戶地理位置選擇適當的 S3 bucket 作為 origin。
